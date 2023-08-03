@@ -1,0 +1,15 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" controller="GYNL_SchedularRecordClass">
+	<aura:handler name="CronEvent" event="c:SendCronToParent" action="{!c.checkChildMessage}"/>
+    <aura:attribute name="CronTrigger" type="string"/>
+    <aura:attribute name="CronName" type="string"/>
+    <div>
+        <c:GYNL_Mass_Sync_Scheduler  aura:id="childCompCustomer"/>
+    </div>    
+    <div class="row">
+        <h2 class="header">Schedular information</h2>
+        <lightning:input type="text" name="input1" label="Enter Name" aura:id="name"/><br/>
+        <lightning:button variant="brand" label="Save" title="Brand action" onclick="{! c.saveEvent }" /> 
+    </div>
+      
+           
+</aura:component>

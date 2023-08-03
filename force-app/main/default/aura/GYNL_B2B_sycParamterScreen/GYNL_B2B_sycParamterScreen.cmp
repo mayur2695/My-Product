@@ -1,0 +1,1011 @@
+<aura:component controller ='GYNC_B2B_syncParamterClass' implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="GYNCO_syncParamRecordList" type="GYNCO_Configuration__c[]"/>   
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler name="change" value="{!v.SystemId}" action="{!c.doInit}" />
+    <aura:attribute name="ShowFrequencyComponent" type="Boolean" default="false"/>
+    <aura:attribute name="value" type="List" default=""/>
+    <aura:attribute name="selTabId" type="String" default=""/>
+    <aura:attribute name="Editable" type="Boolean" default="true"/>
+    <aura:attribute name="showAdvancedSettings" type="boolean" default="false"/>
+    <aura:attribute name="objectList" type="List" default=""/>
+    <aura:attribute name="orderStatusList" type="List" default=""/>
+    <aura:attribute name="EnableBatch" type="Boolean" default=""/>
+    <aura:attribute name="AddfiltertotheField" type="Boolean" default="false"/>
+    <aura:attribute name="FilterValue" type="List" default="" />
+    <aura:attribute name="SelectedFilteroptions" type="List" default=""/>
+    <aura:attribute name="SelectedFilter" type="String" default=""/>
+    <aura:attribute name="storebuttonName" type="String" />
+    <aura:attribute name="hideTab" type="String" default=""/>
+    <aura:attribute name="SystemId" type="string" default=""/>
+    
+    <!--Main Objects Variable-->
+    <aura:attribute name="CustomerList" type="GYNCO_Configuration__c" default="" />
+    <aura:attribute name="PricingList" type="GYNCO_Configuration__c" default="" />
+    <aura:attribute name="MaterialList" type="GYNCO_Configuration__c" default="" />
+    <aura:attribute name="SalesOrderList" type="GYNCO_Configuration__c" default="" />
+    <aura:attribute name="EquipmentList" type="GYNCO_Configuration__c" default="" />
+    <aura:attribute name="QuotationList" type="GYNCO_Configuration__c" default="" />
+    <aura:attribute name="InvoiceList" type="GYNCO_Configuration__c" default="" />
+    <aura:attribute name="ListPriceList" type="GYNCO_Configuration__c" default="" />
+	<aura:attribute name="InventoryList" type="GYNCO_Configuration__c" default="" />
+    <!--aura:attribute name='CustomerBatchList' type='List' default=""/>
+    <aura:attribute name='MaterialBatchList' type='List' default=""/>
+    <aura:attribute name='SalesOrderBatchList' type='List' default=""/>
+    <aura:attribute name='EquipmentBatchList' type='List' default=""/>
+    <aura:attribute name='InvoiceBatchList' type='List' default=""/>
+    <aura:attribute name='QuotationBatchList' type='List' default=""/-->
+    <div class=""  style="border-radius:0rem;background:white;">
+        <lightning:tabset class="{!v.hideTab}" variant="scoped" onselect="{!c.tabSelected}" selectedTabId="{!v.selTabId}">
+          
+            
+            
+            <!-- New Pricing Screen  -->
+            <lightning:tab label="Pricing"  id="Pricing" iconName="standard:currency">
+                <div class="slds-box">
+                    <strong><h2 class="header">Object Settings</h2></strong>
+                    <label class="slds-form-element__label" style="margin-right: 0.5rem;">Salesforce Object Name</label>
+                    <lightning:helptext content="Select the Salesforce Object name to be mapped with Customer" class="FieldsWithHelpText"/> 
+                    <lightning:select class="maxWidth" name="GYNCF_SFDC_Object_Name__c" label="Salesforce Object Name" variant="label-hidden" aura:id="mySelect2" value="{!v.PricingList.GYNCF_SFDC_Object_Name__c}" disabled="{!v.Editable}">
+                        <option value="">--Select Object--</option>   
+                        <aura:iteration items="{!v.objectList}" var="item">
+                            <aura:if isTrue="{!item.value== v.PricingList.GYNCF_SFDC_Object_Name__c}">
+                                <option value="{!item.value}" selected="true">{!item.key}</option>
+                                <aura:set attribute="else">
+                                    <option value="{!item.value}">{!item.key}</option>
+                                </aura:set>
+                            </aura:if>
+                        </aura:iteration>
+                    </lightning:select>
+                </div>
+                <br/>
+                <div class="slds-box">
+                    <strong><h2 class="header">Filter Criteria</h2></strong>
+                    
+                    <div class="slds-grid slds-gutters">
+                        <div class="slds-col maxWidth">
+                            <span>
+                                <lightning:input type="text" id="textinput1" name="GYNCF_Account_Group__c" label="Account Group" value="{!v.CustomerList.GYNCF_Account_Group__c}" disabled="{!v.Editable}"/> 
+                                <lightning:input type="text" id="textinputFC2" name="GYNCF_Sales_Org__c" label="Sales Org" value="{!v.CustomerList.GYNCF_Sales_Org__c}" disabled="{!v.Editable}"  />
+                                <lightning:input type="text" id="textinputFC3" name="GYNCF_Distribution_Channel__c" label="Distribution Channel" value="{!v.CustomerList.GYNCF_Distribution_Channel__c}" disabled="{!v.Editable}" />
+                                <lightning:input type="text" id="textinputFC4" name="GYNCF_Division__c" label="Division" value="{!v.CustomerList.GYNCF_Division__c}" disabled="{!v.Editable}"/>
+                                <div>
+                                    <p>Created Date Range:</p>
+                                </div>
+                                <div class="slds-grid slds-gutters">
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <lightning:input class="" type="date" id="dateinput13" name="GYNCF_Date_Range_From__c" label="From" value="{!v.PricingList.GYNCF_Date_Range_From__c}" disabled="{!v.Editable}"/>
+                                    </div>                
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <lightning:input class="" type="date" id="dateinput14" name="GYNCF_Date_Range_To__c" label="To" value="{!v.PricingList.GYNCF_Date_Range_To__c}" disabled="{!v.Editable}"/>
+                                    </div>
+                                </div><br/>
+                                <lightning:input type="checkbox" id="opt1" label="Include Archived" name="GYNCF_Archived__c" checked="{!v.PricingList.GYNCF_Archived__c}" disabled="{!v.Editable}" aura:id="Archiveid"/><br/> 
+                                <label class="slds-form-element__label" style="margin-right: 0.5rem;">DELTA Sync</label>
+                                <lightning:helptext content="Select this checkbox to fetch the records created between Last Sync Date and Present Date" class="FieldsWithHelpText"/>
+                                <lightning:input type="checkbox" id="opt1" variant="label-hidden" label="DELTA Sync" name="Sync_Only_DELTA__c" checked="{!v.PricingList.Sync_Only_DELTA__c}" disabled="{!v.Editable}" aura:id="Archiveid"/> 
+                            </span>
+                        </div>
+                        <div class="slds-col" style="padding-top: 0.5%;">
+                            <span >
+                                <br/><lightning:button disabled="{!v.Editable}" iconName="action:filter" ariaControls="{!v.selTabId}" ariaDescribedBy="KTOKD" variant="brand" label="Add filters" title="Add filters" onclick="{!c.AddAGroupMember}"/>
+                                <br/><br/>
+                                <div style="padding-top: 0.8%;">
+                                    <lightning:button disabled="{!v.Editable}" iconName="action:filter" ariaControls="{!v.selTabId}" ariaDescribedBy="VKORG" variant="brand" label="Add filters" title="Add filters" onclick="{!c.AddAGroupMember}"/>
+                                </div>
+                                <div style="padding-top: 0.8%;">
+                                    <br/><lightning:button disabled="{!v.Editable}" iconName="action:filter" ariaControls="{!v.selTabId}" ariaDescribedBy="VTWEG" variant="brand" label="Add filters" title="Add filters" onclick="{!c.AddAGroupMember}"/>
+                                </div><div style="padding-top: 0.9%;">
+                                <br/><lightning:button disabled="{!v.Editable}" iconName="action:filter" ariaControls="{!v.selTabId}" ariaDescribedBy="SPART" variant="brand" label="Add filters" title="Add filters" onclick="{!c.AddAGroupMember}"/>
+                                </div>
+                            </span>
+                        </div>
+                    </div>    
+                    
+                </div>
+                <br/>
+                <div class="slds-box">
+                    <strong><h2 class="header">Available Operations</h2></strong>
+                    <br/>
+                    <lightning:input type="checkbox" id="opt3" label="Mass Sync from SAP" name="GYNCF_Mass_Sync__c" checked="{!v.PricingList.GYNCF_Mass_Sync__c}" disabled="{!v.Editable}" aura:id="MassSyncid"/>
+                    
+                </div>
+                <br/>   
+                <aura:if isTrue="{!v.PricingList.GYNCF_Mass_Sync__c}">
+                    <!--  <div class="slds-box">
+                        <strong><h2 class="header">Batch Scheduler</h2></strong>
+                        <br/>   
+                        <aura:if isTrue="{!v.ShowFrequencyComponent}">
+                            <c:GYNL_Mass_Sync_Scheduler  aura:id="childCompCustomer" disableFirst="{!v.Editable}"/>   
+                        </aura:if>
+                        <c:GYNL_Schedular_List/>
+                    </div>-->
+                </aura:if> 
+                
+                <br/>
+                <div class="slds-clearfix">
+                    <div class="slds-float_right">
+                        <aura:if isTrue="{!v.Editable}">
+                            
+                            <lightning:button iconName="utility:edit" variant="brand" label="Edit" onclick="{!c.showEdit}" />
+                            <aura:set attribute="else">
+                                <lightning:button iconName="utility:save"  variant="brand" label="Save" title="Save" onclick="{!c.saveRec}"/>
+                                <lightning:button iconName="utility:clear"  variant="destructive" label="Cancel" title="Cancel" onclick="{!c.cancelChanges}"/>
+                            </aura:set>
+                        </aura:if>
+                    </div>
+                </div>
+                <br/>
+                
+            </lightning:tab>
+            <!-- Old Customer Screen --> 
+            <lightning:tab label="Customer"  id="Customer" iconName="standard:customers">
+                <div class="slds-box">
+                    <strong><h2 class="header">Object Settings</h2></strong>
+                    <label class="slds-form-element__label" style="margin-right: 0.5rem;">Salesforce Object Name</label>
+                    <lightning:helptext content="Select the Salesforce Object name to be mapped with Customer" class="FieldsWithHelpText"/> 
+                    <lightning:select class="maxWidth" name="GYNCF_SFDC_Object_Name__c" label="Salesforce Object Name" variant="label-hidden" aura:id="mySelect2" value="{!v.CustomerList.GYNCF_SFDC_Object_Name__c}" disabled="{!v.Editable}">
+                        <option value="">--Select Object--</option>   
+                        <aura:iteration items="{!v.objectList}" var="item">
+                            <aura:if isTrue="{!item.value== v.CustomerList.GYNCF_SFDC_Object_Name__c}">
+                                <option value="{!item.value}" selected="true">{!item.key}</option>
+                                <aura:set attribute="else">
+                                    <option value="{!item.value}">{!item.key}</option>
+                                </aura:set>
+                            </aura:if>
+                        </aura:iteration>
+                    </lightning:select>
+                </div>
+                <br/>
+                <div class="slds-box">
+                    <strong><h2 class="header">Filter Criteria</h2></strong>
+                    
+                    <div class="slds-grid slds-gutters">
+                        <div class="slds-col maxWidth">
+                            <span>
+                                <lightning:input type="text" id="textinput1" name="GYNCF_Account_Group__c" label="Account Group" value="{!v.CustomerList.GYNCF_Account_Group__c}" disabled="{!v.Editable}"/> 
+                                <lightning:input type="text" id="textinputFC2" name="GYNCF_Sales_Org__c" label="Sales Org" value="{!v.CustomerList.GYNCF_Sales_Org__c}" disabled="{!v.Editable}"  />
+                                <lightning:input type="text" id="textinputFC3" name="GYNCF_Distribution_Channel__c" label="Distribution Channel" value="{!v.CustomerList.GYNCF_Distribution_Channel__c}" disabled="{!v.Editable}" />
+                                <lightning:input type="text" id="textinputFC4" name="GYNCF_Division__c" label="Division" value="{!v.CustomerList.GYNCF_Division__c}" disabled="{!v.Editable}"/>
+                                <div>
+                                    <p>Created Date Range:</p>
+                                </div>
+                                <div class="slds-grid slds-gutters">
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <lightning:input class="" type="date" id="dateinput13" name="GYNCF_Date_Range_From__c" label="From" value="{!v.CustomerList.GYNCF_Date_Range_From__c}" disabled="{!v.Editable}"/>
+                                    </div>                
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <lightning:input class="" type="date" id="dateinput14" name="GYNCF_Date_Range_To__c" label="To" value="{!v.CustomerList.GYNCF_Date_Range_To__c}" disabled="{!v.Editable}"/>
+                                    </div>
+                                </div><br/>
+                                <lightning:input type="checkbox" id="opt1" label="Include Archived" name="GYNCF_Archived__c" checked="{!v.CustomerList.GYNCF_Archived__c}" disabled="{!v.Editable}" aura:id="Archiveid"/><br/> 
+                                <label class="slds-form-element__label" style="margin-right: 0.5rem;">DELTA Sync</label>
+                                <lightning:helptext content="Select this checkbox to fetch the records created between Last Sync Date and Present Date" class="FieldsWithHelpText"/>
+                                <lightning:input type="checkbox" id="opt1" variant="label-hidden" label="DELTA Sync" name="Sync_Only_DELTA__c" checked="{!v.CustomerList.Sync_Only_DELTA__c}" disabled="{!v.Editable}" aura:id="Archiveid"/> 
+                            </span>
+                        </div>
+                        <div class="slds-col" style="padding-top: 0.5%;">
+                            <span >
+                                <br/><lightning:button disabled="{!v.Editable}" iconName="action:filter" ariaControls="{!v.selTabId}" ariaDescribedBy="KTOKD" variant="brand" label="Add filters" title="Add filters" onclick="{!c.AddAGroupMember}"/>
+                                <br/><br/>
+                                <div style="padding-top: 0.8%;">
+                                    <lightning:button disabled="{!v.Editable}" iconName="action:filter" ariaControls="{!v.selTabId}" ariaDescribedBy="VKORG" variant="brand" label="Add filters" title="Add filters" onclick="{!c.AddAGroupMember}"/>
+                                </div>
+                                <div style="padding-top: 0.8%;">
+                                    <br/><lightning:button disabled="{!v.Editable}" iconName="action:filter" ariaControls="{!v.selTabId}" ariaDescribedBy="VTWEG" variant="brand" label="Add filters" title="Add filters" onclick="{!c.AddAGroupMember}"/>
+                                </div><div style="padding-top: 0.9%;">
+                                <br/><lightning:button disabled="{!v.Editable}" iconName="action:filter" ariaControls="{!v.selTabId}" ariaDescribedBy="SPART" variant="brand" label="Add filters" title="Add filters" onclick="{!c.AddAGroupMember}"/>
+                                </div>
+                            </span>
+                        </div>
+                    </div>    
+                    
+                </div>
+                <br/>
+                <div class="slds-box">
+                    <strong><h2 class="header">Available Operations</h2></strong>
+                    <br/>
+                    <lightning:input type="checkbox" id="opt3" label="Mass Sync from SAP" name="GYNCF_Mass_Sync__c" checked="{!v.CustomerList.GYNCF_Mass_Sync__c}" disabled="{!v.Editable}" aura:id="MassSyncid"/>
+                    
+                </div>
+                <br/>   
+                <aura:if isTrue="{!v.CustomerList.GYNCF_Mass_Sync__c}">
+                    <!--  <div class="slds-box">
+                        <strong><h2 class="header">Batch Scheduler</h2></strong>
+                        <br/>   
+                        <aura:if isTrue="{!v.ShowFrequencyComponent}">
+                            <c:GYNL_Mass_Sync_Scheduler  aura:id="childCompCustomer" disableFirst="{!v.Editable}"/>   
+                        </aura:if>
+                        <c:GYNL_Schedular_List/>
+                    </div>-->
+                </aura:if> 
+                
+                <br/>
+                <div class="slds-clearfix">
+                    <div class="slds-float_right">
+                        <aura:if isTrue="{!v.Editable}">
+                            
+                            <lightning:button iconName="utility:edit" variant="brand" label="Edit" onclick="{!c.showEdit}" />
+                            <aura:set attribute="else">
+                                <lightning:button iconName="utility:save"  variant="brand" label="Save" title="Save" onclick="{!c.saveRec}"/>
+                                <lightning:button iconName="utility:clear"  variant="destructive" label="Cancel" title="Cancel" onclick="{!c.cancelChanges}"/>
+                            </aura:set>
+                        </aura:if>
+                    </div>
+                </div>
+                <br/>
+                
+            </lightning:tab>
+            
+            <lightning:tab label="Material" onactive="{!c.handleActive }" id="Material" iconName="standard:all">
+                <div class="slds-box">
+                    <strong><h2 class="header">Object Settings</h2></strong>
+                    <label class="slds-form-element__label" style="margin-right: 0.5rem;">Salesforce Object Name</label>
+                    <lightning:helptext content="Select the Salesforce Object name to be mapped with Material" class="FieldsWithHelpText"/> 
+                    <lightning:select class="maxWidth" name="GYNCF_SFDC_Object_Name__c" label="Salesforce Object Name" variant="label-hidden" aura:id="mySelect2" value="{!v.MaterialList.GYNCF_SFDC_Object_Name__c}" disabled="{!v.Editable}">
+                        <option value="">--Select Object--</option>   
+                        <aura:iteration items="{!v.objectList}" var="item">
+                            <aura:if isTrue="{!item.value== v.MaterialList.GYNCF_SFDC_Object_Name__c}">
+                                <option value="{!item.value}" selected="true">{!item.key}</option>
+                                <aura:set attribute="else">
+                                    <option value="{!item.value}">{!item.key}</option>
+                                </aura:set>
+                            </aura:if>
+                        </aura:iteration>
+                    </lightning:select>
+                </div>
+                <br/>
+                <div class="slds-box">
+                    <strong><h2 class="header">Filter Criteria</h2></strong>
+                    
+                    <div class="slds-grid slds-gutters">
+                        <div class="slds-col maxWidth">
+                            <span>
+                                <lightning:input type="text" id="textinput2" name="GYNCF_Material_Group__c" label="Material Group" value="{!v.MaterialList.GYNCF_Material_Group__c}" disabled ="{!v.Editable}" />
+                                <lightning:input type="text" id="textinput3" name="GYNCF_Material_Type__c" label="Material Type" value="{!v.MaterialList.GYNCF_Material_Type__c}" disabled="{!v.Editable}" />
+                                <lightning:input type="text" id="textinputFC2" name="GYNCF_Sales_Org__c" label="Sales Org" value="{!v.MaterialList.GYNCF_Sales_Org__c}" disabled="{!v.Editable}"  />
+                                <lightning:input type="text" id="textinputFC3" name="GYNCF_Distribution_Channel__c" label="Distribution Channel" value="{!v.MaterialList.GYNCF_Distribution_Channel__c}" disabled="{!v.Editable}" /><br/>
+                                <lightning:input type="checkbox" id="opt1" label="Include Archived" name="GYNCF_Archived__c" checked="{!v.MaterialList.GYNCF_Archived__c}" disabled="{!v.Editable}" aura:id="Archiveid"/><br/>
+                                <label class="slds-form-element__label" style="margin-right: 0.5rem;">DELTA Sync</label>
+                                <lightning:helptext content="Select this checkbox to fetch the records created between Last Sync Date and Present Date" class="FieldsWithHelpText"/>
+                                <lightning:input type="checkbox" id="opt1" label="DELTA Sync" variant="label-hidden" name="Sync_Only_DELTA__c" checked="{!v.MaterialList.Sync_Only_DELTA__c}" disabled="{!v.Editable}" aura:id="Archiveid"/>
+                            </span>
+                        </div>
+                      
+                         <div class="slds-col" style="padding-top: 0.5%;">
+                            <span >
+                                <br/><lightning:button disabled="{!v.Editable}" iconName="action:filter" ariaControls="{!v.selTabId}" ariaDescribedBy="MATKL" variant="brand" label="Add filters" title="Add filters" onclick="{!c.AddAGroupMember}"/>
+                                <br/><br/>
+                                <div style="padding-top: 0.8%;">
+                                    <lightning:button disabled="{!v.Editable}" iconName="action:filter" ariaControls="{!v.selTabId}" ariaDescribedBy="MTART" variant="brand" label="Add filters" title="Add filters" onclick="{!c.AddAGroupMember}"/>
+                                </div>
+                                <div style="padding-top: 0.8%;">
+                                    <br/><lightning:button disabled="{!v.Editable}" iconName="action:filter" ariaControls="{!v.selTabId}" ariaDescribedBy="VKORG" variant="brand" label="Add filters" title="Add filters" onclick="{!c.AddAGroupMember}"/>
+                                </div><div style="padding-top: 0.9%;">
+                                <br/><lightning:button disabled="{!v.Editable}" iconName="action:filter" ariaControls="{!v.selTabId}" ariaDescribedBy="VTWEG" variant="brand" label="Add filters" title="Add filters" onclick="{!c.AddAGroupMember}"/>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <br/>
+                <div class="slds-box">
+                    <strong><h2 class="header">Available Operations</h2></strong>
+                    <br/>
+                    <lightning:input type="checkbox" id="opti6" label="Mass Sync from SAP" name="GYNCF_Mass_Sync__c" checked="{!v.MaterialList.GYNCF_Mass_Sync__c}"  disabled="{!v.Editable}" aura:id="MassSyncidM"/>
+                </div>
+                <br/>
+                <div class="row">
+                    <aura:if isTrue="{!v.MaterialList.GYNCF_Mass_Sync__c}">
+                        <aura:if isTrue="{!v.ShowFrequencyComponent}">
+                            <!--c:GYNL_Mass_Sync_Scheduler  aura:id="childCompMaterials" disableFirst="{!v.Editable}"/-->   
+                        </aura:if>
+                    </aura:if>
+                </div>
+                <br/>
+                <div class="slds-clearfix">
+                    <div class="slds-float_right">
+                        <aura:if isTrue="{!v.Editable}">
+                            <lightning:button iconName="utility:edit" variant="brand" label="Edit" onclick="{!c.showEdit}" />
+                            <aura:set attribute="else">
+                                <lightning:button iconName="utility:save"  variant="brand" label="Save" title="Save" onclick="{!c.saveRec}"/>
+                                <lightning:button iconName="utility:clear"  variant="destructive" label="Cancel" title="Cancel" onclick="{!c.cancelChanges}"/>
+                            </aura:set>
+                        </aura:if>
+                    </div>
+                </div>
+                
+            </lightning:tab>
+            
+            
+            <lightning:tab label="Pricing" onactive="{! c.handleActive }" id="Pricing" iconName="standard:product">
+                <div class="slds-box">
+                    <strong><h2 class="header">Object Settings</h2></strong>
+                    <label class="slds-form-element__label" style="margin-right: 0.5rem;">Salesforce Object Name</label>
+                    <lightning:helptext content="Select the Salesforce Object name to be mapped with Equipment" class="FieldsWithHelpText"/> 
+                    <lightning:select class="maxWidth" name="GYNCF_SFDC_Object_Name__c" label="Salesforce Object Name" variant="label-hidden" aura:id="mySelect2" value="{!v.EquipmentList.GYNCF_SFDC_Object_Name__c}" disabled="{!v.Editable}">
+                        <option value="">--Select Object--</option>   
+                        <aura:iteration items="{!v.objectList}" var="item">
+                            <aura:if isTrue="{!item.value== v.EquipmentList.GYNCF_SFDC_Object_Name__c}">
+                                <option value="{!item.value}" selected="true">{!item.key}</option>
+                                <aura:set attribute="else">
+                                    <option value="{!item.value}">{!item.key}</option>
+                                </aura:set>
+                            </aura:if>
+                        </aura:iteration>
+                    </lightning:select>
+                </div>
+                <br/>
+                <div class="slds-box">
+                    <strong><h2 class="header">Filter Criteria</h2></strong>
+                    
+                    <div class="slds-grid slds-gutters">
+                        <div class="slds-col maxWidth">
+                            <span>
+                                <lightning:input type="text" id="textinput4" name="GYNCF_Sales_Org__c" label="Sales Org" value="{!v.EquipmentList.GYNCF_Sales_Org__c}" disabled="{!v.Editable}" />
+                                <lightning:input type="text" id="textinput4" name="GYNCF_System_Status__c" label="Status" value="{!v.EquipmentList.GYNCF_System_Status__c}" disabled="{!v.Editable}"/><br/>
+                                <lightning:input type="checkbox" id="opt1" label="Include Archived" name="GYNCF_Archived__c" checked="{!v.EquipmentList.GYNCF_Archived__c}" disabled="{!v.Editable}" aura:id="Archiveid"/><br/>
+                                <label class="slds-form-element__label" style="margin-right: 0.5rem;">DELTA Sync</label>
+                                <lightning:helptext content="Select this checkbox to fetch the records created between Last Sync Date and Present Date" class="FieldsWithHelpText"/>
+                                <lightning:input type="checkbox" id="opt1" label="DELTA Sync" name="Sync_Only_DELTA__c" variant="label-hidden" checked="{!v.EquipmentList.Sync_Only_DELTA__c}" disabled="{!v.Editable}" aura:id="Archiveid"/>
+                            </span>
+                        </div>
+                         <div class="slds-col" style="padding-top: 0.5%;">
+                            <span >
+                                <br/><lightning:button disabled="{!v.Editable}" iconName="action:filter" ariaControls="{!v.selTabId}" ariaDescribedBy="VKORG" variant="brand" label="Add filters" title="Add filters" onclick="{!c.AddAGroupMember}"/>
+                                <br/><br/>
+                                <div style="padding-top: 0.8%;">
+                                    <lightning:button disabled="{!v.Editable}" iconName="action:filter" ariaControls="{!v.selTabId}" ariaDescribedBy="ISTAT" variant="brand" label="Add filters" title="Add filters" onclick="{!c.AddAGroupMember}"/>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <br/>
+                
+                <div class="slds-box">
+                    <strong><h2 class="header">Available Operations</h2></strong>
+                    <br/>
+                    <lightning:input type="checkbox" id="optio8" label="Create in SAP" name="GYNCF_Create__c" checked="{!v.EquipmentList.GYNCF_Create__c}" disabled="{!v.Editable}" aura:id="CreateidE"/>
+                    <lightning:input type="checkbox" id="optio9" label="Mass Sync from SAP" name="GYNCF_Mass_Sync__c" checked="{!v.EquipmentList.GYNCF_Mass_Sync__c}" disabled="{!v.Editable}" aura:id="MassSyncidE"/>
+                </div>
+                <br/>
+                <div class="row">
+                    <aura:if isTrue="{!v.EquipmentList.GYNCF_Mass_Sync__c}">
+                        <aura:if isTrue="{!v.ShowFrequencyComponent}">
+                            <!--c:GYNL_Mass_Sync_Scheduler  aura:id="childCompEquipment" disableFirst="{!v.Editable}"/-->   
+                        </aura:if>
+                    </aura:if> 
+                </div>
+                <br/>
+                <div class="slds-clearfix">
+                    <div class="slds-float_right">
+                        <aura:if isTrue="{!v.Editable}">
+                            <lightning:button iconName="utility:edit" variant="brand" label="Edit" onclick="{!c.showEdit}" />
+                            <aura:set attribute="else">
+                                <lightning:button iconName="utility:save"  variant="brand" label="Save" title="Save" onclick="{!c.saveRec}"/>
+                                <lightning:button iconName="utility:clear"  variant="destructive" label="Cancel" title="Cancel" onclick="{!c.cancelChanges}"/>
+                            </aura:set>
+                        </aura:if>
+                    </div>
+                </div>
+                
+            </lightning:tab>
+            
+            <!-- Added By NAMAMI MISHRA -->
+            <lightning:tab label="Inventory" onactive="{! c.handleActive }" id="Inventory" iconName="standard:orders">
+                <div class="slds-box">
+                    <strong><h2 class="header">Object Settings</h2></strong>
+                    <label class="slds-form-element__label" style="margin-right: 0.5rem;">Salesforce Object Name</label>
+                    <lightning:helptext content="Select the Salesforce Object name to be mapped with Sales Order" class="FieldsWithHelpText"/> 
+                    <lightning:select class="maxWidth" name="GYNCF_SFDC_Object_Name__c" label="Salesforce Object Name" variant="label-hidden" aura:id="mySelect2" value="{!v.InventoryList.GYNCF_SFDC_Object_Name__c}" disabled="{!v.Editable}">
+                        <option value="">--Select Object--</option>   
+                        <aura:iteration items="{!v.objectList}" var="item">
+                            <aura:if isTrue="{!item.value== v.InventoryList.GYNCF_SFDC_Object_Name__c}">
+                                <option value="{!item.value}" selected="true">{!item.key}</option>
+                                <aura:set attribute="else">
+                                    <option value="{!item.value}">{!item.key}</option>
+                                </aura:set>
+                            </aura:if>
+                        </aura:iteration>
+                    </lightning:select>
+                   
+                </div>
+                <br/>
+                <div class="slds-box">
+                    <strong><h2 class="header">Filter Criteria</h2></strong>
+                    
+                    <div class="slds-grid slds-gutters">
+                        <div class="slds-col maxWidth">
+                            <span>
+                                <lightning:input type="text" id="inventoryFilter1" name="GYNCF_Document_Type__c" label="Plant" value="{!v.InventoryList.GYNCF_Document_Type__c}" disabled="{!v.Editable}"/>
+                                <br/>
+                                <lightning:input type="checkbox" id="chckinputFC1" label="Fetch By Storage Location" name="GYNCF_Archived__c" checked="{!v.InventoryList.GYNCF_Archived__c}" disabled="{!v.Editable}"  />
+                            </span>
+                        </div>
+                        <div class="slds-col" style="padding-top: 0.25%;">
+                            <span >
+                                <br/><lightning:button disabled="{!v.Editable}" iconName="action:filter" ariaControls="{!v.selTabId}" ariaDescribedBy="AUART" variant="brand" label="Add filters" title="Add filters" onclick="{!c.AddAGroupMember}"/>
+                                <br/>
+                            </span>
+                        </div>
+                    </div>
+                    
+                    
+                </div>
+                <br/>
+                <div class="slds-box">
+                    <strong><h2 class="header">Available Operations</h2></strong>
+                    <br/>
+                    <lightning:input type="checkbox" id="chckinputFC5" label="Mass Sync from SAP" name="GYNCF_Mass_Sync__c" checked="{!v.SalesOrderList.GYNCF_Mass_Sync__c}" disabled="{!v.Editable}"/>
+                </div>
+                <br/>   
+                <div class="row">
+                    <aura:if isTrue="{!v.SalesOrderList.GYNCF_Mass_Sync__c}">
+                        <aura:if isTrue="{!v.ShowFrequencyComponent}">
+                            <!--c:GYNL_Mass_Sync_Scheduler  aura:id="childCompSalesOrder" disableFirst="{!v.Editable}"/-->   
+                        </aura:if>   
+                    </aura:if> 
+                </div>
+                
+                <br/>
+                <div class="slds-clearfix">
+                    <div class="slds-float_right">
+                        <aura:if isTrue="{!v.Editable}">
+                            <lightning:button iconName="utility:edit" variant="brand" label="Edit" onclick="{!c.showEdit}" />
+                            <aura:set attribute="else">
+                                <lightning:button iconName="utility:save"  variant="brand" label="Save" title="Save" onclick="{!c.saveRec}"/>
+                                <lightning:button iconName="utility:clear"  variant="destructive" label="Cancel" title="Cancel" onclick="{!c.cancelChanges}"/>
+                            </aura:set>
+                        </aura:if>
+                    </div>
+                </div>
+                
+            </lightning:tab>
+            <!-- Added By NAMAMI MISHRA -->
+            
+            <lightning:tab label="Quote" onactive="{! c.handleActive }" id="Quotation" iconName="standard:quotes">
+                <div class="slds-box">
+                    <strong><h2 class="header">Object Settings</h2></strong>
+                    <label class="slds-form-element__label" style="margin-right: 0.5rem;">Salesforce Object Name</label>
+                    <lightning:helptext content="Select the Salesforce Object name to be mapped with Quotation" class="FieldsWithHelpText"/> 
+                    <lightning:select class="maxWidth" name="GYNCF_SFDC_Object_Name__c" label="Salesforce Object Name" variant="label-hidden" aura:id="mySelect2" value="{!v.QuotationList.GYNCF_SFDC_Object_Name__c}" disabled="{!v.Editable}">
+                        <option value="">--Select Object--</option>   
+                        <aura:iteration items="{!v.objectList}" var="item">
+                            <aura:if isTrue="{!item.value== v.QuotationList.GYNCF_SFDC_Object_Name__c}">
+                                <option value="{!item.value}" selected="true">{!item.key}</option>
+                                <aura:set attribute="else">
+                                    <option value="{!item.value}">{!item.key}</option>
+                                </aura:set>
+                            </aura:if>
+                        </aura:iteration>
+                    </lightning:select>
+                    <br/>
+                    <div class="slds-clearfix">
+                        <lightning:button variant="brand" label="Advanced Object Settings" title="Settings" onclick="{!c.showAdvancedSettings}"/>
+                    </div>
+                    <aura:if isTrue="{!v.showAdvancedSettings}">
+                        <label class="slds-form-element__label" style="margin-right: 0.5rem;">Unique SAP Identifier</label>
+                        <lightning:helptext content="Unique field from SAP to be stored in this field" class="FieldsWithHelpText"/>    
+                        <lightning:input class="maxWidth" type="text" variant="label-hidden" id="textinput1" name="GYNCF_Identifier_SFDC__c" label="Unique SAP Identifier" value="{!v.QuotationList.GYNCF_Identifier_SFDC__c}" disabled="{!v.Editable}"/>
+                        <label class="slds-form-element__label" style="margin-right: 0.5rem;">Line Item API Name</label>
+                        <lightning:helptext content="API Name of the line item object to be stored in the field" class="FieldsWithHelpText"/>
+                        <lightning:input class="maxWidth" type="text" id="textinputFC2" name="GYNCF_LineItemApi_Name__c" variant="label-hidden" label="Line Item API Name" value="{!v.QuotationList.GYNCF_LineItemApi_Name__c}" disabled="{!v.Editable}"  />
+                        <label class="slds-form-element__label" style="margin-right: 0.5rem;">Unique SAP Line Item Identifier</label>
+                        <lightning:helptext content="Unique field from SAP for line item to be stored in this field" class="FieldsWithHelpText"/>
+                        <lightning:input class="maxWidth" type="text" id="textinputFC3" name="GYNCF_LineItem_Identifier_SFDC__c" variant="label-hidden" label="Unique SAP Line Item Identifier" value="{!v.QuotationList.GYNCF_LineItem_Identifier_SFDC__c}" disabled="{!v.Editable}" />
+                        <label class="slds-form-element__label" style="margin-right: 0.5rem;">Line Item Parent Object API Name</label>
+                        <lightning:helptext content="Parent object API name for the line item to be stored in this field" class="FieldsWithHelpText"/>
+                        <lightning:input class="maxWidth" type="text" id="textinputFC4" name="GYNCF_LineItem_ParentField_Api__c" variant="label-hidden" label="Line Item Parent Object API Name" value="{!v.QuotationList.GYNCF_LineItem_ParentField_Api__c}" disabled="{!v.Editable}"/>
+                        <label class="slds-form-element__label" style="margin-right: 0.5rem;">Pricebook Entry API Name</label>
+                        <lightning:helptext content="API Name for Pricebook Entry to be stored in this field" class="FieldsWithHelpText"/>
+                        <lightning:input class="maxWidth" type="text" id="textinputFC4" name="GYNCF_PricebookEntry_Field_API_Name__c" variant="label-hidden" label="Pricebook Entry API Name" value="{!v.QuotationList.GYNCF_PricebookEntry_Field_API_Name__c}" disabled="{!v.Editable}"/>
+                    </aura:if>
+                </div>
+                <br/>
+                <div class="slds-box">
+                    <strong><h2 class="header">Filter Criteria</h2></strong>
+                    
+                    <div class="slds-grid slds-gutters">
+                        <div class="slds-col maxWidth">
+                            <span>
+                                <lightning:input  type="text" id="txtinputQ1" name="GYNCF_Document_Type__c" label="Document Type" value="{!v.QuotationList.GYNCF_Document_Type__c}" disabled="{!v.Editable}" />
+                                <lightning:input  type="text" id="txtinputQ2" name="GYNCF_Sales_Org__c" label="Sales Org" value="{!v.QuotationList.GYNCF_Sales_Org__c}" disabled="{!v.Editable}"/>
+                                <lightning:input  type="text" id="txtinputQ3" name="GYNCF_Distribution_Channel__c" label="Distribution Channel" value="{!v.QuotationList.GYNCF_Distribution_Channel__c}" disabled="{!v.Editable}"/>
+                                <lightning:input  type="text" id="txtinputQ8" name="GYNCF_Document_Status__c" label="Document Status" value="{!v.QuotationList.GYNCF_Document_Status__c}" disabled="{!v.Editable}"/>
+                                <div>
+                                    <p>Created Date Range:</p>
+                                </div>
+                                <div class="slds-grid slds-gutters">
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <lightning:input class="" type="date" id="dateinput15" name="GYNCF_Date_Range_From__c" label="From" value="{!v.QuotationList.GYNCF_Date_Range_From__c}" disabled="{!v.Editable}"/>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <lightning:input class="" type="date" id="dateinput16" name="GYNCF_Date_Range_To__c" label="To" value="{!v.QuotationList.GYNCF_Date_Range_To__c}" disabled="{!v.Editable}"/>
+                                    </div>
+                                </div> <br/>                   
+                                <lightning:input type="checkbox" id="opt1" label="Archived" name="GYNCF_Archived__c" checked="{!v.QuotationList.GYNCF_Archived__c}" disabled="{!v.Editable}" aura:id="Archiveid"/>
+                                <br/> <label class="slds-form-element__label" style="margin-right: 0.5rem;">DELTA Sync</label>
+                                <lightning:helptext content="Select this checkbox to fetch the records created between Last Sync Date and Present Date" class="FieldsWithHelpText"/>
+                                <lightning:input type="checkbox" id="opt1" label="DELTA Sync" variant="label-hidden" name="Sync_Only_DELTA__c" checked="{!v.QuotationList.Sync_Only_DELTA__c}" disabled="{!v.Editable}" aura:id="Archiveid"/>
+                            </span>
+                        </div>
+                        
+                        <div class="slds-col" style="padding-top: 0.5%;">
+                            <span >
+                                <br/><lightning:button disabled="{!v.Editable}" iconName="action:filter" ariaControls="{!v.selTabId}" ariaDescribedBy="AUART" variant="brand" label="Add filters" title="Add filters" onclick="{!c.AddAGroupMember}"/>
+                                <br/><br/>
+                                <div style="padding-top: 0.8%;">
+                                    <lightning:button disabled="{!v.Editable}" iconName="action:filter" ariaControls="{!v.selTabId}" ariaDescribedBy="VKORG" variant="brand" label="Add filters" title="Add filters" onclick="{!c.AddAGroupMember}"/>
+                                </div>
+                                <div style="padding-top: 0.8%;">
+                                    <br/><lightning:button disabled="{!v.Editable}" iconName="action:filter" ariaControls="{!v.selTabId}" ariaDescribedBy="VTWEG" variant="brand" label="Add filters" title="Add filters" onclick="{!c.AddAGroupMember}"/>
+                                </div><div style="padding-top: 0.9%;">
+                                <br/><lightning:button disabled="{!v.Editable}" iconName="action:filter" ariaControls="{!v.selTabId}" ariaDescribedBy="GBSTK" variant="brand" label="Add filters" title="Add filters" onclick="{!c.AddAGroupMember}"/>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+                    
+                    
+                </div>
+                <br/>
+                <div class="slds-box">
+                    <strong><h2 class="header">Available Operations</h2></strong>
+                    <br/>
+                    <lightning:input type="checkbox" id="chckinputQ2" label="Create in SAP" name="GYNCF_Create__c" checked="{!v.QuotationList.GYNCF_Create__c}" disabled="{!v.Editable}"/>
+                    <lightning:input type="checkbox" id="chckinputQ3" label="Mass Sync from SAP" name="GYNCF_Mass_Sync__c" checked="{!v.QuotationList.GYNCF_Mass_Sync__c}" disabled="{!v.Editable}" />
+                </div>
+                <br/>
+                <div class="row">
+                    <aura:if isTrue="{!v.QuotationList.GYNCF_Mass_Sync__c}">
+                        <aura:if isTrue="{!v.ShowFrequencyComponent}">
+                            <!--c:GYNL_Mass_Sync_Scheduler  aura:id="childCompQuotation" disableFirst="{!v.Editable}"/-->   
+                        </aura:if>   
+                    </aura:if> 
+                </div>
+                
+                <br/>
+                <div class="slds-clearfix">
+                    <div class="slds-float_right">
+                        <aura:if isTrue="{!v.Editable}">
+                            <lightning:button iconName="utility:edit" variant="brand" label="Edit" onclick="{!c.showEdit}" />
+                            <aura:set attribute="else">
+                                <lightning:button iconName="utility:save"  variant="brand" label="Save" title="Save" onclick="{!c.saveRec}"/>
+                                <lightning:button iconName="utility:clear"  variant="destructive" label="Cancel" title="Cancel" onclick="{!c.cancelChanges}"/>
+                            </aura:set>
+                        </aura:if>
+                    </div>
+                </div>
+                
+            </lightning:tab>
+            
+            
+            <lightning:tab label="Invoice" onactive="{! c.handleActive }" id="Invoice" iconName="standard:drafts">
+                <div class="slds-box">
+                    <strong><h2 class="header">Object Settings</h2></strong>
+                    <label class="slds-form-element__label" style="margin-right: 0.5rem;">Salesforce Object Name</label>
+                    <lightning:helptext content="Select the Salesforce Object name to be mapped with Invoice" class="FieldsWithHelpText"/> 
+                    <lightning:select class="maxWidth" name="GYNCF_SFDC_Object_Name__c" label="Salesforce Object Name" variant="label-hidden" aura:id="mySelect2" value="{!v.InvoiceList.GYNCF_SFDC_Object_Name__c}" disabled="{!v.Editable}">
+                        <option value="">--Select Object--</option>   
+                        <aura:iteration items="{!v.objectList}" var="item">
+                            <aura:if isTrue="{!item.value== v.InvoiceList.GYNCF_SFDC_Object_Name__c}">
+                                <option value="{!item.value}" selected="true">{!item.key}</option>
+                                <aura:set attribute="else">
+                                    <option value="{!item.value}">{!item.key}</option>
+                                </aura:set>
+                            </aura:if>
+                        </aura:iteration>
+                    </lightning:select>
+                    <br/>
+                    <div class="slds-clearfix">
+                        <lightning:button variant="brand" label="Advanced Object Settings" title="Settings" onclick="{!c.showAdvancedSettings}"/>
+                    </div>
+                    <aura:if isTrue="{!v.showAdvancedSettings}">
+                        <label class="slds-form-element__label" style="margin-right: 0.5rem;">Unique SAP Identifier</label>
+                        <lightning:helptext content="Unique field from SAP to be stored in this field" class="FieldsWithHelpText"/>    
+                        <lightning:input class="maxWidth" type="text" variant="label-hidden" id="textinput1" name="GYNCF_Identifier_SFDC__c" label="Unique SAP Identifier" value="{!v.InvoiceList.GYNCF_Identifier_SFDC__c}" disabled="{!v.Editable}"/>
+                        <label class="slds-form-element__label" style="margin-right: 0.5rem;">Line Item API Name</label>
+                        <lightning:helptext content="API Name of the line item object to be stored in the field" class="FieldsWithHelpText"/>
+                        <lightning:input class="maxWidth" type="text" id="textinputFC2" name="GYNCF_LineItemApi_Name__c" variant="label-hidden" label="Line Item API Name" value="{!v.InvoiceList.GYNCF_LineItemApi_Name__c}" disabled="{!v.Editable}"  />
+                        <label class="slds-form-element__label" style="margin-right: 0.5rem;">Unique SAP Line Item Identifier</label>
+                        <lightning:helptext content="Unique field from SAP for line item to be stored in this field" class="FieldsWithHelpText"/>
+                        <lightning:input class="maxWidth" type="text" id="textinputFC3" name="GYNCF_LineItem_Identifier_SFDC__c" variant="label-hidden" label="Unique SAP Line Item Identifier" value="{!v.InvoiceList.GYNCF_LineItem_Identifier_SFDC__c}" disabled="{!v.Editable}" />
+                        <label class="slds-form-element__label" style="margin-right: 0.5rem;">Line Item Parent Object API Name</label>
+                        <lightning:helptext content="Parent object API name for the line item to be stored in this field" class="FieldsWithHelpText"/>
+                        <lightning:input class="maxWidth" type="text" id="textinputFC4" name="GYNCF_LineItem_ParentField_Api__c" variant="label-hidden" label="Line Item Parent Object API Name" value="{!v.InvoiceList.GYNCF_LineItem_ParentField_Api__c}" disabled="{!v.Editable}"/>
+                        <label class="slds-form-element__label" style="margin-right: 0.5rem;">Pricebook Entry API Name</label>
+                        <lightning:helptext content="API Name for Pricebook Entry to be stored in this field" class="FieldsWithHelpText"/>
+                        <lightning:input class="maxWidth" type="text" id="textinputFC4" name="GYNCF_PricebookEntry_Field_API_Name__c" variant="label-hidden" label="Pricebook Entry API Name" value="{!v.InvoiceList.GYNCF_PricebookEntry_Field_API_Name__c}" disabled="{!v.Editable}"/>
+                    </aura:if>
+                </div>
+                <br/>
+                <div class="slds-box">
+                    <strong><h2 class="header">Filter Criteria</h2></strong>
+                    
+                    <div class="slds-grid slds-gutters">
+                        <div class="slds-col maxWidth">
+                            <span>
+                                <lightning:input  type="text" id="txtinputI1" name="GYNCF_Billing_Type__c" label="Billing Type" value="{!v.InvoiceList.GYNCF_Billing_Type__c}" disabled="{!v.Editable}"/>
+                                <lightning:input  type="text" id="txtinputI2" name="GYNCF_Company_Code__c" label="Company Code" value="{!v.InvoiceList.GYNCF_Company_Code__c}" disabled="{!v.Editable}"/>
+                                <lightning:input  type="text" id="txtinputI3" name="GYNCF_Sales_Org__c" label="Sales Org" value="{!v.InvoiceList.GYNCF_Sales_Org__c}" disabled="{!v.Editable}"/>
+                                <lightning:input  type="text" id="txtinputI4" name="GYNCF_Fiscal_Year__c" label="Fiscal Year" value="{!v.InvoiceList.GYNCF_Fiscal_Year__c}" disabled="{!v.Editable}"/>
+                                <div>
+                                    <p>Created Date Range:</p>
+                                </div>
+                                <div class="slds-grid slds-gutters">
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <lightning:input class="" type="date" id="dateinput15" name="GYNCF_Date_Range_From__c" label="From" value="{!v.QuotationList.GYNCF_Date_Range_From__c}" disabled="{!v.Editable}"/>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <lightning:input class="" type="date" id="dateinput16" name="GYNCF_Date_Range_To__c" label="To" value="{!v.QuotationList.GYNCF_Date_Range_To__c}" disabled="{!v.Editable}"/>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p>Billing Date Range:</p>
+                                </div>
+                                <div class="slds-grid slds-gutters">
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <lightning:input class="" type="date" id="dateinput15" name="GYNCF_Billing_Start_Date__c" label="From" value="{!v.QuotationList.GYNCF_Billing_Start_Date__c}" disabled="{!v.Editable}"/>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <lightning:input class="" type="date" id="dateinput16" name="GYNCF_Billing_End_Date__c" label="To" value="{!v.QuotationList.GYNCF_Billing_End_Date__c}" disabled="{!v.Editable}"/>
+                                    </div>
+                                </div><br/>
+                                <lightning:input class="maxWidth" type="checkbox" id="txtinputI5" name="GYNCF_Archived__c" label="Archived" value="{!v.InvoiceList.GYNCF_Archived__c}" disabled="{!v.Editable}"/>
+                                <br/><label class="slds-form-element__label" style="margin-right: 0.5rem;">DELTA Sync</label>
+                                <lightning:helptext content="Select this checkbox to fetch the records created between Last Sync Date and Present Date" class="FieldsWithHelpText"/>
+                                <lightning:input type="checkbox" id="opt1" label="DELTA Sync" variant="label-hidden" name="Sync_Only_DELTA__c" checked="{!v.InvoiceList.Sync_Only_DELTA__c}" disabled="{!v.Editable}" aura:id="Archiveid"/>
+                            </span>
+                        </div>
+                        <div class="slds-col" style="padding-top: 0.5%;">
+                            <span class="slds-p-top_x-large">
+                                <br/><lightning:button disabled="{!v.Editable}" iconName="action:filter" ariaControls="{!v.selTabId}" ariaDescribedBy="FKART" variant="brand" label="Add filters" title="Add filters" onclick="{!c.AddAGroupMember}"/>
+                                <br/><br/>
+                                <div style="padding-top: 0.75%;">
+                                    <lightning:button disabled="{!v.Editable}" iconName="action:filter" ariaControls="{!v.selTabId}" ariaDescribedBy="BUKRS" variant="brand" label="Add filters" title="Add filters" onclick="{!c.AddAGroupMember}"/>
+                                </div>
+                                <br/>
+                                <div style="padding-top: 0.75%;">
+                                    <lightning:button disabled="{!v.Editable}" iconName="action:filter" ariaControls="{!v.selTabId}" ariaDescribedBy="VKORG" variant="brand" label="Add filters" title="Add filters" onclick="{!c.AddAGroupMember}"/>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+                    
+                    
+                    
+                </div>
+                <br/>
+                <div class="slds-box">
+                    <strong><h2 class="header">Available Operations</h2></strong>
+                    <br/>
+                    <lightning:input type="checkbox" id="chckinputI2" label="Create in SAP" name="GYNCF_Create__c" checked="{!v.InvoiceList.GYNCF_Create__c}" disabled="{!v.Editable}"/>
+                    <lightning:input type="checkbox" id="chckinputI3" label="Mass Sync from SAP" name="GYNCF_Mass_Sync__c" checked="{!v.InvoiceList.GYNCF_Mass_Sync__c}" disabled="{!v.Editable}"/>
+                </div>
+                <br/>
+                <div class="row">
+                    <aura:if isTrue="{!v.InvoiceList.GYNCF_Mass_Sync__c}">
+                        <aura:if isTrue="{!v.ShowFrequencyComponent}">
+                            <!--c:GYNL_Mass_Sync_Scheduler  aura:id="childCompInvoice" disableFirst="{!v.Editable}"/-->
+                        </aura:if>
+                        
+                    </aura:if> 
+                </div>
+                
+                <br/>
+                <div class="slds-clearfix">
+                    <div class="slds-float_right">
+                        <aura:if isTrue="{!v.Editable}">
+                            <lightning:button iconName="utility:edit" variant="brand" label="Edit" onclick="{!c.showEdit}" />
+                            <aura:set attribute="else">
+                                <lightning:button iconName="utility:save"  variant="brand" label="Save" title="Save" onclick="{!c.saveRec}"/>
+                                <lightning:button iconName="utility:clear"  variant="destructive" label="Cancel" title="Cancel" onclick="{!c.cancelChanges}"/>
+                            </aura:set>
+                        </aura:if>
+                    </div>
+                </div>
+                
+            </lightning:tab>
+            
+            
+            
+            <!--To open the model box for filter criteria-->
+            <aura:if isTrue="{!v.AddfiltertotheField}">
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container">
+                        <header class="slds-modal__header">
+                            <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Add Filters</h2>
+                        </header>
+                        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                            <lightning:checkboxGroup name="Available values:"
+                                                     label="Available values:"
+                                                     options="{! v.FilterValue }"
+                                                     value="{! v.SelectedFilteroptions }"
+                                                     onchange="{! c.handleChange }"/>
+                        </div>
+                        <footer class="slds-modal__footer">
+                            <lightning:button iconName="utility:save"  variant="brand" label="Add" title="Add" onclick="{!c.AddFiltervalueToField}"/>
+                            <lightning:button iconName="utility:clear" variant="destructive" label="Cancel" title="Cancel" onclick="{!c.closeModel}"/>
+                        </footer>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </aura:if>
+            
+            <lightning:tab label="CMIR" onactive="{! c.handleActive }" id="CMIR" iconName="standard:drafts">
+                <div class="slds-box">
+                    <strong><h2 class="header">Object Settings</h2></strong>
+                    <label class="slds-form-element__label" style="margin-right: 0.5rem;">Salesforce Object Name</label>
+                    <lightning:helptext content="Select the Salesforce Object name to be mapped with Invoice" class="FieldsWithHelpText"/> 
+                    <lightning:select class="maxWidth" name="GYNCF_SFDC_Object_Name__c" label="Salesforce Object Name" variant="label-hidden" aura:id="mySelect2" value="{!v.InvoiceList.GYNCF_SFDC_Object_Name__c}" disabled="{!v.Editable}">
+                        <option value="">--Select Object--</option>   
+                        <aura:iteration items="{!v.objectList}" var="item">
+                            <aura:if isTrue="{!item.value== v.InvoiceList.GYNCF_SFDC_Object_Name__c}">
+                                <option value="{!item.value}" selected="true">{!item.key}</option>
+                                <aura:set attribute="else">
+                                    <option value="{!item.value}">{!item.key}</option>
+                                </aura:set>
+                            </aura:if>
+                        </aura:iteration>
+                    </lightning:select>
+                    <br/>
+                    <div class="slds-clearfix">
+                        <lightning:button variant="brand" label="Advanced Object Settings" title="Settings" onclick="{!c.showAdvancedSettings}"/>
+                    </div>
+                    <aura:if isTrue="{!v.showAdvancedSettings}">
+                        <label class="slds-form-element__label" style="margin-right: 0.5rem;">Unique SAP Identifier</label>
+                        <lightning:helptext content="Unique field from SAP to be stored in this field" class="FieldsWithHelpText"/>    
+                        <lightning:input class="maxWidth" type="text" variant="label-hidden" id="textinput1" name="GYNCF_Identifier_SFDC__c" label="Unique SAP Identifier" value="{!v.InvoiceList.GYNCF_Identifier_SFDC__c}" disabled="{!v.Editable}"/>
+                        <label class="slds-form-element__label" style="margin-right: 0.5rem;">Line Item API Name</label>
+                        <lightning:helptext content="API Name of the line item object to be stored in the field" class="FieldsWithHelpText"/>
+                        <lightning:input class="maxWidth" type="text" id="textinputFC2" name="GYNCF_LineItemApi_Name__c" variant="label-hidden" label="Line Item API Name" value="{!v.InvoiceList.GYNCF_LineItemApi_Name__c}" disabled="{!v.Editable}"  />
+                        <label class="slds-form-element__label" style="margin-right: 0.5rem;">Unique SAP Line Item Identifier</label>
+                        <lightning:helptext content="Unique field from SAP for line item to be stored in this field" class="FieldsWithHelpText"/>
+                        <lightning:input class="maxWidth" type="text" id="textinputFC3" name="GYNCF_LineItem_Identifier_SFDC__c" variant="label-hidden" label="Unique SAP Line Item Identifier" value="{!v.InvoiceList.GYNCF_LineItem_Identifier_SFDC__c}" disabled="{!v.Editable}" />
+                        <label class="slds-form-element__label" style="margin-right: 0.5rem;">Line Item Parent Object API Name</label>
+                        <lightning:helptext content="Parent object API name for the line item to be stored in this field" class="FieldsWithHelpText"/>
+                        <lightning:input class="maxWidth" type="text" id="textinputFC4" name="GYNCF_LineItem_ParentField_Api__c" variant="label-hidden" label="Line Item Parent Object API Name" value="{!v.InvoiceList.GYNCF_LineItem_ParentField_Api__c}" disabled="{!v.Editable}"/>
+                        <label class="slds-form-element__label" style="margin-right: 0.5rem;">Pricebook Entry API Name</label>
+                        <lightning:helptext content="API Name for Pricebook Entry to be stored in this field" class="FieldsWithHelpText"/>
+                        <lightning:input class="maxWidth" type="text" id="textinputFC4" name="GYNCF_PricebookEntry_Field_API_Name__c" variant="label-hidden" label="Pricebook Entry API Name" value="{!v.InvoiceList.GYNCF_PricebookEntry_Field_API_Name__c}" disabled="{!v.Editable}"/>
+                    </aura:if>
+                </div>
+                <br/>
+                <div class="slds-box">
+                    <strong><h2 class="header">Filter Criteria</h2></strong>
+                    
+                    <div class="slds-grid slds-gutters">
+                        <div class="slds-col maxWidth">
+                            <span>
+                                <lightning:input  type="text" id="txtinputI1" name="GYNCF_Billing_Type__c" label="Billing Type" value="{!v.InvoiceList.GYNCF_Billing_Type__c}" disabled="{!v.Editable}"/>
+                                <lightning:input  type="text" id="txtinputI2" name="GYNCF_Company_Code__c" label="Company Code" value="{!v.InvoiceList.GYNCF_Company_Code__c}" disabled="{!v.Editable}"/>
+                                <lightning:input  type="text" id="txtinputI3" name="GYNCF_Sales_Org__c" label="Sales Org" value="{!v.InvoiceList.GYNCF_Sales_Org__c}" disabled="{!v.Editable}"/>
+                                <lightning:input  type="text" id="txtinputI4" name="GYNCF_Fiscal_Year__c" label="Fiscal Year" value="{!v.InvoiceList.GYNCF_Fiscal_Year__c}" disabled="{!v.Editable}"/>
+                                <div>
+                                    <p>Created Date Range:</p>
+                                </div>
+                                <div class="slds-grid slds-gutters">
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <lightning:input class="" type="date" id="dateinput15" name="GYNCF_Date_Range_From__c" label="From" value="{!v.QuotationList.GYNCF_Date_Range_From__c}" disabled="{!v.Editable}"/>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <lightning:input class="" type="date" id="dateinput16" name="GYNCF_Date_Range_To__c" label="To" value="{!v.QuotationList.GYNCF_Date_Range_To__c}" disabled="{!v.Editable}"/>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p>Billing Date Range:</p>
+                                </div>
+                                <div class="slds-grid slds-gutters">
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <lightning:input class="" type="date" id="dateinput15" name="GYNCF_Billing_Start_Date__c" label="From" value="{!v.QuotationList.GYNCF_Billing_Start_Date__c}" disabled="{!v.Editable}"/>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <lightning:input class="" type="date" id="dateinput16" name="GYNCF_Billing_End_Date__c" label="To" value="{!v.QuotationList.GYNCF_Billing_End_Date__c}" disabled="{!v.Editable}"/>
+                                    </div>
+                                </div><br/>
+                                <lightning:input class="maxWidth" type="checkbox" id="txtinputI5" name="GYNCF_Archived__c" label="Archived" value="{!v.InvoiceList.GYNCF_Archived__c}" disabled="{!v.Editable}"/>
+                                <br/><label class="slds-form-element__label" style="margin-right: 0.5rem;">DELTA Sync</label>
+                                <lightning:helptext content="Select this checkbox to fetch the records created between Last Sync Date and Present Date" class="FieldsWithHelpText"/>
+                                <lightning:input type="checkbox" id="opt1" label="DELTA Sync" variant="label-hidden" name="Sync_Only_DELTA__c" checked="{!v.InvoiceList.Sync_Only_DELTA__c}" disabled="{!v.Editable}" aura:id="Archiveid"/>
+                            </span>
+                        </div>
+                        <div class="slds-col" style="padding-top: 0.5%;">
+                            <span class="slds-p-top_x-large">
+                                <br/><lightning:button disabled="{!v.Editable}" iconName="action:filter" ariaControls="{!v.selTabId}" ariaDescribedBy="FKART" variant="brand" label="Add filters" title="Add filters" onclick="{!c.AddAGroupMember}"/>
+                                <br/><br/>
+                                <div style="padding-top: 0.75%;">
+                                    <lightning:button disabled="{!v.Editable}" iconName="action:filter" ariaControls="{!v.selTabId}" ariaDescribedBy="BUKRS" variant="brand" label="Add filters" title="Add filters" onclick="{!c.AddAGroupMember}"/>
+                                </div>
+                                <br/>
+                                <div style="padding-top: 0.75%;">
+                                    <lightning:button disabled="{!v.Editable}" iconName="action:filter" ariaControls="{!v.selTabId}" ariaDescribedBy="VKORG" variant="brand" label="Add filters" title="Add filters" onclick="{!c.AddAGroupMember}"/>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+                    
+                    
+                    
+                </div>
+                <br/>
+                <div class="slds-box">
+                    <strong><h2 class="header">Available Operations</h2></strong>
+                    <br/>
+                    <lightning:input type="checkbox" id="chckinputI2" label="Create in SAP" name="GYNCF_Create__c" checked="{!v.InvoiceList.GYNCF_Create__c}" disabled="{!v.Editable}"/>
+                    <lightning:input type="checkbox" id="chckinputI3" label="Mass Sync from SAP" name="GYNCF_Mass_Sync__c" checked="{!v.InvoiceList.GYNCF_Mass_Sync__c}" disabled="{!v.Editable}"/>
+                </div>
+                <br/>
+                <div class="row">
+                    <aura:if isTrue="{!v.InvoiceList.GYNCF_Mass_Sync__c}">
+                        <aura:if isTrue="{!v.ShowFrequencyComponent}">
+                            <!--c:GYNL_Mass_Sync_Scheduler  aura:id="childCompInvoice" disableFirst="{!v.Editable}"/-->
+                        </aura:if>
+                        
+                    </aura:if> 
+                </div>
+                
+                <br/>
+                <div class="slds-clearfix">
+                    <div class="slds-float_right">
+                        <aura:if isTrue="{!v.Editable}">
+                            <lightning:button iconName="utility:edit" variant="brand" label="Edit" onclick="{!c.showEdit}" />
+                            <aura:set attribute="else">
+                                <lightning:button iconName="utility:save"  variant="brand" label="Save" title="Save" onclick="{!c.saveRec}"/>
+                                <lightning:button iconName="utility:clear"  variant="destructive" label="Cancel" title="Cancel" onclick="{!c.cancelChanges}"/>
+                            </aura:set>
+                        </aura:if>
+                    </div>
+                </div>
+                
+            </lightning:tab>
+            <!--Edited by Anjali-->
+            
+            
+            <lightning:tab label="Order" onactive="{! c.handleActive }" id="Order" iconName="standard:orders">
+                <div class="slds-box">
+                    <strong><h2 class="header">Object Settings</h2></strong>
+                    <label class="slds-form-element__label" style="margin-right: 0.5rem;">Salesforce Object Name</label>
+                    <lightning:helptext content="Select the Salesforce Object name to be mapped with Sales Order" class="FieldsWithHelpText"/> 
+                    <lightning:select class="maxWidth" name="GYNCF_SFDC_Object_Name__c" label="Salesforce Object Name" variant="label-hidden" aura:id="mySelect2" value="{!v.SalesOrderList.GYNCF_SFDC_Object_Name__c}" disabled="{!v.Editable}">
+                        <option value="">--Select Object--</option>   
+                        <aura:iteration items="{!v.objectList}" var="item">
+                            <aura:if isTrue="{!item.value== v.SalesOrderList.GYNCF_SFDC_Object_Name__c}">
+                                <option value="{!item.value}" selected="true">{!item.key}</option>
+                                <aura:set attribute="else">
+                                    <option value="{!item.value}">{!item.key}</option>
+                                </aura:set>
+                            </aura:if>
+                        </aura:iteration>
+                    </lightning:select>
+                    <br/>
+                    <div class="slds-clearfix">
+                        <lightning:button variant="brand" label="Advanced Object Settings" title="Settings" onclick="{!c.showAdvancedSettings}"/>
+                    </div>
+                    <aura:if isTrue="{!v.showAdvancedSettings}">
+                        <label class="slds-form-element__label" style="margin-right: 0.5rem;">Unique SAP Identifier</label>
+                        <lightning:helptext content="Unique field from SAP to be stored in this field" class="FieldsWithHelpText"/>    
+                        <lightning:input class="maxWidth" type="text" variant="label-hidden" id="textinput1" name="GYNCF_Identifier_SFDC__c" label="Unique SAP Identifier" value="{!v.SalesOrderList.GYNCF_Identifier_SFDC__c}" disabled="{!v.Editable}"/>
+                        <label class="slds-form-element__label" style="margin-right: 0.5rem;">Line Item API Name</label>
+                        <lightning:helptext content="API Name of the line item object to be stored in the field" class="FieldsWithHelpText"/>
+                        <lightning:input class="maxWidth" type="text" id="textinputFC2" name="GYNCF_LineItemApi_Name__c" variant="label-hidden" label="Line Item API Name" value="{!v.SalesOrderList.GYNCF_LineItemApi_Name__c}" disabled="{!v.Editable}"  />
+                        <label class="slds-form-element__label" style="margin-right: 0.5rem;">Unique SAP Line Item Identifier</label>
+                        <lightning:helptext content="Unique field from SAP for line item to be stored in this field" class="FieldsWithHelpText"/>
+                        <lightning:input class="maxWidth" type="text" id="textinputFC3" name="GYNCF_LineItem_Identifier_SFDC__c" variant="label-hidden" label="Unique SAP Line Item Identifier" value="{!v.SalesOrderList.GYNCF_LineItem_Identifier_SFDC__c}" disabled="{!v.Editable}" />
+                        <label class="slds-form-element__label" style="margin-right: 0.5rem;">Line Item Parent Object API Name</label>
+                        <lightning:helptext content="Parent object API name for the line item to be stored in this field" class="FieldsWithHelpText"/>
+                        <lightning:input class="maxWidth" type="text" id="textinputFC4" name="GYNCF_LineItem_ParentField_Api__c" variant="label-hidden" label="Line Item Parent Object API Name" value="{!v.SalesOrderList.GYNCF_LineItem_ParentField_Api__c}" disabled="{!v.Editable}"/>
+                        <label class="slds-form-element__label" style="margin-right: 0.5rem;">Pricebook Entry API Name</label>
+                        <lightning:helptext content="API Name for Pricebook Entry to be stored in this field" class="FieldsWithHelpText"/>
+                        <lightning:input class="maxWidth" type="text" id="textinputFC4" name="GYNCF_PricebookEntry_Field_API_Name__c" variant="label-hidden" label="Pricebook Entry API Name" value="{!v.SalesOrderList.GYNCF_PricebookEntry_Field_API_Name__c}" disabled="{!v.Editable}"/>
+                    </aura:if>
+                </div>
+                <br/>
+                <div class="slds-box">
+                    <strong><h2 class="header">Filter Criteria</h2></strong>
+                    
+                    <div class="slds-grid slds-gutters">
+                        <div class="slds-col maxWidth">
+                            <span>
+                                <lightning:input type="text" id="textinputFC1" name="GYNCF_Document_Type__c" label="Document Type" value="{!v.SalesOrderList.GYNCF_Document_Type__c}" disabled="{!v.Editable}"  />
+                                <lightning:input type="text" id="textinputFC2" name="GYNCF_Sales_Org__c" label="Sales Org" value="{!v.SalesOrderList.GYNCF_Sales_Org__c}" disabled="{!v.Editable}"  />
+                                <lightning:input type="text" id="textinputFC3" name="GYNCF_Distribution_Channel__c" label="Distribution Channel" value="{!v.SalesOrderList.GYNCF_Distribution_Channel__c}" disabled="{!v.Editable}"  />
+                                <lightning:input type="text" id="textinputFC4" name="GYNCF_Division__c" label="Division" value="{!v.SalesOrderList.GYNCF_Division__c}" disabled="{!v.Editable}" />
+                                <lightning:input type="text" id="textinputFC8" name="GYNCF_Document_Status__c" label="Document Status" value="{!v.SalesOrderList.GYNCF_Document_Status__c}" disabled="{!v.Editable}" />
+                                
+                                <div>
+                                    <p>Created Date Range:</p>
+                                </div>
+                                <div class="slds-grid slds-gutters">
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <lightning:input class="" type="date" id="dateinput13" name="GYNCF_Date_Range_From__c" label="From" value="{!v.SalesOrderList.GYNCF_Date_Range_From__c}" disabled="{!v.Editable}"/>
+                                    </div>
+                                    
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <lightning:input class="" type="date" id="dateinput14" name="GYNCF_Date_Range_To__c" label="To" value="{!v.SalesOrderList.GYNCF_Date_Range_To__c}" disabled="{!v.Editable}"/>
+                                    </div>
+                                </div><br/>
+                                <lightning:input type="checkbox" id="chckinputFC1" label="Billing Block" name="GYNCF_Billing_Block__c" checked="{!v.SalesOrderList.GYNCF_Billing_Block__c}" disabled="{!v.Editable}"  /><br/>
+                                <lightning:input type="checkbox" id="chckinputFC2" label="Delivery Block" name="GYNCF_Delivery_Block__c" checked="{!v.SalesOrderList.GYNCF_Delivery_Block__c}" disabled="{!v.Editable}"  /><br/>
+                                <lightning:input type="checkbox" id="opt1" label="Archived" name="GYNCF_Archived__c" checked="{!v.SalesOrderList.GYNCF_Archived__c}" disabled="{!v.Editable}" aura:id="Archiveid"/><br/>
+                                <label class="slds-form-element__label" style="margin-right: 0.5rem;">DELTA Sync</label>
+                                <lightning:helptext content="Select this checkbox to fetch the records created between Last Sync Date and Present Date" class="FieldsWithHelpText"/>
+                                <lightning:input type="checkbox" id="opt1" variant="label-hidden" label="DELTA Sync" name="Sync_Only_DELTA__c" checked="{!v.SalesOrderList.Sync_Only_DELTA__c}" disabled="{!v.Editable}" aura:id="Archiveid"/>
+                            </span>
+                        </div>
+                        <div class="slds-col" style="padding-top: 0.5%;">
+                            <span >
+                                <br/><lightning:button disabled="{!v.Editable}" iconName="action:filter" ariaControls="{!v.selTabId}" ariaDescribedBy="AUART" variant="brand" label="Add filters" title="Add filters" onclick="{!c.AddAGroupMember}"/>
+                                <br/><br/>
+                                <div style="padding-top: 0.8%;">
+                                    <lightning:button disabled="{!v.Editable}" iconName="action:filter" ariaControls="{!v.selTabId}" ariaDescribedBy="VKORG" variant="brand" label="Add filters" title="Add filters" onclick="{!c.AddAGroupMember}"/>
+                                </div>
+                                <div style="padding-top: 0.8%;">
+                                    <br/><lightning:button disabled="{!v.Editable}" iconName="action:filter" ariaControls="{!v.selTabId}" ariaDescribedBy="VTWEG" variant="brand" label="Add filters" title="Add filters" onclick="{!c.AddAGroupMember}"/>
+                                </div><div style="padding-top: 0.9%;">
+                                <br/><lightning:button disabled="{!v.Editable}" iconName="action:filter" ariaControls="{!v.selTabId}" ariaDescribedBy="SPART" variant="brand" label="Add filters" title="Add filters" onclick="{!c.AddAGroupMember}"/>
+                                </div>
+                                <div style="padding-top: 0.9%;">
+                                <br/><lightning:button disabled="{!v.Editable}" iconName="action:filter" ariaControls="{!v.selTabId}" ariaDescribedBy="GBSTK" variant="brand" label="Add filters" title="Add filters" onclick="{!c.AddAGroupMember}"/>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+                    
+                    
+                </div>
+                <br/>
+                <div class="slds-box">
+                    <strong><h2 class="header">Default Values for Order Creation</h2></strong>
+                    <lightning:select class="maxWidth" name="GYNCF_Default_Order_Status__c" label="Default Order Status" aura:id="mySelect3" value="{!v.SalesOrderList.GYNCF_Default_Order_Status__c}" disabled="{!v.Editable}">
+                        <option value="">--Select Status--</option>   
+                        <aura:iteration items="{!v.orderStatusList}" var="item">
+                            <aura:if isTrue="{!item.value== v.SalesOrderList.GYNCF_Default_Order_Status__c}">
+                                <option value="{!item.value}" selected="true">{!item.value}</option>
+                                <aura:set attribute="else">
+                                    <option value="{!item.value}">{!item.value}</option>
+                                </aura:set>
+                            </aura:if>
+                        </aura:iteration>
+                    </lightning:select>
+                </div>
+                <br/>
+                <div class="slds-box">
+                    <strong><h2 class="header">Pricebook Settings</h2></strong>
+                    <lightning:input class="maxWidth" type="text" id="textinputFC8" name="GYNCF_PricebookApi_Name__c" label="Custom Pricebook API Name" value="{!v.SalesOrderList.GYNCF_PricebookApi_Name__c}" disabled="{!v.Editable}" />
+                </div>
+                <br/>
+                <div class="slds-box">
+                    <strong><h2 class="header">Available Operations</h2></strong>
+                    <br/>
+                    <lightning:input type="checkbox" id="chckinputFC4" label="Create in SAP" name="GYNCF_Create__c" checked="{!v.SalesOrderList.GYNCF_Create__c}" disabled="{!v.Editable}"/>
+                    <lightning:input type="checkbox" id="chckinputFC5" label="Mass Sync from SAP" name="GYNCF_Mass_Sync__c" checked="{!v.SalesOrderList.GYNCF_Mass_Sync__c}" disabled="{!v.Editable}"/>
+                </div>
+                <br/>   
+                <div class="row">
+                    <aura:if isTrue="{!v.SalesOrderList.GYNCF_Mass_Sync__c}">
+                        <aura:if isTrue="{!v.ShowFrequencyComponent}">
+                            <!--c:GYNL_Mass_Sync_Scheduler  aura:id="childCompSalesOrder" disableFirst="{!v.Editable}"/-->   
+                        </aura:if>   
+                    </aura:if> 
+                </div>
+                
+                <br/>
+                <div class="slds-clearfix">
+                    <div class="slds-float_right">
+                        <aura:if isTrue="{!v.Editable}">
+                            <lightning:button iconName="utility:edit" variant="brand" label="Edit" onclick="{!c.showEdit}" />
+                            <aura:set attribute="else">
+                                <lightning:button iconName="utility:save"  variant="brand" label="Save" title="Save" onclick="{!c.saveRec}"/>
+                                <lightning:button iconName="utility:clear"  variant="destructive" label="Cancel" title="Cancel" onclick="{!c.cancelChanges}"/>
+                            </aura:set>
+                        </aura:if>
+                    </div>
+                </div>
+                
+            </lightning:tab>
+        </lightning:tabset>
+    </div>
+   
+    
+    
+</aura:component>

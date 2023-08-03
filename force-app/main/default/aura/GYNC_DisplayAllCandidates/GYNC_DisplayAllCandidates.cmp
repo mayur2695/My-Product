@@ -1,0 +1,35 @@
+<!-- This component is created to display all related candidates list in the record page of position object
+      Created by - Arnab Dey-->
+
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" controller = "GYNC_GetAllCandidates" access="global" >
+      <aura:attribute name = "data" type = "Object"/>
+    <aura:attribute name = "column" type = "List"/>
+    <aura:attribute name="isOpen" type="boolean" default="false"/>
+    <aura:attribute name="NewCanIsOpen" type="boolean" default="false"/>
+    <aura:attribute name="parentId" type="Id" default="" />
+    <aura:attribute name="enableInfiniteLoading" type="Boolean" default="true"/>
+    <aura:attribute name="initialRows" type="Integer" default="10"/>
+    <aura:attribute name="currentCount" type="Integer" default="10"/>
+    <aura:attribute name="totalRows" type="Integer" default="0"/>
+    <aura:attribute name="loadOffset" type="Integer" default="1"/><!--Set when to trigger loading of more rows-->
+    <!--Aura Attributes END--> 
+                <!--lightning:button variant="brand" label="Candidate List" onclick="{!c.getCandidates}"/-->
+                    <aura:handler name="init" value="{!this}" action="{!c.getCandidates}"/>
+                    <aura:handler event="force:refreshView" action="{!c.getCandidates}" />
+                <lightning:button variant="brand" label="New Candidate" onclick="{!c.CreateNewCandidate}"/>
+  <!--lightning:card -->
+                <p class="slds-p-horizontal_small" style="height: 180px">
+            <lightning:datatable
+                keyField="Id"
+                data="{! v.data }"
+                columns="{! v.column }"
+                hideCheckboxColumn="true"
+                onrowaction="{! c.handleRowAction }"
+                enableInfiniteLoading="{!v.enableInfiniteLoading}"
+                loadMoreOffset="{!v.loadOffset}"
+                onloadmore="{!c.handleLoadMore}"/>
+        </p>
+    <!--/lightning:card-->
+    <c:GYNC_FileUploader parentId="{!v.parentId}" isOpen = "{!v.isOpen}"/>
+    <c:GYNC_NewCandidateForm NewCanIsOpen = "{!v.NewCanIsOpen}" PositionId = "{!v.recordId}"/>
+            </aura:component>

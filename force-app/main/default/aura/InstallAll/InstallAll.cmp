@@ -1,0 +1,3 @@
+<aura:component controller = "GYNC_PostDeploymentScript" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+	<lightning:button onclick="{!c.installAllRecord}">Install</lightning:button>
+</aura:component>

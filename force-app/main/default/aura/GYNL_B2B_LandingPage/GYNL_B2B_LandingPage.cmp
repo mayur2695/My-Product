@@ -1,0 +1,96 @@
+<aura:component implements="force:appHostable" >
+    <div class="slds-box" style="background-color:white;">
+        <div class="slds-page-header">
+            <div class="slds-page-header__row">
+                <div class="slds-page-header__col-title">
+                    <div class="slds-media">
+                        <div class="slds-media__figure">
+                            <span class="slds-icon_container" title="SAP Salesforce Connector Suite">
+                                <lightning:icon class="headerIconBG" iconName="standard:home" alternativeText="SAP Salesforce Connector Suite" title="B2B E-Commerce Suite" />
+                                <span class="slds-assistive-text">B2B E-Commerce Suite</span>
+                            </span>
+                        </div>
+                        <div class="slds-media__body">
+                            <div class="slds-page-header__name">
+                                <div class="slds-page-header__name-title">
+                                    <h1>
+                                        <span style="margin-top: 0.3rem;" class="slds-page-header__title slds-truncate" title="B2B E-Commerce Suite">B2B E-Commerce Suite</span>
+                                    </h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br/>
+        <div class="slds-grid slds-gutters">
+            <div class="slds-col slds-size_1-of-2">
+				<div class="slds-grid slds-gutters slds-wrap">
+					<div class="slds-col slds-size_1-of-1" style="margin-top:0.75rem;">
+						<span>
+							<div  class="slds-app-launcher__tile slds-text-link_reset slds-medium-size_1-of-2 LiBox"  onclick="{!c.callOrder}">
+								<div class="slds-app-launcher__tile-figure">
+									<span class="slds-avatar slds-avatar_large">
+										<abbr class="slds-avatar__initials slds-icon-custom-27" title="Order To Cash Connect">
+											<lightning:icon class="icnStyle .slds-icon_large" iconName="standard:proposition" alternativeText="Order To Cash Connect" title="Order To Cash Connect" />
+										</abbr>
+									</span>
+								</div>
+								<div class="slds-app-launcher__tile-body" style="background-color:white border-style: solid;border-color: #0b4256;background-color:#0b4256; ">
+									<div style="margin-top: 1rem;">
+										<b>  <center><a style="font-size:1.2rem; color:white;" href="">Sales Connect</a></center></b>
+									</div>  
+								</div>
+							</div>
+					  
+						</span>
+					</div>
+					<div class="slds-col slds-size_1-of-1" style="margin-top:0.75rem;">
+						<span>
+							<div  class="slds-app-launcher__tile slds-text-link_reset box LiBox"  onclick="{!c.callMaster}">
+								<div class="slds-app-launcher__tile-figure">
+									<span class="slds-avatar slds-avatar_large">
+										<abbr class="slds-avatar__initials slds-icon-custom-27" title="Master Data Connect">
+											<lightning:icon class="icnStyle" iconName="standard:account" alternativeText="Master Data Connect" title="Master Data Connect"  size="small"/>
+										</abbr>
+									</span>                       
+								</div>
+								<div class="slds-app-launcher__tile-body" style="background-color:#0b4256;">
+									<div style="margin-top: 1rem;">
+										<b> <Center> <a style="font-size:1.2rem; color:white;" href="">Master Data Connect</a></Center></b>
+									</div>
+								</div>
+							</div>
+						</span>
+					</div>
+					<div class="slds-col slds-size_1-of-1" style="margin-top:0.75rem;">
+						<span>
+							<div  class="slds-app-launcher__tile slds-text-link_reset box LiBox"  onclick="{!c.OnClickB2B}">
+								<div class="slds-app-launcher__tile-figure">
+									<span class="slds-avatar slds-avatar_large">
+										<abbr class="slds-avatar__initials slds-icon-custom-27" title="B2B E-Commerce">
+											<lightning:icon class="icnStyle" iconName="standard:fulfillment_order" alternativeText="B2B E-Commerce" title="B2B E-Commerce"  size="small"/>
+										</abbr>
+									</span>                       
+								</div>
+								<div class="slds-app-launcher__tile-body" style="background-color:#0b4256;">
+									<div style="margin-top: 1rem;">
+										<b> <Center> <a style="font-size:1.2rem; color:white;" href="">E-Commerce (B2B)</a></Center></b>
+									</div>
+								</div>
+							</div>
+						</span>
+					</div>
+				</div>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <span> <center> <img src="{!$Resource.Landing}" style="height:250px !important;"></img></center> </span>
+            </div>
+        </div>
+        
+        <!--<div class="slds-grid slds-gutters" style="margin-bottom: 0.5rem;float: right;">
+            <span><b><p class = "markup" >Powered by GyanSys</p></b></span>
+        </div-->
+    </div>
+</aura:component>

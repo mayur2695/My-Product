@@ -1,0 +1,14 @@
+<aura:component controller="GYNC_relatedSalesAgreements" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+ 	<aura:handler name="init" value="{!this}" action="{!c.doInit}"></aura:handler>
+    <aura:attribute name="saList" type="SalesAgreement[]"></aura:attribute>
+    
+    <lightning:select label="Available Sales Agreements" name="uzr" aura:id="uzr"> 
+        <option value="----Choose Related Sales Agreement---">----Choose Related Sales Agreement---</option>
+        <aura:iteration items="{!v.saList}" var="sa">
+			<option value="{!sa.Id}">{!sa.Name}</option>
+        </aura:iteration>
+	</lightning:select>
+    <div class="slds-align_absolute-center" style="height:5rem">
+    <lightning:button  iconName="utility:save"  variant="brand"  label= "Assign"  title="Assign" onclick="{!c.updateSA}"  />
+    </div>
+    </aura:component>

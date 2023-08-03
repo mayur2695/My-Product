@@ -1,0 +1,148 @@
+<aura:component controller="GYNC_createCustomfieldController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:handler name="init" value="{!this}" action="{!c.doinit}" />
+    <aura:attribute name="selectedtab" type="String" default="Customer"/>
+    <aura:attribute name="CustomFieldList" type="List" />
+    <aura:attribute name="selectedSystemId" type="String" />
+    <aura:handler event="c:RefershCustomtable" action="{!c.handleApplicationEvent}"/>
+    <aura:handler name="change" value="{!v.selectedSystemId}" action="{!c.itemsChange}"/>
+
+    
+    <div class="slds-box">
+        <h1 style="font-size: 1rem;"><b>Custom SAP Fields</b></h1>
+        <br/>
+        <table aria-multiselectable="true" class="slds-table slds-table_bordered slds-table_fixed-layout slds-table_resizable-cols" role="grid">
+            <thead>
+                <tr class="slds-line-height_reset">
+                    <!--<th class="slds-text-align_right" scope="col" style="width:3.25rem">
+                    <span id="column-group-header" class="slds-assistive-text">Choose a row</span>
+                    <div class="slds-th__action slds-th__action_form">
+                        <div class="slds-checkbox">
+                            <input type="checkbox" name="options" id="checkbox-unique-id-293" value="checkbox-unique-id-293" tabindex="0" aria-labelledby="check-select-all-label column-group-header" />
+                            <label class="slds-checkbox__label" for="checkbox-unique-id-293" id="check-select-all-label">
+                                <span class="slds-checkbox_faux"></span>
+                                <span class="slds-form-element__label slds-assistive-text">Select All</span>
+                            </label>
+                        </div>
+                    </div>
+                </th>-->
+                    
+                    <!--th aria-label="Name" aria-sort="none" class="slds-is-resizable slds-is-sortable" scope="col">
+                    <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="0">
+                        <span class="slds-assistive-text">Sort by: </span>
+                        <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                            <span class="slds-truncate" title="Name">Name</span>
+                            
+                        </div>
+                    </a>
+                    <div class="slds-resizable">
+                        <input type="range" aria-label="Name column width" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-533" max="1000" min="20" tabindex="0" />
+                        <span class="slds-resizable__handle">
+                            <span class="slds-resizable__divider"></span>
+                        </span>
+                    </div>
+                </th-->
+                    <th aria-label="Account Name" aria-sort="none" class="slds-is-resizable slds-is-sortable" scope="col">
+                        <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="0">
+                            <span class="slds-assistive-text">Sort by: </span>
+                            <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                                <span class="slds-truncate" title="Label">SAP Field Name</span>
+                                
+                            </div>
+                        </a>
+                        <div class="slds-resizable">
+                            <input type="range" aria-label="Account Name column width" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-534" max="1000" min="20" tabindex="0" />
+                            <span class="slds-resizable__handle">
+                                <span class="slds-resizable__divider"></span>
+                            </span>
+                        </div>
+                    </th>
+                    <th aria-label="Close Date" aria-sort="none" class="slds-is-resizable slds-is-sortable" scope="col">
+                        <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="0">
+                            <span class="slds-assistive-text">Sort by: </span>
+                            <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                                <span class="slds-truncate" title="Property">Property</span>
+                                
+                            </div>
+                        </a>
+                        <div class="slds-resizable">
+                            <input type="range" aria-label="Close Date column width" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-535" max="1000" min="20" tabindex="0" />
+                            <span class="slds-resizable__handle">
+                                <span class="slds-resizable__divider"></span>
+                            </span>
+                        </div>
+                    </th>
+                    <th  aria-label="Add to Salesforce"  aria-sort="none" class="slds-is-resizable slds-is-sortable slds-text-align_center" scope="col">
+                        <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="0">
+                            <span class="slds-assistive-text">Sort by: </span>
+                            <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                                <span class="slds-truncate" title="Add to Salesforce">Add to Salesforce</span>
+                                
+                            </div>
+                        </a>
+                        <div class="slds-resizable">
+                            <input type="range" aria-label="Name column width" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-533" max="1000" min="20" tabindex="0" />
+                            <span class="slds-resizable__handle">
+                                <span class="slds-resizable__divider"></span>
+                            </span>
+                        </div>
+                    </th>
+                    <th aria-label="Name" aria-sort="none" class="slds-is-resizable slds-is-sortable" scope="col">
+                        <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="0">
+                            <span class="slds-assistive-text">Sort by: </span>
+                            <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                                <span class="slds-truncate" title="Name">Item</span>
+                                
+                            </div>
+                        </a>
+                        <div class="slds-resizable">
+                            <input type="range" aria-label="Name column width" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-533" max="1000" min="20" tabindex="0" />
+                            <span class="slds-resizable__handle">
+                                <span class="slds-resizable__divider"></span>
+                            </span>
+                        </div>
+                    </th>
+                    
+                    
+                    
+                    
+                </tr>
+            </thead>
+            <tbody>
+                <aura:iteration items="{!v.CustomFieldList}" var="data">
+                    <tr  class="slds-hint-parent">
+                        
+                        <th scope="row">
+                            <!--div class="slds-truncate" title="{!data.Name}">
+                        {!data.Name}
+                    </div-->
+                            <div class="slds-truncate" title="{!data.Label__c}">{!data.Label__c}</div>
+                        </th>
+                        <!--td role="gridcell">
+                    <div class="slds-truncate" title="{!data.Label__c}">{!data.Label__c}</div>
+                </td-->
+                        <td role="gridcell">
+                            <div class="slds-truncate" title="{!data.Property__c}">{!data.Property__c}</div>
+                        </td>
+                        <td  role="gridcell">
+                            <div class="slds-checkbox">
+                                <input type="checkbox" name="{!data.Id}" id="{!data.Id}" value="" tabindex="0" aria-labelledby="check-button-label-01 column-group-header" checked="{!data.Add_Field_To_Salesforce__c }" onchange="{!c.addtoSalesforce}" disabled="{!data.Add_Field_To_Salesforce__c }" />
+                                
+                                <label class="slds-checkbox__label" for="{!data.Id}">
+                                    <span class="slds-checkbox_faux"></span>
+                                    <span class="slds-form-element__label slds-assistive-text">Select item 1</span>
+                                </label>
+                            </div>
+                        </td>
+                        <td role="gridcell">
+                            <div class="slds-truncate" title="{!data.Item__c}">
+                                
+                                <lightning:input type="checkbox" label="" checked="{!data.Item__c}" name="input1" disabled="true"/>
+                            </div>
+                        </td>    
+                    </tr>
+                </aura:iteration>
+                
+            </tbody>
+        </table>
+    </div>
+</aura:component>

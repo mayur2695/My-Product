@@ -1,0 +1,16 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId" access="global">
+    <!--aura:attribute name="ProductId" type="Id" default = "01t0o000009yqwaAAA"/-->
+    <aura:attribute name="storeRating" type="Integer" default = "0"/>
+    <aura:attribute name="recordId" type="String"/>
+    <aura:registerEvent name="showToast" type="force:showToast" />
+    <aura:registerEvent name="GYNE_changeReviewTab" type="c:GYNE_changeReviewTab"/>
+    <lightning:recordEditForm onsuccess =  "{!c.successful}" aura:id = "review" objectApiName="GYNCO_Product_Review__c" onsubmit = "{!c.submitForm}">
+        
+        <lightning:messages />
+        <lightning:inputField aura:id = "commentid" fieldName="GYNCF_Review_Description__c" variant="label-stacked"/>
+        <!--lightning:inputField fieldName="Product__c" variant="label-stacked"/-->
+         <c:GYNL_starRating ratingSelected="{!v.storeRating}" />
+        <lightning:button variant="brand" class="slds-m-top_small" type="submit" label="Submit" />
+    </lightning:recordEditForm>
+    
+</aura:component>

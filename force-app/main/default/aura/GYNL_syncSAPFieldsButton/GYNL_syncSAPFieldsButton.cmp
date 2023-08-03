@@ -1,0 +1,5 @@
+<aura:component controller="GYNC_SyncAPIFieldNamesSAPClass" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+	<aura:attribute name="selTabId" type="String" default="Customer"/>  
+    <aura:attribute name="systemId" type="String" default=""/> 
+    <lightning:button iconName="action:share_link" variant="brand" label="Sync SAP APIs" onclick="{!c.syncSAPFields}" />
+</aura:component>

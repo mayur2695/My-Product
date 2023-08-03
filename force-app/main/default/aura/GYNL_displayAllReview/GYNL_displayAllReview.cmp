@@ -1,0 +1,51 @@
+<aura:component controller = "GYNC_displayAllReviewApex" implements="flexipage:availableForRecordHome,force:hasRecordId" access="global">
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name = "allReviews" type = "List"/>
+    <aura:attribute name = "itemsOnFirstPage" type = "Integer" default = "5"/>
+    <aura:attribute name = "showAllReview" type = "Boolean" default = "false"/>
+    
+    <aura:handler name ="init" value ="{!this}" action ="{!c.doInit}"/>
+    
+    <div >
+        
+        <aura:iteration items = "{!v.allReviews}" var ="item" indexVar = "index">
+            <aura:if isTrue="{!index == 0}">
+                <aura:set attribute="else">
+                    <hr style = "margin:2%"/>
+                </aura:set>
+            </aura:if> 
+            <div class="slds-grid " >
+                <div class="slds-col slds-size_1-of-15" >
+                    <span class="slds-avatar slds-avatar_profile-image-large slds-avatar_circle">
+                        <span class="slds-assistive-text">Person name</span>
+                    </span>
+                </div>
+                <div class="slds-col slds-size_14-of-15" style = "font-size:20px; line-height:19px; color:black; margin-top:8px; margin-left:5px; text-align: left !important;">
+                    {!item.CreatedBy.Name}
+                </div> 
+            </div>
+            
+            <div style = "font-size:26px;">
+                <c:GYNL_showStars ratingSelected= "{!item.GYNCF_Rating__c}" />
+            </div>
+            <div style = "font-size:14px; line-height:19px; color:black; font-weight: bold;">
+                <lightning:formattedRichText value="{!item.GYNCF_Review_Description__c}"/>
+            </div>
+        </aura:iteration>
+        <aura:if isTrue="{!v.allReviews.length>0}">
+        <aura:if isTrue="{!!v.showAllReview}">
+            <div>
+                <span style = "color:orange; text-decoration:underline; cursor:pointer;" onclick="{! c.clickShowMore}">See All Reviews</span>
+                    
+            </div>
+            <aura:set attribute="else">
+               <div>
+                    <span style = "color:orange; text-decoration:underline; cursor:pointer;" onclick="{! c.clickShowLess}">Show Less</span>
+                
+            </div>  
+            </aura:set>
+        </aura:if> 
+        </aura:if>
+        <br/>
+    </div>
+</aura:component>

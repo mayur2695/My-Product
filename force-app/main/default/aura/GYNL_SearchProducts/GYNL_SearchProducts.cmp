@@ -1,0 +1,77 @@
+<aura:component controller="GYNC_CatalogController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+	<!-- attributes -->
+    <aura:attribute name="Results" type="Product2[]"/>
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="cvalue" type="String" default="Test Catalog"/>
+    <aura:attribute name="cdata" type="Object" />
+    <aura:attribute name="showPrdAssignSec" type="boolean" default="false"/>
+    <aura:attribute name="selectedProd" type="Object"/>
+    <aura:attribute name="pname" type="Id"/>
+    <aura:attribute name="pageNumber" type="Integer" default="1"/>
+    <aura:attribute name="pageSize" type="Integer" default="10"/>
+    <aura:attribute name="isLastPage" type="Boolean" default="false"/>
+    <aura:attribute name="dataSize" type="Integer" default="0"/> 
+    
+    <!-- handlers-->
+    <aura:handler name="init" value="{!this }" action="{!c.init }"/>
+    
+    <div class="slds-grid slds-wrap slds-text-align_left custom-container">
+        <div class="slds-size_1-of-2 slds-max-small-size_1-of-3">
+            <p class="box1"><c:GYNL_TreeDisplayCategories cInfo="{!v.cdata}" aura:id="treeCmp"/></p>
+        </div>
+        
+        <div class="slds-size_1-of-2 slds-max-small-size_2-of-3">
+            <p class="vl">&nbsp;          
+				<p class="box2">
+					<p>
+					<lightning:input type="search" label="Searh" variant="label-hidden" placeholder="Product Name..." aura:id="SearchBox"/>
+						&nbsp;<br/><lightning:button label="Search Product"  variant="brand" onclick="{!c.serachData}"/>
+					</p><br/><br/>
+					
+					
+					<lightning:datatable
+									 columns="{!v.columns}"
+									 maxRowSelection="{!v.maxRowSelection}"
+									 data="{!v.Results}"
+									 keyField = "Id"
+									 hideCheckboxColumn="true"
+									 onrowaction="{!c.handleData}"/>
+				 
+					<div class="slds-clearfix">
+						<div class="slds-page-header" role="banner">
+							<div class="slds-float_right">            
+								<lightning:button label="Prev" iconName="utility:chevronleft" iconPosition="left"
+												  onclick="{!c.handlePrev}" disabled="{! v.pageNumber == 1}"/>
+								<lightning:button label="Next" iconName="utility:chevronright" iconPosition="right"
+												  disabled="{! v.isLastPage}" onclick="{!c.handleNext}"/>
+							</div>
+							<p >Page {!v.pageNumber} | Showing records from {! ((v.pageNumber-1)*v.pageSize)+' to '+((v.pageNumber-1)*v.pageSize+v.dataSize)}</p>
+						</div>
+					</div>
+				</p>
+			</p>
+			
+		</div>
+   <!-- Products Assignemt Section -->
+    <aura:if isTrue="{!v.showPrdAssignSec}">
+    	<div class="slds-modal slds-fade-in-open">
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+            <div class="slds-modal__container">                
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                	<lightning:card title="Assign Category">	
+                    <lightning:recordEditForm objectApiName="Product2" recordId="{!v.pname}" onsuccess="{!c.handleSuccess}">
+                            <lightning:outputField fieldName="Name" />
+                            <lightning:inputField fieldName="GYNCF_Product_Category__c"/>
+                            <div class="slds-align_absolute-center">
+                                <lightning:button variant="brand-outline" label="Close" title="Close" onclick="{! c.closeSec }" />
+                                <lightning:button variant="brand" name="Update" label="Assign" type="submit"/> 
+                            </div>
+                    </lightning:recordEditForm>
+                   </lightning:card>
+                </div>
+            </div>
+        </section>
+        </div>
+    </aura:if>
+    </div>  	    
+</aura:component>

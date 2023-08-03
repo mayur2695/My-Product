@@ -1,0 +1,50 @@
+({
+	doInit : function(component, event, helper) {
+		var finalArrray=[];
+        var objectData= new Object();
+        objectData.iconName="avatar";
+        objectData.ObjectName="Admin";
+        finalArrray.push(objectData);
+        var objectData1= new Object();
+        objectData1.iconName="customers";
+        objectData1.ObjectName="Customer";
+        finalArrray.push(objectData1);
+        var objectData2= new Object();
+        objectData2.iconName="location";
+        objectData2.ObjectName="Inventory";
+        finalArrray.push(objectData2);
+        var objectData3= new Object();
+        objectData3.iconName="orders";
+        objectData3.ObjectName="Order";
+        finalArrray.push(objectData3);
+        var objectData4= new Object();
+        objectData4.iconName="custom";
+        objectData4.ObjectName="Any Data Connect";
+        finalArrray.push(objectData4);
+        var objectData4= new Object();
+        objectData4.iconName="all";
+        objectData4.ObjectName="Material";
+        finalArrray.push(objectData4);
+        var objectData4= new Object();
+        objectData4.iconName="lead";
+        objectData4.ObjectName="CMIR";
+        finalArrray.push(objectData4);
+        var objectData4= new Object();
+        objectData4.iconName="quotes";
+        objectData4.ObjectName="Quote";
+        finalArrray.push(objectData4);
+        var objectData4= new Object();
+        objectData4.iconName="currency";
+        objectData4.ObjectName="Pricing";
+        finalArrray.push(objectData4);
+        var objectData4= new Object();
+        objectData4.iconName="steps";
+        objectData4.ObjectName="VC";
+        finalArrray.push(objectData4);
+        var objectData4= new Object();
+        objectData4.iconName="pricebook";
+        objectData4.ObjectName="Invoice";
+        finalArrray.push(objectData4);
+        component.set("v.MainList",finalArrray);
+	}
+})

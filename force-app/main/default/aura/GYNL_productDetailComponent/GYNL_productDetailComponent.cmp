@@ -1,0 +1,177 @@
+<aura:component controller="GYNC_productDetailList"
+    implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction,lightning:isUrlAddressable"
+    access="global">
+    <!--<ltng:require scripts="{!join(',',
+                           $Resource.jquery183,
+                           $Resource.okzoom
+                           )}" 
+                  afterScriptsLoaded="{!c.scriptsLoaded}"/> -->
+    <ltng:require scripts="{!$Resource.zoom}" afterScriptsLoaded="{!c.M1}" />
+    <!-- Added By Spandana 05/26 -->
+    <aura:if isTrue="{!v.staticresourceName=='Theme2'}">
+        <ltng:require styles="{!$Resource.GYNSR_GyansysTheme}" afterScriptsLoaded="{!c.scriptsLoaded1}" />
+    </aura:if>
+    <aura:if isTrue="{!v.staticresourceName=='Theme1'}">
+        <ltng:require styles="{!$Resource.GYNSR_SalesforceTheme}" afterScriptsLoaded="{!c.scriptsLoaded1}" />
+    </aura:if>
+    <aura:if isTrue="{!v.staticresourceName=='Theme3'}">
+        <ltng:require styles="{!$Resource.GYNSR_GreyTheme}" afterScriptsLoaded="{!c.scriptsLoaded1}" />
+    </aura:if>
+
+
+    <aura:attribute name="staticresourceName" type="String" />
+    <!-- Ended By Spandana 05/26 -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler event="c:GYNE_changeReviewTab" action="{!c.changeReviewTab}" />
+
+    <aura:attribute name="ProdDetails" type="Product2[]" />
+    <aura:attribute name="ProdDetails1" type="Id" />
+    <aura:attribute name="Details" type="String[]" />
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="rating" type="Integer" />
+    <aura:handler name="change" value="{!v.pageReference}" action="{!c.reInit}" />
+
+    <div class="themeClass">
+        <lightning:card>
+            <div class="slds-grid slds-gutters">
+                <div class="slds-col slds-size_2-of-3 slds-border_right">
+                    <!-- add button by aniket -->
+                    <button class="slds-button" onclick="{!c.redirectToPreviousPage}">
+                        <lightning:icon iconName="utility:chevronleft" size="small" alternativeText="left" />
+                    </button>
+                    <div class="slds-grid slds-grid_vertical">
+                        <div id="img-container" style="display:table;height:300px;text-align:center;width: 400px;">
+                            <img id="image" src="{!v.ProdDetails1}" alt="Description of the image" />
+                        </div>
+                    </div>
+                    <br />
+                </div>
+                <div class="container slds-col slds-size_1-of-3 slds-p-left_xx-large">
+                    <br />
+                    <aura:iteration items="{!v.ProdDetails}" var="b">
+                        <p style="font-size:20px;"><b>{!b.Name}</b></p>
+                        <div>
+                            <c:GYNL_showStars starSize="20" ratingSelected="{!b.GYNCF_Average_Rating__c}" />
+                        </div>
+                        <p style="font-size:18px;">
+                            <lightning:formattedNumber value="{!b.GYNCF_Price__c}" style="currency"
+                                currencyCode="USD" />
+                        </p>
+                    </aura:iteration><br />
+                    <b>
+                        <p style="font-size:15px;">Highlights:</p>
+                    </b><br />
+                    <div class="slds-text-longform">
+                        <ul type="a">
+                            <aura:iteration items="{!v.Details}" var="arr">
+                                <li>
+                                    <p style="font-size:12px; color:grey;">{!arr}</p>
+                                </li>
+                            </aura:iteration>
+                        </ul>
+                    </div>
+                    <br />
+                </div>
+            </div>
+
+            <div>
+                <aura:if isTrue="{!v.recordId !=null}">
+                   <lightning:card>
+                       <div id="Related_Product" class="c2 slds-col slds-p-left_xx-large"><br /><br />
+                           <h1 style="text-align:left;font-size:20px;"><b>Show Related Products:</b></h1>
+                           <div class="slds-p-around_large">
+                               <c:GYNL_relatedProducts recordId="{!v.recordId}" />
+                           </div>
+                           <!--<br/><br/><br/> -->
+                       </div>
+                   </lightning:card>
+               </aura:if>
+           </div>
+
+            <!-- <b><p style="font-size:15px;"> USER REVIEWS AND RATINGS  <lightning:icon iconName="utility:comments" alternativeText="Comment image"/> </p></b>
+                <br/>
+                <div class="slds-col">
+                    <a href="#Related_Product"><p style="font-size: 15px;">Compare With Similar Items</p></a>
+                </div>
+                <div class="slds-col">
+                    <a href="#Review_Product"><p style="font-size: 15px;">See All Customer Reviews</p></a>
+                </div>
+                <br/>
+                <div class="slds-p-medium" style="width:90% height:150%">
+                    <aura:if isTrue="{!v.recordId !=null}">
+                        <c:GYNL_productRatingChart recordId="{!v.recordId}"/>
+                    </aura:if>
+                </div>
+                <br/>
+                <br/> -->
+        </lightning:card>
+        <!--<br/><br/><br/><br/><br/><br/><br/> -->
+        <!--<br/><br/><br/><br/> -->
+        <!--<br/><br/><br/><br/><br/><br/> -->
+        <!-- <lightning:card>
+            <div>
+             <aura:if isTrue="{!v.recordId !=null}">
+                <lightning:card>
+                    <div id="Related_Product" class="c2 slds-col slds-p-left_xx-large"><br /><br />
+                        <h1 style="text-align:left;font-size:20px;"><b>Show Related Products:</b></h1>
+                        <div class="slds-p-around_large">
+                            <c:GYNL_relatedProducts recordId="{!v.recordId}" />
+                        </div>
+                        <br/><br/><br/> 
+                    </div>
+                </lightning:card>
+            </aura:if>
+        </div>
+        </lightning:card> -->
+        <lightning:card>
+        <br />
+        <b>
+            <p style="font-size:15px; padding-left: 25px;"> USER REVIEWS AND RATINGS
+                <lightning:icon iconName="utility:comments" alternativeText="Comment image" />
+            </p>
+        </b>
+        <br />
+
+        <div class="slds-col">
+            <a href="#Related_Product">
+                <p style="font-size: 15px; padding-left: 25px;">Compare With Similar Items</p>
+            </a>
+        </div>
+        <br />
+
+        <div class="slds-p-medium" style="width:90% height:150%">
+            <aura:if isTrue="{!v.recordId !=null}">
+                <c:GYNL_productRatingChart recordId="{!v.recordId}" />
+            </aura:if>
+        </div>
+        <br />
+            
+            <div class="slds-col">
+                <a href="#Review_Product">
+                    <p style="font-size: 15px; padding-left: 25px;">See All Customer Reviews</p>
+                </a>
+            </div>
+            <br />
+            <div id="Review_Product" class="c1 slds-col slds-tabs_large slds-p-around_large">
+                <lightning:tabset aura:id="reviewTabSet" variant="scoped" selectedTabId="two">
+                    <lightning:tab label="Customer Reviews" id="two">
+
+                        <span>
+                            <aura:if isTrue="{!v.recordId !=null}">
+                                <c:GYNL_displayAllReview recordId="{!v.recordId}" />
+                            </aura:if>
+                        </span>
+                    </lightning:tab>
+                    <lightning:tab label="Review This Product">
+                        <div class="slds-p-around_medium">
+                            <c:GYNL_addReview recordId="{!v.recordId}" />
+                        </div>
+                    </lightning:tab>
+                    <br />
+                </lightning:tabset>
+            </div>
+            <br />
+        </lightning:card>
+    </div>
+    <br /><br /><br />
+</aura:component>

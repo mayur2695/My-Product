@@ -1,0 +1,28 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" controller="GYNL_SchedularRecordClass">
+	<aura:attribute name="schedlist" type="Schedule__c[]" />
+    <aura:attribute name="SchedId" type="string"/>
+    <aura:attribute name="ObjectName" type="string" default=""/>
+    <aura:attribute name="SystemId" type="string" default=""/>
+    <aura:attribute name="selectedValue" type="String" default=""/>
+    <aura:registerEvent name="ReloadNewBatchSetting" type="c:ReloadNewBatchSetting" />
+    <aura:handler event="c:GYNL_UpdateVariantList" action="{!c.getSchedulatListcontroller}"/>
+    
+   <!-- <aura:handler name="calldoInit" event="c:GYNL_UpdateVariantList" action="{!c.getSchedulatListcontroller}" />-->
+    <aura:handler name="init" value="{!this}" action="{!c.getSchedulatListcontroller}"/>
+   
+           <strong><h2 class="header">Use Existing Setting</h2></strong>
+            <lightning:select class="maxWidth" aura:id="PicklistId" label="Variant Scheduler List" name="Schedule" value="{!v.selectedValue}" onchange="{!c.passCron}">
+                    <option value="" text="- None -" /> 
+                    <aura:iteration items="{!v.schedlist}" var="sch">
+                        <aura:if isTrue="{!sch.Name == sch.GYNCF_Configuration_Record__r.Scheduler_information__c}">
+                        	<option value="{!sch.Id}" selected="true" text="{!sch.Name}" />
+                            <aura:set attribute="else">
+                                    <option value="{!sch.Id}" text="{!sch.Name}" />
+                                </aura:set>
+                        </aura:if>
+                          
+                    </aura:iteration>
+            </lightning:select>
+          <br/>
+    <lightning:button iconName="utility:save" variant="brand" label="Save" title="Save" onclick="{! c.saveEvent }" /> 
+</aura:component>

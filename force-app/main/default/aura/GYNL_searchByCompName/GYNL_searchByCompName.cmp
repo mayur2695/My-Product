@@ -1,0 +1,41 @@
+<aura:component controller="GYNC_TemplateShowController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global">
+
+    <aura:attribute name="objectAPIName" type="string" default=""/>
+    <aura:attribute name="label" type="string" default=""/>
+    <aura:attribute name="isOpen" type="Boolean" default="false"/>
+    <aura:attribute name="srarchByFieldAPIName" type="string" default=""/>
+    <aura:attribute name = "data" type = "Object"/>
+    <aura:attribute name = "column" type = "List"/>
+    <aura:attribute name="RowTemplate" type="sObject" default="{}"/>
+
+    <!--declare events hendlers-->  
+    <aura:handler name="init" value="{!this}" action="{!c.handleComponentEvent}"/>
+
+    <!--aura:handler name="oSelectedRecordEvent" event="c:GYNE_searchBAr" action="{!c.handleComponentEvent}"/-->
+    
+    
+        <!--This part is for display search bar for lookup-->  
+        <div class="slds-form-element__control">
+            
+            <div class="slds-input-has-icon slds-input-has-icon--right"> 
+                <!-- This markup is for when an record is selected -->
+                <div aura:id="lookup-pill" class="slds-pill-container">
+                    
+        <p class="slds-p-horizontal_small" style="height: 180px">
+            <lightning:datatable
+                keyField="Id"
+                data="{! v.data }"
+                columns="{! v.column }"
+                hideCheckboxColumn="true"
+                onrowaction="{! c.handleRowAction }"
+                />
+        </p>
+                    
+                </div>
+                 
+            </div>
+        </div>
+        
+       
+
+</aura:component>

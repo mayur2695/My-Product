@@ -1,0 +1,23 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" controller = "GYNC_getReport" access="global">
+    <aura:attribute name="urlPlannedreport" type="String"/>
+    <aura:attribute name="urlPlannedreport2" type="String"/>
+    <aura:attribute name="urlPlannedreport3" type="String"/>
+   <lightning:card variant="narrow">
+       
+       <p class="slds-box slds-text-heading_small" style="font-size:20px;">
+         <lightning:icon iconName="standard:report" alternativeText="New note" title="New note"/>
+           Reports
+       </p>
+       <div class="slds-scrollable_y" style="height:10rem">
+        <div slot="actions" style="Margin-top:5px;color:#000099;margin-left: 55px;font-family: sans-serif;font-size:15px">
+          <a target="blank" href="{!v.urlPlannedreport}" id="GYNCR_All_interviews_HLJ" onclick="{!c.OnClickStd}">All Interviews of Today</a>
+        </div>
+        <div slot="actions" style="Margin-top:5px;color:#000099;margin-left: 55px;font-family: sans-serif;font-size:15px">
+          <a target="blank" href="{!v.urlPlannedreport2}" id="New_Candidates_with_Position_Report_aa1" onclick="{!c.OnClickStd2}">Candidates Joined</a>
+        </div>
+        <div slot="actions" style="Margin-top:5px;color:#000099;margin-left: 55px;font-family: sans-serif;font-size:15px">
+          <a target="blank" href="{!v.urlPlannedreport3}" id="New_Positions_Report_Jrz" onclick="{!c.OnClickStd3}">All Position Status</a>
+        </div>
+       </div>
+   </lightning:card>
+</aura:component>

@@ -1,0 +1,32 @@
+<!-- This is an admin page component of Enterprise Recruitment app. It is created so that admin can
+choose between either creating salesforce event or use direct meeting link as meeting invite for interviewer
+
+Created By - Arnab Dey
+-->
+
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" controller = "GYNC_UpdateModeOfMail" access="global">
+    <aura:attribute name="options" type="List" default="[
+    {'label': 'Use Blank Event', 'value': 'SalesforceEvent'},
+    {'label': 'Use External Meeting Tools', 'value': 'DirectMeetingLink'}
+                                                        ]"/>
+    <!--attribute to show the options of the radio buttons-->
+    <aura:attribute name="value" type="String"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+     <p class="slds-box slds-text-heading_small"> 
+       <lightning:icon iconName="standard:email" alternativeText="Email" title="Email" />
+       Select Event Format
+     </p>
+     <lightning:card>
+      <p class="slds-p-horizontal_small" style="Margin-top:5px;color:#000099;margin-left: 70px;font-family: sans-serif;font-size:20px">
+          <!--Radio button to choose the mode of mail/communication-->
+          <lightning:radioGroup name="ModeOfMail"
+                          label="Event Format"
+                          options="{! v.options }"
+                          value="{! v.value }"
+                          type="radio"/>
+      </p>
+      <div slot="actions" style="Margin-top:15px;margin-left: 80px">
+         <lightning:button variant="brand" label="Save" title="Brand action" onclick="{! c.handleChange }" />
+      </div> 
+     </lightning:card>
+</aura:component>

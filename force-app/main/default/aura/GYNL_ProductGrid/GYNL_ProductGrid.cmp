@@ -1,0 +1,87 @@
+<aura:component controller="GYNC_productGridController">
+    <aura:attribute name="parent" type="String"/>
+    <aura:attribute name="AllProducts" type="List"/>
+    <aura:attribute name="Productlimit" type="Integer" default="9"/>
+    <aura:attribute name="ProductsforCurrentPage" type="List"/>
+    <aura:attribute name="PageNumber" type="Integer" default="1"/>
+    <aura:attribute name="PageNumberList" type="List"/>
+    <aura:attribute name="PageNumberLimit" type="Integer" default="5"/>
+    <aura:attribute name="PageNumberStart" type="Integer" default="0"/>
+    <aura:attribute name="PageNumberEnd" type="Integer" default="5"/>
+    <aura:attribute name="containsData" type="Boolean" default="false"/>
+    <aura:attribute name="showError" type="Boolean" default="false"/>
+    <aura:attribute name="Image" type="Id"/>
+    <aura:handler event="c:GYNE_ProductGridInboundEvent" action="{!c.doinit}"/>
+    <lightning:navigation aura:id="nav"/>
+    <!-- to show the notification when there is no result-->
+    <aura:if isTrue = "{!v.showError == true}">
+        <div class="demo-only" style="height:7rem">
+            <div class="slds-notify_container slds-is-relative">
+                <div class="slds-notify slds-notify_toast slds-align-content-center Result" style="margin-top: 13rem;padding: 0.3rem;" role="status">
+                    <span class="slds-assistive-text">info</span>
+                    <span class="slds-icon_container slds-icon-utility-info slds-m-right_small slds-no-flex slds-align-top" title="Description of icon when needed">
+                        <lightning:icon iconName="utility:sentiment_neutral" variant="inverse" size="small"/>
+                    </span>
+                    <div class="slds-notify__content">
+                        <b>
+                            
+                            <h2 class="slds-text-heading_small">Results not found
+                            </h2>
+                            
+                        </b>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aura:if>
+    <!--grid View-->
+    <div class="slds-grid slds-wrap slds-gutters" style="margin-left: 7rem;">
+        <aura:iteration items="{!v.ProductsforCurrentPage}" var="prod">
+            <div class="slds-col slds-size_1-of-3 slds-box backgroundBox" style="margin-top: 2rem;">
+                <div class="slds-grid slds-wrap slds-gutters">
+                    <div class="slds-col slds-size_1-of-1" style="height:200px;">
+                        <img id="{!prod.Id}" src="{!'/sfc/servlet.shepherd/version/download/'+prod.GYNCF_ImageDoc__c}" 
+                          	style="width:200px;max-height:200px;" onclick="{!c.navigateDetailPage}"/>
+                    </div>
+                    <b class="productNameTruncate" title="{!prod.Name}" > 
+                        {!prod.Name}
+                    </b>
+                    <div class="slds-col slds-size_1-of-1">
+                        <div class="slds-grid slds-wrap slds-gutters" style="padding-left:1rem;padding-right:1rem;">
+                            <!--<div class="slds-col slds-size_2-of-6">
+                                <c:GYNL_showStars starSize="12" ratingSelected="{!prod.GYNCF_Average_Rating__c}"/>
+                            </div>-->
+                            <c:GYNL_showStars starSize="12" ratingSelected="{!prod.GYNCF_Average_Rating__c}"/>
+                            <b style="font-size:11px;margin-top:0.12rem;"> <!--div class="slds-col slds-size_1-of-6" style="font-size:11px;margin-top:0.12rem;"-->
+                                ({!prod.GYNCF_Average_Rating__c})
+                                <!--/div--></b>
+                        </div>
+                        <b> <div class="slds-col slds-size_1-of-1" style="text-align:center; padding: initial;color:green;">Price:
+                            <lightning:formattedNumber value="{!prod.GYNCF_Price__c}" style="currency" maximumFractionDigits="2"/>
+                            </div></b>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-of-6" style="margin-top: 1rem;"></div>
+        </aura:iteration>
+    </div>
+    <!---pagination functionality-->
+    <div class="slds-align--absolute-center" style="margin-top: 5rem;">
+        <aura:if isTrue="{!v.containsData==true}">
+            <lightning:button class="pageNoBtn" variant="base" iconName="utility:chevronleft" onclick="{!c.prevBtnGrp}"/>
+        </aura:if>
+        
+        <aura:iteration items="{!v.PageNumberList}" var="pageNumber" start="{!v.PageNumberStart}" end="{!v.PageNumberEnd}">
+            <aura:if isTrue="{!pageNumber == v.PageNumber}">
+                <button class="slds-button slds-button--brand pageNoBtn" id="{!pageNumber}" onclick="{!c.onclickButton}">{!pageNumber}</button>
+                <aura:set attribute="else">
+                    <button class="slds-button slds-button_outline-brand pageNoBtn" id="{!pageNumber}" onclick="{!c.onclickButton}">{!pageNumber}</button>
+                </aura:set>
+            </aura:if>
+        </aura:iteration>
+        
+        <aura:if isTrue="{!v.containsData==true}">
+            &nbsp;&nbsp;<lightning:button variant="base" class="pageNoBtn" iconName="utility:chevronright" onclick="{!c.nextBtnGrp}"/>
+        </aura:if>
+    </div>
+</aura:component>

@@ -1,0 +1,16 @@
+.THIS {
+  height: 500px;
+}
+.THIS.slds-card{
+    border:none;
+    box-shadow:none;
+}
+.THIS .activeSearch {
+ /* background-color: #1b3563;
+  color: white;
+  font-size: 12px;*/
+  padding:8px;
+}
+.THIS .slds-card__header{
+    padding:0;
+}

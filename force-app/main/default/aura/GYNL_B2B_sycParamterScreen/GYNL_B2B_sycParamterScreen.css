@@ -1,0 +1,20 @@
+.THIS .maxWidth {
+    max-width:50%;
+}
+.THIS .FieldsWithHelpText div{
+    vertical-align: top !important;
+}
+
+.THIS .dateClass {
+    width:60%;
+}
+.THIS .hideTab ul{
+    display:none !important;
+}
+
+.THIS .buttonAlign {
+     padding-top: 50% !important;
+}
+.THIS .slds-tabs_scoped__content{
+    border-width:0px !important;
+}

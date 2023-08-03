@@ -1,0 +1,60 @@
+<aura:component controller="AdminScreenApex">
+    <aura:attribute name="options" type="Object" />
+    <aura:attribute name="selectedValue" type="String" default=""/>
+    <aura:attribute name="selectedSystemId" type="String"/>
+    <aura:attribute name="PageName" type="String" default=""/>
+    <aura:attribute name="NewSystem" type="Boolean" default="false"/>
+    <aura:attribute name="NewSystemName" type="String" default=""/>
+    <aura:attribute name="NewSystemUrl" type="String" default=""/>
+    <aura:attribute name="IsEdit" type="Boolean" />
+    
+    
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <div class="slds-clearfix">
+        
+        <aura:if isTrue="{!v.PageName=='Admin'}">
+            <div class="slds-float_left slds-m-bottom_medium">
+                <lightning:select name="SystemId" label="Select a Source system:" aura:id="SysID" value="{!v.selectedValue}" onchange="{!c.updateSystemId}" >
+                    <aura:iteration items="{!v.options}" var="option">
+                        
+                        <option text="{!option.value}" value="{!option.key}" />
+                    </aura:iteration>
+                </lightning:select>
+            </div>
+            <div class="slds-float_right slds-m-top_large">
+                <lightning:button iconName="utility:add"  variant="brand" label="Create a new system connectivity" title="Create a new system connectivity" onclick="{!c.createSystem}" />
+                
+            </div>
+            <aura:set attribute="else">
+                <div class="">
+                    <lightning:select name="System" label="Select a Source system:"  value="{!v.selectedValue}" onchange="{!c.updateSystemId}">
+                        <aura:iteration items="{!v.options}" var="option">
+                            <option text="{!option.value}" value="{!option.key}" />
+                        </aura:iteration>
+                    </lightning:select>
+                </div>
+            </aura:set>
+        </aura:if>
+    </div>
+    <aura:if isTrue="{!v.NewSystem}">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Create New System</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <lightning:input name="input3" label="Enter Name" placeholder="Enter Name for System" value="{!v.NewSystemName}"/>
+                	<lightning:input name="input3" label="Enter Base Url" placeholder="Enter BaseUrl for System" value="{!v.NewSystemUrl}"/>
+                
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning:button variant="brand" label="Create" title="Create" onclick="{! c.handlecreate }" />
+                    <lightning:button variant="brand" label="Cancel" title="Cancel" onclick="{! c.handleCancel }" />
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+</aura:component>

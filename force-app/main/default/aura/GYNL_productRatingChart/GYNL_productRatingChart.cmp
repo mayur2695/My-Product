@@ -1,0 +1,45 @@
+<aura:component controller = "GYNC_productRatingChartApex" implements="flexipage:availableForRecordHome,force:hasRecordId" access="global">
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="ratingMatrix" type="List"/>
+    <aura:attribute name="ratingCount" type="Integer"/>
+    <aura:attribute name="overallRating" type="Decimal"/>
+    <aura:attribute name="loading" type="Boolean" default="false"/>
+   
+    
+    <aura:handler name ="init" value ="{!this}" action ="{!c.doInit}"/>
+
+<aura:if isTrue="{!v.loading}">
+    <div class = "slds-box slds-align_absolute-center slds-red-background" style = "width:800px; ;background-color:#fff;">
+        <div style="text-align:center; width:700px; margin-left:85px;"> 
+        <div style="margin-left:159px; display:flex;">
+            <div>
+                
+                <c:GYNL_showStars ratingSelected= "{!v.overallRating}" starSize = "26" />
+                
+            </div>
+            <div style = "font-size:20px; margin-top:6px;">
+                &nbsp;&nbsp;{!v.overallRating} Out Of 5
+            
+            
+        </div>
+        </div>
+        <span style="margin-left:-125px; font-size:20px; "> {!v.ratingCount} Customer Reviews</span>
+        <aura:iteration items="{!v.ratingMatrix}" var="rev" indexVar = "index">
+            <div class="slds-grid " style = "background-color:#fff;">
+                <div class="slds-col slds-size_1-of-12" style = "font-weight: bold; min-width: 63px;">
+                    {!rev.name}
+                </div>
+                <div class="slds-col slds-size_8-of-12"  >
+                    <lightning:progressBar value="{!rev.ratingPercentage}" size="large" />
+                    
+                </div>
+                <div class="slds-col slds-size_1-of-12" style = "text-align:right; font-weight: bold;" >
+                    {!rev.ratingPercentage}%
+                </div>
+            </div>
+        </aura:iteration>	
+    </div>
+    </div>
+</aura:if>
+    
+</aura:component>

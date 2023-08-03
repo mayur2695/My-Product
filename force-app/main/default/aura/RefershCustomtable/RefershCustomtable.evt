@@ -1,0 +1,4 @@
+<!--<c:RefershCustomtable/>-->
+<aura:event type="APPLICATION" description="Event template" >
+    <aura:attribute Name="firetableDonit" type="String"/>
+</aura:event>

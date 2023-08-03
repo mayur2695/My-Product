@@ -1,0 +1,258 @@
+<aura:component controller = "GYNC_SAPTableReplicationHomeApex">
+    <lightning:empApi aura:id="empApi"/>
+    <aura:attribute name = "existingTableMap" type = "List" />
+    <aura:attribute name = "existingFilter" type = "List" />
+    <aura:attribute name = "availableFields" type = "List" />
+    <aura:attribute name = "allSAPFieldsSelectedObj" type = "List" />
+    <aura:attribute name = "sapTableMap" type = "Map" />
+    <aura:attribute name = "tableSelected" type = "String" />
+    <aura:attribute name = "selectedConfigId" type = "String" />
+    <aura:attribute name = "systemId" type = "String" />
+    <aura:attribute name = "fieldMapping" type = "List" />
+    <aura:attribute name = "openObjectModalFlag" type = "Boolean" default = "false" />
+    <aura:attribute name = "deleteConfigModalFlag" type = "Boolean" default = "false" />
+    <aura:attribute name = "loadingFlag" type = "Boolean" default = "false" />
+    <aura:attribute name = "baseURL" type = "String" default = "" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler name="GYNE_DynamicSearchEvent" event="c:GYNE_DynamicSearchEvent" action="{!c.handleSearchEvent}"/>
+    
+    <aura:method name="editExisting" action="{!c.handleEditEvent}" access="public">
+        <aura:attribute name="selectedTableName" type="String" /> 
+    </aura:method>
+    <aura:if isTrue = "{!v.existingTableMap.length > 0}">
+        <aura:if isTrue = "{!v.loadingFlag}">
+            <lightning:spinner alternativeText="Loading" size="medium" variant = "brand"/>
+        </aura:if>
+        <lightning:card title="Existing Table Mapping" iconName = "standard:entity">
+            
+            <p class="slds-p-horizontal_small">
+                <table>
+                    <tr>
+                        <th>Sl No</th>
+                        <th>SAP Table Name</th>
+                        <th>SFDC Table Name</th>
+                        <th>Last Sync Date</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    
+                    <aura:iteration items="{!v.existingTableMap}" var="item" indexVar="index">
+                        <tr class = "height40">
+                            <td>{!index+1}</td>
+                            <td>{!item.Name} </td>
+                            <td><a href="{!'/lightning/o/'+item.GYNCF_SFDC_Object_Name__c+'/home'}" target="_blank">{!item.GYNCF_SFDC_Object_Name__c}</a></td>
+                            <td>
+                                <aura:if isTrue = "{!item.GYNCF_Mass_Sync_Live__c}">
+                                    <span style = "color:green;">Syncing</span>
+                                    <aura:set attribute="else">
+                                        <aura:if isTrue="{!item.GYNCF_Last_Synced__c != null}">
+                                            {!item.GYNCF_Last_Synced__c}
+                                            <aura:set attribute="else">
+                                                <span style = "color:red;">Not Synced</span>
+                                            </aura:set>
+                                        </aura:if> 
+                                    </aura:set>
+                                </aura:if>
+                            </td>
+                            <td>
+                                <lightning:button iconName="utility:edit" name = "{!item.Name}" label = "Edit" variant="brand" onclick =  "{!c.editTableMaping}" />
+                            </td>
+                            <td>
+                                <lightning:button disabled = "{!!item.GYNCF_isFLSActive__c}" name = "{!item.Name}" label = "Sync Now" variant="brand" onclick =  "{!c.StartMassSync}" />
+                            </td>
+                            <td style = "text-align:left;">
+                                <lightning:buttonIcon iconName="utility:delete" variant="bare" onclick="{!c.deleteConfig}" name = "{!item.Name}" alternativeText="DeleteDelete" title="Delete" />
+                            </td>
+                        </tr>
+                        
+                    </aura:iteration>
+                </table>
+            </p>
+        </lightning:card>
+        
+        
+        
+        <!--Confirm Delete configuration-->
+<aura:if isTrue="{!v.deleteConfigModalFlag}">
+            
+            <!--###### MODAL BOX Start######--> 
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open ">
+                <div class="slds-modal__container">
+                    <!-- ###### MODAL BOX HEADER Start ######-->
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon iconName="utility:close"
+                                              onclick="{! c.closeModel }"
+                                              alternativeText="close"
+                                              variant="bare-inverse"
+                                              class="slds-modal__close"/>
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Delete {!v.tableSelected}</h2>
+                    </header>
+                    <!--###### MODAL BOX BODY Part Start######-->
+                    <div  class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <aura:if isTrue = "{!v.loadingFlag}">
+                            <lightning:spinner alternativeText="Loading" size="medium" variant = "brand"/>
+                        </aura:if>
+                        <p style = "text-align:center;">
+                            Are you sure you want to delete {!v.tableSelected}?
+                            
+                            <p style = "color:red; margin-top:3%;"><span style = "font-size:16px;">*</span>Deleting this will delete the object and records also.</p>
+                        </p>
+                        
+                        
+                    </div>
+                    <!--###### MODAL BOX FOOTER Part Start ######-->
+                    <footer class="slds-modal__footer">
+                        <lightning:button variant="neutral" 
+                                          label="Cancel"
+                                          title="Cancel"
+                                          onclick="{! c.closeModel }"/>
+                        <lightning:button variant="destructive" 
+                                          label="Delete"
+                                          title="Like and Close"
+                                          onclick="{! c.deleteConfirmed }"/>
+                    </footer>
+                </div>
+          
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+            <!--###### MODAL BOX Part END Here ######-->
+            
+        </aura:if>
+
+
+<!--Object seting-->        
+        <aura:if isTrue="{!v.openObjectModalFlag}">
+            
+            <!--###### MODAL BOX Start######--> 
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open modal-width1100">
+                <div class="slds-modal__container">
+                    <!-- ###### MODAL BOX HEADER Start ######-->
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon iconName="utility:close"
+                                              onclick="{! c.closeModel }"
+                                              alternativeText="close"
+                                              variant="bare-inverse"
+                                              class="slds-modal__close"/>
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Edit {!v.tableSelected}</h2>
+                    </header>
+                    <!--###### MODAL BOX BODY Part Start######-->
+                    <div  class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <aura:if isTrue = "{!v.loadingFlag}">
+                            <lightning:spinner alternativeText="Loading" size="medium" variant = "brand"/>
+                        </aura:if>
+                        
+                        
+                        <lightning:accordion aura:id="accordion" activeSectionName="filters">
+                            <lightning:accordionSection name="fields" label="Fields Created">
+                                <aura:if isTrue = "{!v.fieldMapping.length > 0}">
+                                    <div style = "display:flex; flex-wrap: wrap;">
+                                            <aura:iteration items="{!v.allSAPFieldsSelectedObj}" var="item" indexVar="index">
+                                                <div style = "flex-grow: 1;width: 25%;">
+                                                    <lightning:input type="checkbox" name="" label="{!item.fieldName}" checked = "{!item.isSelected}" />
+                                                </div>
+                                                
+                                            </aura:iteration>
+                                       
+                                        <!--aura:iteration items="{!v.fieldMapping}" var="item" indexVar="index">
+                                            <div style = "flex-grow: 1;width: 33%;">
+                                                <span style= "font-weight: 700;">{!index+1}. {!item.sapField}</span> 
+                                            </div>
+                                            
+                                        </aura:iteration-->
+                                    </div>
+                                                
+                                </aura:if>
+                            </lightning:accordionSection>
+                            <lightning:accordionSection name="filters" label="Applied Filters">
+                                <div class = "slds-box padding-small">
+                                    <c:GYNL_DynamicSearchBar title = "Search Fields" itemList = "{!v.availableFields}" origin = "fieldSearch"  />
+                                </div>
+                                
+                                
+                                <aura:if isTrue = "{!v.existingFilter.length > 0}">
+                                    <div class = "slds-box slds-m-top_small padding-small">
+                                    <lightning:card title="Existing Filters" iconName = "standard:entity">
+                                        
+                                        <p class="slds-p-horizontal_small">
+                                            <table>
+                                                <tr>
+                                                    <th>Sl No</th>
+                                                    <th>SAP Field Name</th>
+                                                    <th>SFDC Field Name</th>
+                                                    <th>Operation</th>
+                                                    <th>Filter Value</th>
+                                                    
+                                                </tr>
+                                                
+                                                <aura:iteration items="{!v.existingFilter}" var="item" indexVar="index">
+                                                    <tr class = "height40" >
+                                                        <td>{!index+1}</td>
+                                                        <td>{!item.sapFieldName} </td>
+                                                        <td>{!item.sfdcfieldName} </td>
+                                                        <td class = "remove-label slds-p-right_small">
+                                                            <lightning:select name="select1" value = "{!item.operationType}">
+                                                                <option value="EQ">Equals</option>
+                                                                <option value="GE">Greater than or equals</option>
+                                                                <option value="LE">Less than or equals</option>
+                                                                <option value="BT">Between</option>
+                                                                <option value="GT">Greater than</option>
+                                                                <option value="LT">Less than</option>
+                                                                <option value="NE">Not Equals</option>
+                                                            </lightning:select>
+                                                        </td>
+                                                        <td >
+                                                            <aura:if isTrue = "{!item.operationType == 'BT'}">
+                                                                <lightning:input label = "Low:" variant = "label-inline" type="text" name="input1" value = "{!item.valueLow}" />
+                                                                <lightning:input label = "High:" variant = "label-inline" type="text" name="input1" value = "{!item.valueHigh}" />
+                                                                <aura:set attribute="else">
+                                                                    <span class = "remove-label">
+                                                                    	<lightning:input type="text" name="input1" value = "{!item.valueLow}" />
+                                                                    </span>
+                                                                </aura:set>
+                                                            </aura:if>
+                                                        </td>
+                                                        
+                                                    </tr>
+                                                    
+                                                </aura:iteration>
+                                            </table>
+                                        </p>
+                                    </lightning:card>
+                                    </div>
+                                </aura:if>
+                                
+                                
+                                
+                            </lightning:accordionSection>
+                            
+                        </lightning:accordion>
+                        
+                        
+                        
+                    </div>
+                    <!--###### MODAL BOX FOOTER Part Start ######-->
+                    <footer class="slds-modal__footer">
+                        <lightning:button variant="neutral" 
+                                          label="Cancel"
+                                          title="Cancel"
+                                          onclick="{! c.closeModel }"/>
+                        <lightning:button variant="brand" 
+                                          label="Save"
+                                          title="Like and Close"
+                                          onclick="{! c.saveFilter }"/>
+                    </footer>
+                </div>
+          
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+            <!--###### MODAL BOX Part END Here ######-->
+            
+        </aura:if>
+        
+        
+    </aura:if>
+    
+    
+</aura:component>

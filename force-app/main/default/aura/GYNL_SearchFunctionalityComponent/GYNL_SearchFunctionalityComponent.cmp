@@ -1,0 +1,73 @@
+<aura:component controller="GYNC_SearchController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >  
+    <aura:registerEvent name="GYNE_ProductGridInboundEvent" type="c:GYNE_ProductGridInboundEvent"/>
+    <aura:attribute name="title" type="String" default="Search for Products"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>  
+    <aura:attribute name="data" type="List" /> 
+    <aura:attribute name="categoryList" type="List" /> 
+    <aura:attribute name="val" default="5" type="Integer"/>
+    <aura:attribute name="products"  type="Product2[]"/>
+    <aura:attribute name="dataPrLowToHigh" type="Product2[]" />
+    <aura:attribute name="dataPrHighToLow" type="Product2[]" />
+    <aura:attribute name="dataPoLowToHigh" type="Product2[]" />
+    <aura:attribute name="dataPoHighToLow" type="Product2[]" />
+    <aura:attribute name="unfilteredData" type="Product2[]" />  
+    <aura:attribute name="searchCriteria" type="String" />  
+    <aura:attribute name="maxPrice" type="Integer" default="50000"/>
+    <aura:attribute name="minPrice" type="Integer" default="50"/>
+    <aura:handler name="change" value="{!v.searchCriteria}" action="{!c.doFilter}" />
+    <aura:attribute name="myval" default="" type="Integer"/>
+   <aura:registerEvent name="cmpEvent2" type="c:GYNE_DynamicSearchEvent"/>
+    <aura:registerEvent name="cmpEvent1" type="c:GYNE_DynamicSearchEvent"/>
+    <lightning:card> 
+        <!-- <aura:set attribute="title">
+            <b><p class="activeSearch" style="font-size: 14px;">
+                <lightning:icon iconName="utility:search" size="x-small" variant="Inverse"/>
+                &nbsp;{!v.title} 
+                </p>
+            </b>
+        </aura:set> -->
+        <div>
+            <p class="slds-p-vertical_small">
+                <!--  Dynamic Search functionality  -->        
+                <lightning:input name="x" value="{!v.searchCriteria}" label="Product Name" placeholder="Search" autocomplete="off"  onkeyup ="{!c.onHandlerChange}"/> 
+            </p>
+            <p class="slds-p-vertical_small">
+                <!-- Sort Option -->
+                <lightning:select aura:id="select" name="select" label="Sort" onchange="{!c.onChange }">
+                    <option value="">Select an Option</option>
+                    <option value="prl2h">Price Low to High</option>
+                    <option value="prh2l">Price High to Low</option>
+                    <option value="pol2h">Popularity Low to High</option>
+                    <option value="poh2l">Popularity High to Low</option>
+                </lightning:select>
+            </p>
+            <p class="slds-p-vertical_small">
+                <!-- {!v.dataPrLowToHigh}
+                <c:GYNL_SliderComp/> -->
+                <lightning:slider step="100" 
+                                  value="{!v.val}"
+                                  onchange="{! c.handleRangeChange }" 
+                                  min="{!v.minPrice}" max="{!v.maxPrice}" 
+                                  />
+            </p>
+            <p class="slds-p-vertical_small">
+                <!--   Product quantity -->
+                <p class="slds-form-element__label">Product Category</p>
+                <div class="slds-scrollable_y" style="height:10rem;">
+                    <p>
+                        <table class="slds-table">
+                            <tbody>
+                                <aura:iteration items="{!v.categoryList}" var="rw" indexVar="rowIndex1">
+                                    <tr>
+                                        <td>{!rw.category}({!rw.count})</td>                       
+                                    </tr>
+                                </aura:iteration>
+                            </tbody>  
+                        </table>
+                    </p>
+                </div>
+            </p>
+        </div>
+        
+    </lightning:card>
+</aura:component>

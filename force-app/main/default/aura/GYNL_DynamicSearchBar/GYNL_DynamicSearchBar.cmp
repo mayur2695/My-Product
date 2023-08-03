@@ -1,0 +1,37 @@
+<aura:component >
+    <aura:attribute name="origin" type="String" />
+    <aura:attribute name="title" type="String" default = "Search"/>
+    <aura:attribute name="spinnerFlag" type="Boolean" default = "false" />
+    <aura:registerEvent name="GYNE_DynamicSearchEvent" type="c:GYNE_DynamicSearchEvent"/>
+    <aura:attribute name="itemList" type="List" default = "[]"/>
+    
+    
+    <lightning:card class = "search-card"  title="{!v.title}" iconName = "standard:search">
+            <p class="slds-p-horizontal_small" style = 'display: flex;'>
+                <div style = "width:50%;">
+                    <lightning:input type="Search" name="input1" onkeyup = "{!c.searchItem}" onfocus = "{!c.searchItem}" onfocusout = "{!c.closeOptions}" />
+                </div>
+                <aura:if isTrue = "{!v.spinnerFlag}">
+                    <div class="loader"></div>
+                </aura:if>
+            </p>
+   
+            <aura:if isTrue = "{!v.itemList.length > 0}">
+                <div class = "slds-box slds-m-around_small slds-m-top_none"  >
+                    <aura:iteration items="{!v.itemList}" var="item">
+                        <div class = "hover-highlight" style = "cursor:pointer;" id = "{!item.value}" onmousedown = "{!c.itemSelected}">
+                            <label class = "slds-text-title_bold">{!item.value}</label>
+                            <aura:if isTrue = "{!and(item.isAdded != undefined, item.isAdded)}">
+                                &nbsp;
+                                <span style = "color:orange; border: 1px solid red;">Already Added</span>
+                            </aura:if>
+                            <p>{!item.description}</p>
+                        </div>
+                        <hr style = "padding:0px !important; margin:0px !important;"/>
+                        
+                    </aura:iteration>
+                </div>
+            </aura:if>
+        </lightning:card>
+	
+</aura:component>

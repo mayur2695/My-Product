@@ -1,0 +1,29 @@
+.THIS .auto-resize-square {
+height: 200px;
+width: 200px;
+}
+.THIS .gallery {
+  scroll-snap-type: x mandatory;
+  display: flex;
+    overflow-x: scroll;
+}
+.THIS .auto-resize-big{
+width:175px;
+height:175px;
+}
+
+.THIS .productNameTruncate{
+    padding-left:0.75rem;
+    padding-right:0.75rem;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+
+
+.THIS .custom-box {
+    
+   
+    padding: 1rem;
+    border: 1px solid #d8dde6;
+}

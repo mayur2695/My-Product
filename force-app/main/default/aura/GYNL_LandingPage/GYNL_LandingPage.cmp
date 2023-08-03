@@ -1,0 +1,120 @@
+<aura:component controller="AdminScreenApex" implements="force:appHostable" >
+    <aura:attribute name="MasterAllowed" type="Boolean" default=""/>
+    <aura:attribute name="SalesAllowed" type="Boolean" default=""/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <div class="slds-box" style="background-color:white;">
+        <div class="slds-page-header">
+            <div class="slds-page-header__row">
+                <div class="slds-page-header__col-title">
+                    <div class="slds-media">
+                        <div class="slds-media__figure">
+                            <span class="slds-icon_container" title="SAP Salesforce Connector Suite">
+                                <!--<lightning:icon iconName="standard:apps_admin" alternativeText="Account" title="Account" />
+        						-->
+                                <lightning:icon iconName="standard:apps_admin" alternativeText="SAP Salesforce Connector Suite" title="SAP Salesforce Connector Suite" />
+                                <span class="slds-assistive-text">SAP Salesforce Connector Suite</span>
+                            </span>
+                        </div>
+                        <div class="slds-media__body">
+                            <div class="slds-page-header__name">
+                                <div class="slds-page-header__name-title">
+                                    <h1>
+                                        <span class="slds-page-header__title slds-truncate" title="SAP Salesforce Connector Suite">SAP Salesforce Connector Suite</span>
+                                    </h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br/>
+        <div class="slds-grid slds-gutters">
+            <div class="slds-col slds-size_1-of-3">
+                    <span>
+                            <br/><br/><br/>
+                        <aura:if isTrue="{!v.MasterAllowed}">
+                            <div  class="slds-app-launcher__tile slds-text-link_reset box LiBox"  onclick="{!c.callMaster}">
+                                <div class="slds-app-launcher__tile-figure">
+                                    <span class="slds-avatar slds-avatar_large">
+                                        <abbr class="slds-avatar__initials slds-icon-custom-27" title="Master Data Connect">
+                                            <lightning:icon class="icnStyle" iconName="standard:account" alternativeText="Master Data Connect" title="Master Data Connect"  size="small"/>
+                                        </abbr>
+                                    </span>                       
+                                </div>
+                                <div class="slds-app-launcher__tile-body" style="background-color:#0b4256;">
+                                    <div style="margin-top: 1rem;">
+                                        <b> <Center> <a style="font-size:1.2rem; color:white;" href="">Master Data Connect</a></Center></b>
+                                    </div>
+                                </div>
+                            </div>
+                        <aura:set attribute="else">
+                            <div  class="slds-app-launcher__tile slds-text-link_reset box dLiBox" onclick="{!c.showMyToast}">
+                                <div class="slds-app-launcher__tile-figure">
+                                    <span class="slds-avatar slds-avatar_large">
+                                        <abbr class="slds-avatar__initials slds-icon-custom-27" title="Master Data Connect">
+                                            <lightning:icon class="dicnStyle" iconName="standard:account" alternativeText="Master Data Connect" title="Master Data Connect"  size="small"/>
+                                        </abbr>
+                                    </span>                       
+                                </div>
+                                <div class="slds-app-launcher__tile-body" style="background-color:#686b74;">
+                                    <div style="margin-top: 1rem;">
+                                        <b> <Center> <a style="font-size:1.2rem; color:white;" href="">Master Data Connect</a></Center></b>
+                                    </div>
+                                </div>
+                            </div>
+                        </aura:set>
+                        </aura:if>
+                            
+                  <!--      </li> -->
+                    </span>
+                </div>
+                <div class="slds-col slds-size_1-of-3">
+                    <span> <center> <img src="{!$Resource.Landing}" style="height:250px !important;"></img></center> </span>
+                </div>
+                <div class="slds-col slds-size_1-of-3" >
+                    <span>
+                        <br/><br/><br/>
+                        <aura:if isTrue="{!v.SalesAllowed}">
+                            <div  class="slds-app-launcher__tile slds-text-link_reset slds-medium-size_1-of-2 LiBox"  onclick="{!c.callOrder}">
+                            <div class="slds-app-launcher__tile-figure">
+                                <span class="slds-avatar slds-avatar_large">
+                                    <abbr class="slds-avatar__initials slds-icon-custom-27" title="Order To Cash Connect">
+                                        <lightning:icon class="icnStyle .slds-icon_large" iconName="standard:proposition" alternativeText="Order To Cash Connect" title="Order To Cash Connect" />
+                                    </abbr>
+                                </span>
+                            </div>
+                            <div class="slds-app-launcher__tile-body" style="background-color:white;border-style: solid;border-color: #0b4256;background-color:#0b4256; ">
+                                <div style="margin-top: 1rem;">
+                                    <b>  <center><a style="font-size:1.2rem; color:white;" href="">Sales Connect</a></center></b>
+                                </div>  
+                            </div>
+                        </div>
+                        <aura:set attribute="else">
+                            <div  class="slds-app-launcher__tile slds-text-link_reset slds-medium-size_1-of-2 dLiBox"  onclick="{!c.showMyToast}">
+                            <div class="slds-app-launcher__tile-figure">
+                                <span class="slds-avatar slds-avatar_large">
+                                    <abbr class="slds-avatar__initials slds-icon-custom-27" title="Order To Cash Connect">
+                                        <lightning:icon class="dicnStyle .slds-icon_large" iconName="standard:proposition" alternativeText="Order To Cash Connect" title="Order To Cash Connect" />
+                                    </abbr>
+                                </span>
+                            </div>
+                            <div class="slds-app-launcher__tile-body" style="background-color:#686b74;">
+                                <div style="margin-top: 1rem;">
+                                    <b>  <center><a style="font-size:1.2rem; color:white;" href="">Sales Connect</a></center></b>
+                                </div>  
+                            </div>
+                        </div>
+                        </aura:set>
+                        </aura:if>
+                        
+                  
+                    </span>
+                </div>
+        </div>
+
+        <div class="slds-grid slds-gutters" style="margin-bottom: 0.5rem;float: right;">
+            <span><b><p class = "markup" >Powered by GyanSys</p></b></span>
+        </div>
+    </div>
+</aura:component>

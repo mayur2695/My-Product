@@ -1,0 +1,100 @@
+<aura:component controller="GYNC_massSyncTabClass" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    
+    <!--Based upon Mass Sync checkbox in sync parameter Tab it enabled and disabled the mass sync button in Mass Sync Tab -->
+    
+    <aura:attribute name="objectList" type="List" />
+    <aura:attribute name="TimeZone" type="string" />
+    <lightning:empApi aura:id="empApi"/>
+    <!--aura:attribute name="objectSize" type="integer" default ="3"/-->
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+    <aura:handler event="force:refreshView" action="{! c.init}" />
+    <lightning:notificationsLibrary aura:id="notifLib"/>
+    <aura:attribute name="loaded" type="Boolean" default="false" />
+    <aura:attribute name="progress" type="Integer" default=""/>
+    <aura:attribute name="ObjectName" type="String" />
+    <aura:attribute name="SystemId" type="String"/>
+    <aura:attribute name="OpenModal" type="Boolean" default="false"/>
+    <!--div style = "border: 0px;">
+        <hr style = "margin-top: 0%;margin-bottom:0%; border-top:4px solid #324A73; border-radious:10px;" />
+        <hr style = "margin-top: -1px;margin-bottom:0%; border-top:4px solid #EBAF10; border-radious:10px;" />
+        <hr style = "margin-top: -1px;margin-bottom:0%; border-top:4px solid #CDCACF; border-radious:10px;" />
+    </div-->
+    
+    <!--div style="background-color:ghostwhite; border-top:0px !important;" class="slds-box"-->
+    
+    <aura:if isTrue="{!v.loaded }">
+        <div >
+            <lightning:spinner alternativeText="Loading" variant="brand"/>
+        </div>
+    </aura:if>
+    
+    <!--div> <b style="font-size:Large;padding-left:1%">Mass Sync Objects</b></div>
+        <hr/-->
+    <!--div style="margin-top:3%"--> 
+    <aura:iteration items="{!v.objectList}" var="obj" end="">
+        <aura:if isTrue="{!obj.Name == v.ObjectName}">
+            <!--div style="margin-bottom: 1.5%;margin-left:25%;" class="slds-grid slds-wrap"-->
+            <!--div class="slds-col slds-size_0.5-of-12">
+                        <lightning:icon iconName="{!obj.GYNF_Object_Icon__c}" size="small" alternativeText="{!obj.Name}" title="{!obj.Name}" />
+                    </div>
+                    <div style="margin-left:2%;font-size: medium;margin-bottom:2%;width:30%;" class="slds-col slds-size_4-of-12">
+                        {!obj.Name} 
+                    </div> 
+                    <div style="Width:10%;margin-left:-20%;margin-top:1%" class="slds-col slds-size_5-of-12 ">
+                        <aura:if isTrue="{!and(obj.GYNCF_Mass_Sync_Live__c, obj.GYNCF_Mass_Sync__c)}"-->
+            
+            <!--lightning:icon iconName="action:sort" size="xx-small" alternativeText="Sync..." title="{!obj.Name}" /-->
+            <!--div style="width:75%" class="slds-progress-bar slds-progress-bar_circular" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{!obj.progress}" role="progressbar">
+                                <span class="slds-progress-bar__value slds-progress-bar__value_success" style="{!'width:'+ obj.progress +'%'}">  
+                                </span>
+                                <div>{!obj.progress +'%'}</div>
+                            </div>
+                        </aura:if> 
+                    </div-->
+            
+            
+            <!--div id="btn" style="border-radius: 10%;width:38.6%;box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);"-->
+            
+            <div style="margin-right:20%;margin-top:10%;">
+                <lightning:button iconName="utility:sync" name="{!obj.Name}" variant="brand" label="Mass sync from SAP" title="Mass Sync" onclick="{! c.massSyncButton }" disabled = "{!or(obj.GYNCF_Mass_Sync_Live__c, !obj.GYNCF_Mass_Sync__c)}" value ="{!v.SystemId}"/>
+            </div>
+            <aura:if isTrue="{!and(obj.GYNCF_Mass_Sync_Live__c, obj.GYNCF_Mass_Sync__c)}">
+                
+                
+                 <div style="width:78%;margin-top:5%;" class="slds-progress-bar slds-progress-bar_circular" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{!obj.progress}" role="progressbar">
+                    <span class="slds-progress-bar__value slds-progress-bar__value_success" style="{!'width:'+ obj.progress +'%'}">  
+                    </span>
+                    <div>{!obj.progress +'%'}</div>
+                    </div>
+            </aura:if>
+            <aura:if isTrue="{!v.OpenModal}">
+                <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+                    <div style="width:50%" class="slds-modal__container">
+                        <header class="slds-modal__header">
+                            <lightning:buttonIcon iconName="utility:close"
+                                              onclick="{! c.cancle }"
+                                              alternativeText="close"
+                                              variant="bare-inverse"
+                                              class="slds-modal__close"
+                                              size="medium"/>
+                                              
+                            <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Mass Sync Confirmation</h2>
+                        </header>
+                        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                            <p>Do you want to trigger full synchronization of {!obj.Name} ?</p>
+                            
+                        </div>
+                        <footer class="slds-modal__footer">
+                            <button class="slds-button slds-button_neutral" onclick="{!c.cancle}">No</button>
+                            <lightning:button  name="{!obj.Name}" variant="brand" label="Yes" title="Yes" onclick="{! c.ProceedMassSync }" value ="{!v.SystemId}"/>
+                        </footer>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </aura:if>
+        </aura:if>
+    </aura:iteration><!--/div-->
+    <!--b><center> <lightning:button aura:id="submit" variant="base" label="View More" title="View More Objects" onclick="{! c.ViewMore }"/></center></b-->
+    <!--/div-->
+    
+</aura:component>

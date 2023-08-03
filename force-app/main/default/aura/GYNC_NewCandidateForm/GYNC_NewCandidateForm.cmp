@@ -1,0 +1,70 @@
+<!--This lightning component is created to insert new candidate record from the related list of position object.
+It is a child component of GYNC_DisplayAllCandidates component
+Created by - Arnab Dey-->
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" controller = "GYNC_NewCandidate" access="global">
+	<aura:attribute name="CandidateObj" type="GYNCO_Candidate__c" default="{ 'sobjectType': 'GYNCO_Candidate__c'}"/>
+    <aura:attribute name="NewCanIsOpen" type="boolean" default="false"/>
+    <aura:attribute name="PositionId" type="Id" default="" />
+     <aura:attribute name="CandidateId" type="Id" default="" />
+<aura:if isTrue="{!v.NewCanIsOpen}">
+ <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+     <div class="slds-modal__container">
+         <header class="slds-modal__header">
+              <lightning:buttonIcon iconName="utility:close"
+                                    onclick="{! c.closeModel }"
+                                    alternativeText="close"
+                                    variant="bare-inverse"
+                                    class="slds-modal__close"
+                                    />
+             <h1 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">
+                 <lightning:icon iconName="standard:avatar" size="large"/>
+                 Create New Candidate</h1>
+         </header>
+        <lightning:card title="New Candidate" footer="Click on Save button to create new Candidate.">
+                      
+            <!-- Body -->
+            <p class="slds-p-horizontal_small">
+                <lightning:input aura:id="CanName"
+                                 label="Candidate Name"
+                                 type="String"
+                                 required="true"
+                                 value="{!v.CandidateObj.Name}"
+                                 />
+                <lightning:input aura:id="CanPh"
+                                 label="Phone Number"
+                                 type="tel"
+                                 pattern="[0-9]{10}"
+                                 messageWhenPatternMismatch="Entered Phone Number should be of 10 digits."
+                                 value="{!v.CandidateObj.GYNCF_Phone_Number__c}"
+                                 />
+                <lightning:input aura:id="CanMail"
+                                 label="E-mail"
+                                 type="email"
+                                 pattern="^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$"
+                                 messageWhenPatternMismatch="Enter a valid E-mail"
+                                 value="{!v.CandidateObj.GYNCF_Email__c}"
+                                 />
+                <lightning:select aura:id="select" name="select" label="Select working location" value="{!v.CandidateObj.GYNCF_Location__c}">
+                    <option value="Carmel">Carmel</option>
+                    <option value="Bengaluru">Bengaluru</option>
+                    <option value="Hyderabad">Hyderabad</option>
+                    <option value="Manila">Manila</option>
+                </lightning:select>
+           </p>
+            <!--/ Body -->
+       </lightning:card>
+         <footer class="slds-modal__footer">
+              <lightning:button variant="Destructive" 
+                                 label="Close"
+                                 title="Close"
+                                 onclick="{! c.closeModel }"/>
+              <lightning:button aura:id="saveId"
+                                 label="Save" 
+                                 variant="brand"
+                                 onclick="{!c.doSave}"/>
+         </footer>
+    </div>
+ </section>
+         <div class="slds-backdrop slds-backdrop_open"></div>
+</aura:if>
+</aura:component>

@@ -1,0 +1,44 @@
+<aura:component controller="OrderNewButtonController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction,lightning:actionOverride" access="global" >
+    <aura:attribute name="accountChange" type="Boolean" />
+    <aura:attribute name="options" type="List" />
+    <aura:attribute name="selectedValue" type="String" />
+    <!-- <lightning:listView aura:id="listViewAccounts"
+    objectApiName="Order"
+    listName="AllOrders"
+    rows="5"
+    showSearchBar="true"
+    showActionBar="false"
+    enableInlineEdit="true"
+    showRowLevelActions="false"
+/>-->
+    <lightning:recordEditForm aura:id="recordEditForm"
+                              objectApiName="Order">
+        <lightning:messages />
+        <lightning:inputField fieldName="ContractId" />
+        
+        <lightning:inputField fieldName="Name" />  
+        <lightning:inputField fieldName="PoDate" />
+        <lightning:inputField fieldName="PoNumber" />
+        <lightning:inputField aura:id="accountId" fieldName="AccountId" onchange="{!c.accountChange}" />
+        <aura:if isTrue="{!v.accountChange}">
+            <lightning:select name="colorId" label="Sales Aggrement"  value="{!v.selectedValue}">
+                <option text="--Select a Sales Aggrement--" value="" />
+                <aura:iteration items="{!v.options}" var="option">
+                    <option text="{!option.Name}" value="{!option.Id}" />
+                </aura:iteration>
+            </lightning:select>
+        </aura:if>
+        <lightning:inputField fieldName="Status" />
+        <lightning:inputField fieldName="SalesAgreementId" />
+        <lightning:inputField fieldName="ShippingAddress" />
+        <lightning:inputField fieldName="EffectiveDate" />
+        <lightning:inputField fieldName="SalesAgreementId" />
+        
+        
+        
+        
+        
+        
+        <lightning:button class="slds-m-top_small" type="submit" label="Save" />
+    </lightning:recordEditForm>
+</aura:component>

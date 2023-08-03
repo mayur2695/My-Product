@@ -1,0 +1,324 @@
+<aura:component controller="AdminScreenApex" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction,lightning:isUrlAddressable" access="global" >
+    <aura:attribute name="selectedUP" type="Boolean" default="true"/>
+    <aura:attribute name="selectedOAuth" type="Boolean" default="false"/>
+    <aura:attribute name="Edit" type="Boolean" default="true"/>
+    <aura:attribute name="showpassword" type="Boolean" default="false"/>
+    <aura:attribute name="ParentName" type="String" default=""/>
+    <aura:attribute name="SelectedSystem" type="String" default=""/>
+    <aura:attribute name="showpasswordClient" type="Boolean" default="false"/>
+    <aura:handler name="change" value="{!v.SelectedSystem}" action="{!c.change}"/>
+    <aura:handler event="force:refreshView" action="{! c.doInit}" />
+    <aura:attribute name="optionsval" type="List" default="[
+                                                           {'label': 'User/PW', 'value': 'option1'},
+                                                           {'label': 'OAuth', 'value': 'option2'}
+                                                           ]"/>
+    <aura:attribute name="Radiovalue" type="String" default="option1"/>
+    
+    <!--Onload Method Call-->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="UrlList" type="Object" />
+    
+    <div class="slds-box"  style="background-color:white;">
+        <div class="slds-grid slds-gutters">
+            <div style="width:100%" class="slds-col slds-size_2-of-3">
+                <c:GYNL_SystemInformation PageName="Admin" selectedSystemId="{!v.SelectedSystem}" IsEdit="{!v.Edit}"/>
+            </div>
+            <!--<div class="slds-clearfix">
+        <div class="slds-float_left slds-m-bottom_medium">
+         <lightning:select name="SystemId" label="Select a System:" aura:id="SysID" value="{!v.selectedValue}">
+        <aura:iteration items="{!v.options}" var="option">
+            <option text="{!option.value}" value="{!option.key}" />
+        </aura:iteration>
+    </lightning:select>
+        </div>
+        <div class="slds-float_right slds-m-top_large">
+            <lightning:button iconName="utility:add"  variant="brand" label="Create a new system connectivity" title="Create a new system connectivity" onclick="" />
+                       
+        </div>
+        </div>-->
+            <div style="margin-top:1.8%;margin-left:-31%" class="slds-col slds-size_0.5-of-3">
+                <lightning:button variant="brand" label="Delete System" title="Delete System" onclick="{!c.DeleteSystem}" />
+            </div>
+        </div>
+        <div class="slds-box header">
+            <lightning:icon iconName="utility:link" variant="inverse" size="small" alternativeText="Service URL" title="Service URL" />  <span style="margin-left:1%;">  <b>SAP Object Service URL</b></span>
+            
+        </div>
+        
+        <div class="slds-box" style="border-width:0px;">
+            <aura:if isTrue="{!v.ParentName=='B2B_Connect'}">
+                <div class="slds-grid">
+                    <div class="slds-col slds-size_1-of-12">
+                        <h1>Customer</h1>
+                    </div>
+                    <div class="slds-col slds-size_4-of-12">
+                        <lightning:input type="text" id="textinput1" name="InputBox1" value="{!v.UrlList.Customer}" disabled="{!v.Edit}"/>
+                        
+                    </div>
+                    <div class="slds-col slds-size_2-of-12"/>
+                    
+                    <div class="slds-col slds-size_1-of-12">
+                        <h1>Material</h1>
+                    </div>
+                    <div class="slds-col slds-size_4-of-12">
+                        <lightning:input type="text" id="textinput2" name="InputBox2" value="{!v.UrlList.Materials}" disabled="{!v.Edit}" />
+                        
+                    </div>
+                </div>
+                <div class="slds-grid">
+                    <div class="slds-col slds-size_1-of-12">
+                        <h1>Pricing</h1>
+                    </div>
+                    <div class="slds-col slds-size_4-of-12">
+                        <lightning:input type="text" id="textinput1" name="InputBox1" value="{!v.UrlList.Equipment}" disabled="{!v.Edit}"/>
+                        
+                    </div>
+                    <div class="slds-col slds-size_2-of-12"/>
+                    
+                    <div class="slds-col slds-size_1-of-12">
+                        <h1>Inventory</h1>
+                    </div>
+                    <div class="slds-col slds-size_4-of-12">
+                        <lightning:input type="text" id="textinput2" name="InputBox2" value="{!v.UrlList.Quotation}" disabled="{!v.Edit}" />
+                        
+                    </div>
+                    
+                </div>
+                <div class="slds-grid">
+                    <div class="slds-col slds-size_1-of-12">
+                        <h1>CMIR</h1>
+                    </div>
+                    <div class="slds-col slds-size_4-of-12">
+                        <lightning:input type="text" id="textinput1" name="InputBox1" value="{!v.UrlList.Customer}" disabled="{!v.Edit}"/>
+                        
+                    </div>
+                    <div class="slds-col slds-size_2-of-12"/>
+                    
+                    <div class="slds-col slds-size_1-of-12">
+                        <h1>VC</h1>
+                    </div>
+                    <div class="slds-col slds-size_4-of-12">
+                        <lightning:input type="text" id="textinput2" name="InputBox2" value="{!v.UrlList.Materials}" disabled="{!v.Edit}" />
+                        
+                    </div>
+                </div>
+                <div class="slds-grid">
+                    <div class="slds-col slds-size_1-of-12">
+                        <h1>Order</h1>
+                    </div>
+                    <div class="slds-col slds-size_4-of-12">
+                        <lightning:input type="text" id="textinput2" name="InputBox2" value="{!v.UrlList.Invoice}" disabled="{!v.Edit}" />
+                        
+                    </div>
+                    <div class="slds-col slds-size_2-of-12"/>
+                    
+                    <div class="slds-col slds-size_1-of-12">
+                        <h1>Quote</h1>
+                    </div>
+                    <div class="slds-col slds-size_4-of-12">
+                        <lightning:input type="text" id="textinput2" name="InputBox2" value="{!v.UrlList.SalesOrder}" disabled="{!v.Edit}" />
+                        
+                    </div>
+                </div>
+                <div class="slds-grid">
+                    <div class="slds-col slds-size_1-of-12">
+                        <h1>Invoice</h1>
+                    </div>
+                    <div class="slds-col slds-size_4-of-12">
+                        <lightning:input type="text" id="textinput2" name="InputBox2" value="{!v.UrlList.Invoice}" disabled="{!v.Edit}" />
+                        
+                    </div>
+                    <div class="slds-col slds-size_2-of-12"/>
+                    
+                    <div class="slds-col slds-size_1-of-12">
+                        <h1></h1>
+                    </div>
+                    <div class="slds-col slds-size_4-of-12">
+                        
+                        
+                    </div>
+                </div>
+                <aura:set attribute="else">
+                    <aura:if isTrue="{!v.ParentName=='Master'}">
+                        <div class="slds-grid">
+                            <div class="slds-col slds-size_1-of-12">
+                                <h1>Customer</h1>
+                            </div>
+                            <div class="slds-col slds-size_4-of-12">
+                                <lightning:input type="text" id="textinput1" name="InputBox1" value="{!v.UrlList.Customer}" disabled="{!v.Edit}"/>
+                                
+                            </div>
+                            <div class="slds-col slds-size_2-of-12"/>
+                            
+                            <div class="slds-col slds-size_1-of-12">
+                                <h1>Material</h1>
+                            </div>
+                            <div class="slds-col slds-size_4-of-12">
+                                <lightning:input type="text" id="textinput2" name="InputBox2" value="{!v.UrlList.Materials}" disabled="{!v.Edit}" />
+                                
+                            </div>
+                        </div>
+                        <div class="slds-grid">
+                            <div class="slds-col slds-size_1-of-12">
+                                <h1>Pricing</h1>
+                            </div>
+                            <div class="slds-col slds-size_4-of-12">
+                                <lightning:input type="text" id="textinput1" name="InputBox1" value="{!v.UrlList.Customer}" disabled="{!v.Edit}"/>
+                                
+                            </div>
+                            <div class="slds-col slds-size_2-of-12"/>
+                            
+                            <div class="slds-col slds-size_1-of-12">
+                                <h1>Inventory</h1>
+                            </div>
+                            <div class="slds-col slds-size_4-of-12">
+                                <lightning:input type="text" id="textinput2" name="InputBox2" value="{!v.UrlList.Materials}" disabled="{!v.Edit}" />
+                                
+                            </div>
+                        </div>
+                        <div class="slds-grid">
+                            <div class="slds-col slds-size_1-of-12">
+                                <h1>CMIR</h1>
+                            </div>
+                            <div class="slds-col slds-size_4-of-12">
+                                <lightning:input type="text" id="textinput1" name="InputBox1" value="{!v.UrlList.Equipment}" disabled="{!v.Edit}"/>
+                                
+                            </div>
+                            <div class="slds-col slds-size_2-of-12"/>
+                            
+                            <div class="slds-col slds-size_1-of-12">
+                                <h1></h1>
+                            </div>
+                            <div class="slds-col slds-size_4-of-12">
+                                
+                            </div>
+                            
+                        </div>
+                        
+                    </aura:if>
+                    <aura:if isTrue="{!v.ParentName=='Order'}">
+                        <div class="slds-grid">
+                            <div class="slds-col slds-size_1-of-12">
+                                <h1>VC</h1>
+                            </div>
+                            <div class="slds-col slds-size_4-of-12">
+                                <lightning:input type="text" id="textinput2" name="InputBox2" value="{!v.UrlList.Invoice}" disabled="{!v.Edit}" />
+                                
+                            </div>
+                            <div class="slds-col slds-size_2-of-12"/>
+                            
+                            <div class="slds-col slds-size_1-of-12">
+                                <h1>Order</h1>
+                            </div>
+                            <div class="slds-col slds-size_4-of-12">
+                                <lightning:input type="text" id="textinput2" name="InputBox2" value="{!v.UrlList.SalesOrder}" disabled="{!v.Edit}" />
+                                
+                            </div>
+                        </div>
+                        
+                        <div class="slds-grid">
+                            <div class="slds-col slds-size_1-of-12">
+                                <h1>Quote</h1>
+                            </div>
+                            <div class="slds-col slds-size_4-of-12">
+                                <lightning:input type="text" id="textinput1" name="InputBox1" value="{!v.UrlList.Quotation}" disabled="{!v.Edit}"/>
+                                
+                            </div>
+                            <div class="slds-col slds-size_2-of-12"/>
+                            
+                            <div class="slds-col slds-size_1-of-12">
+                                <h1></h1>
+                            </div>
+                            <div class="slds-col slds-size_4-of-12">
+                                
+                            </div>
+                            
+                        </div>
+                        
+                    </aura:if>
+                </aura:set>
+            </aura:if>
+            
+        </div>
+        
+        <br/>
+        
+        <div class="slds-box header">
+            <lightning:icon iconName="utility:lock" variant="inverse" size="small" alternativeText="Authentication" title="Authentication" />  <span style="margin-left:1%;">  <b>Authentication</b></span>
+            
+        </div>
+        
+        
+        <div class="slds-box" style="width:60%;border-width:0px;margin:auto;">
+            
+            <center>
+                <lightning:radioGroup name="radioButtonGroup"
+                                      label=""
+                                      options="{! v.optionsval }"
+                                      value="{!v.Radiovalue}"
+                                      onchange="{!c.handleClick}"
+                                      type="button"/>
+            </center>
+            <aura:if isTrue="{!v.selectedUP}">
+                <div class="slds-grid">
+                    <div class="slds-col slds-size_4-of-12 maxWidth">
+                        <lightning:input class="" type="text" label="UserName" id="UID" name="UserName" value="{!v.UrlList.Username}" disabled="{!v.Edit}" />
+                    </div>
+                    <div class="slds-col slds-size_2-of-12"></div>
+                    <div class="slds-col slds-size_4-of-12 maxWidth">
+                        <aura:if isTrue="{!v.showpassword}">
+                            <lightning:input class="" type="text" label="Password" id="PID" name="Password" value="{!v.UrlList.Password}" disabled="{!v.Edit}" />
+                            <aura:set attribute="else">
+                                <lightning:input class="" type="password" label="Password" id="PID" name="Password" value="{!v.UrlList.Password}" disabled="{!v.Edit}" />
+                            </aura:set>
+                        </aura:if>
+                    </div>
+                    <div class="slds-col slds-size_2-of-12">
+                        <div style="margin-top: 23%;margin-left: 5%;">
+                            <lightning:icon iconName="utility:preview" alternativeText="Show Password" title="Show Password" size="small" onclick="{!c.showpassword}" />
+                        </div>
+                    </div>
+                </div>
+            </aura:if>
+            <aura:if isTrue="{!v.selectedOAuth}">
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col slds-size_4-of-12 maxWidth">
+                        <lightning:input type="text" label="Client ID" id="CID" name="Client ID" value="{!v.UrlList.ClientId}" disabled="{!v.Edit}" />
+                    </div>
+                    <div class="slds-col slds-size_2-of-12"></div>
+                    <div class="slds-col slds-size_4-of-12 maxWidth">
+                        <aura:if isTrue="{!v.showpasswordClient}">
+                            <lightning:input type="text" label="Client Secret" id="CSID" name="Client Secret" value="{!v.UrlList.ClientSecret}" disabled="{!v.Edit}" />
+                            <aura:set attribute="else">
+                                <lightning:input type="password" label="Client Secret" id="CSID" name="Client Secret" value="{!v.UrlList.ClientSecret}" disabled="{!v.Edit}" />
+                            </aura:set>
+                        </aura:if>
+                    </div>
+                    <div class="slds-col slds-size_2-of-12">
+                        <div style="margin-top: 23%;margin-left: 5%;">
+                            <lightning:icon iconName="utility:preview" alternativeText="Show Password" title="Show Password" size="small" onclick="{!c.showpasswordClient}" />
+                        </div>
+                    </div>
+                </div>
+            </aura:if>
+        </div>
+        <br/><br/>
+        <div class="slds-clearfix">   
+            <div class="slds-float_right">
+                <aura:if isTrue="{!v.Edit}">
+                    <lightning:button iconName="utility:edit"  variant="brand" label="Edit" title="Edit" onclick="{!c.edit}" />
+                    <aura:set attribute="else">
+                        <lightning:button iconName="utility:save"  variant="brand" label="Save" title="Save" onclick="{!c.save}" />
+                        <lightning:button iconName="utility:clear"  variant="destructive" label="Cancel" title="Cancel" onclick="{!c.cancel}" />
+                    </aura:set>
+                </aura:if>
+            </div>
+        </div>
+        <div class="slds-grid slds-gutters" style="float: right;">
+            <div >
+                <span><b><p class = "markup">Powered by GyanSys</p></b></span>
+            </div>
+        </div>
+    </div>
+    
+</aura:component>

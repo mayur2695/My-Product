@@ -1,0 +1,5 @@
+<aura:component implements="force:lightningQuickAction,force:hasRecordId" access="global">
+    <aura:method name="viewPDF" />
+    <aura:attribute name="vfHost" type="String" default="gyansysdevelopers1-dev-ed.my.salesforce.com"/>
+    <iframe src="{!'https://' + v.vfHost + '/apex/GYNP_viewAsPDF?Id='+ v.recordId }" id="myIframe" scrolling="no" frameborder="0" />
+</aura:component>

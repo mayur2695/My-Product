@@ -1,0 +1,87 @@
+<aura:component controller='GYNC_B2B_createCustomfieldController' implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="recordId" type="Id" /> 
+    <aura:attribute name="NewField" type="Boolean" default="false"/>
+    <aura:attribute name="Pickval" type="Boolean" default="false"/>
+    <aura:attribute name="fetched" type="Boolean" default="false"/>
+    <aura:attribute name="labelOfField" type="String" />  
+    <aura:attribute name="Name" type="String" />
+    <aura:attribute name="Type" type="String" />
+    <aura:attribute name="Length" type="Integer" /> 
+    <aura:attribute name="PickListvalue" type="String" />
+    <aura:attribute name="SelectedTab" type="String" />
+    <aura:attribute name="addFieldToSF" type="Boolean" default="false"/>
+    <aura:attribute name="addFieldToItemobject" type="Boolean" default="false"/>
+    <aura:attribute name="AddErrorMessage" type="String" />
+    <aura:attribute name="errorSection" type="Boolean" default="false"/>
+    <aura:attribute name="forItemfield" type="Boolean" default="false"/>
+    <aura:attribute name="fetchedData" type="List" />
+    <aura:attribute name="SAPfetchedData" type="List" />
+    <aura:attribute name="selectedSystemId" type="String" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler name="change" value="{!v.Type}" action="{!c.HandlechangePicklist}"/>
+    <aura:registerEvent name="RefershtableEvent" type="c:RefershCustomtable"/>
+    
+    <!--div class="slds-box slds-border_left"  style="border-radius:0rem;background:white;"-->
+    <div class="slds-float_right slds-m-right--xx-small">
+        <lightning:button iconName="utility:insert_template" label="Create New Custom Field"  variant="brand" onclick="{! c.handleClick}"/>
+    </div>
+    <aura:if isTrue="{!v.NewField}">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Create New Field</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <aura:if isTrue="{!v.errorSection}">
+                        <div class="slds-box slds-theme_shade slds-theme_alert-texture" style="color:Red;">
+                            <p>{!v.AddErrorMessage}</p>
+                        </div>
+                    </aura:if>
+                    <div class="slds-p-left_small slds-p-right_small">
+                         <div class="">
+                            <lightning:button label="Fetch SAP Fields"  variant="brand" onclick="{!c.fetchallSAP}"/>
+                        </div>
+                        <aura:if isTrue="{!v.fetched}">
+                            <lightning:select name="Customfieldname1" label="Custom Field Name" required="true" value="{!v.labelOfField}" onchange="{!c.changeobject}">
+                            <option value="">choose one...</option>
+                             <aura:iteration items="{!v.SAPfetchedData}" var="item">
+                            <option value="{!item.name}">{!item.name}</option>
+                            </aura:iteration>
+                        </lightning:select>
+                        <aura:set attribute="else">
+                            <lightning:input name="Customfieldname" label="Custom Field Name" required="true" value="{!v.labelOfField}" placeholder="Label of the field[Custom field]"/>
+                        
+                        </aura:set>
+                        </aura:if>
+                        <!--lightning:input name="Name" label="Full Name" required="true" value="{!v.Name}" placeholder="API Name[Custom_field__c]"/-->
+                        <lightning:select name="Property" label="Property" required="true" value="{!v.Type}">
+                            <option value="">choose one...</option>
+                            <option value="Checkbox">Checkbox</option>
+                            <option value="Number">Number</option>
+                            <option value="Picklist">Picklist</option>
+                            <option value="Text">Text</option>
+                            <option value="Date">Date</option>
+                            <option value="Currency">Currency</option>
+                        </lightning:select>
+                        <aura:if isTrue="{!v.Pickval}">
+                            <lightning:textarea name="Picklist values" label="Picklist values" value="{!v.PickListvalue}"/>
+                            <lightning:button variant="brand" label="Fetch values from SAP button" title="Fetch values from SAP button" onclick="{! c.fetchValuefromSAP }" />
+                        </aura:if>
+                        <!--lightning:input type="number" name="Length" required="true" value="{!v.Length}" label="Length" /-->
+                        <br/><lightning:input type="checkbox" label="Add Field to Salesforce" name="Add Field to Salesforce" checked="{!v.addFieldToSF}" />
+                        
+                        <br/>
+                        <aura:if isTrue="{!v.forItemfield}">
+                            <lightning:input type="checkbox" label="Item" name="Item" checked="{!v.addFieldToItemobject}"/>
+                        </aura:if>
+                    </div>
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning:button variant="brand" label="Create" title="Create" onclick="{! c.handlecreate }" />
+                    <lightning:button variant="brand" label="Cancel" title="Cancel" onclick="{! c.handleCancel }" />
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>    
+</aura:component>

@@ -1,0 +1,1 @@
+<aura:event type="APPLICATION" description="On successful submit of a review, an event will fire." />

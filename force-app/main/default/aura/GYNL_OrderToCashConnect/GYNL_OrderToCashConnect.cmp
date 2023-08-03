@@ -1,0 +1,45 @@
+<aura:component implements="force:appHostable,lightning:isUrlAddressable" >
+    <aura:attribute name="MainList" type="List" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />    
+    <div class="slds-box" style="background-color:white;">
+        <div class="slds-page-header">
+            <div class="slds-page-header__row">
+                <div class="slds-page-header__col-title">
+                    <div class="slds-media">
+                        <div class="slds-media__figure">
+                            <span class="slds-icon_container" title="Order To Cash Connect">
+                                <lightning:icon iconName="standard:proposition" alternativeText="Order To Cash Connect" title="Order To Cash Connect" />
+                                
+                                <span class="slds-assistive-text">Order To Cash Connect</span>
+                            </span>
+                        </div>
+                        <div class="slds-media__body">
+                            <div class="slds-page-header__name">
+                                <div class="slds-page-header__name-title">
+                                    <h1>
+                                        <span class="slds-page-header__title slds-truncate" title="Order To Cash Connect">Order To Cash Connect</span>
+                                    </h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br/>
+        <ul class="slds-grid slds-grid_pull-padded slds-wrap">
+            <aura:iteration items="{!v.MainList}" var="val">
+                
+                <c:GYNL_DataConnectChild iconName="{!val.iconName}" ObjectName="{!val.ObjectName}" ParentName="Order" FeatureManagement="{!val.feature}" FieldApiName="{!val.field}" />
+                
+            </aura:iteration>
+            
+        </ul>
+        <div class="slds-grid slds-gutters" style="float: right;">
+            <div >
+                <span><b><p class = "markup">Powered by GyanSys</p></b></span>
+            </div>
+        </div>
+    </div>
+    
+</aura:component>

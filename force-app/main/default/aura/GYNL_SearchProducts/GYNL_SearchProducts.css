@@ -1,0 +1,17 @@
+.THIS .box1{
+    padding-left:50px;
+    background-color: white;
+    
+}
+.THIS .box2{
+    width: 700px;
+    padding-left: 20px;
+    background-color: white;
+}
+
+.THIS .vl{
+    
+    border-left: 1px solid black;
+	height: 500px;
+    padding-right: 1000px;
+}

@@ -1,0 +1,36 @@
+<aura:component controller="GYNC_ProductCatalogBrowse">
+  
+    <aura:handler name="init" value="{!this}" action="{!c.doinit}"/>
+    <aura:attribute name="items" type="Object"/>
+    <aura:attribute name="showMainMenuButton" type="Boolean" default="false"/>
+    <aura:attribute name="iteratedItems" type="Object"/>
+    <aura:registerEvent name="browsegrideventfire" type="c:GYNE_ProductGridInboundEvent"/>
+    <aura:registerEvent name="cmpEvent3" type="c:GYNE_DynamicSearchEvent"/>
+    <aura:attribute name="counter" default="0" type="integer"/>
+
+    <div>
+        <!--<lightning:tree items="{!v.items}" header= " Shop By Category" onselect="{! c.handleSelect }"/>-->
+        
+        <ul class="ulClass">
+            <li>
+                <div class="slds-grid">
+                    <aura:if isTrue="{!v.showMainMenuButton}">
+                        <div class="slds-col slds-size_2-of-5">
+                            <b><a onclick="{!c.toMainMenu}" class="active" style="font-size: 11px;"><lightning:icon iconName="utility:back" size="x-small" variant="inverse"/>Main Menu</a></b>
+                        </div>
+                    </aura:if>
+                    <div class="{!'slds-col'+if(v.showMainMenuButton == false, ' slds-size_1-of-1', ' slds-size_3-of-5')}">
+                        <b><a class="active" style="{!'font-size: 11px;'+if(v.showMainMenuButton == false, 'text-align: left;', 'text-align: right;')}">Shop By Category <lightning:icon iconName="utility:shopping_bag" size="x-small" variant="inverse"/></a></b>
+                	</div>
+                    </div>
+            </li>
+            <aura:iteration items="{!v.iteratedItems}" var="each">
+                <li><a id="{!each.name}" onclick="{!c.getSubCategories}">{!each.label}
+                    <span style="float: right;" id="{!each.name}" onclick="{!c.getSubCategories}">
+                        <lightning:icon iconName="utility:chevronright" size="xx-small" variant="inverse"/>
+                    </span>
+                    </a></li>
+            </aura:iteration>
+        </ul>
+    </div>
+</aura:component>

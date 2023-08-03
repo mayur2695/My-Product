@@ -1,0 +1,143 @@
+<aura:component controller="GYNC_CatalogController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+	<aura:attribute type="GYNCO_Catalog_Master__c[]" name="acctList"/>
+    <aura:attribute name="mycolumns" type="List"/>
+    <aura:attribute name="selectedAccount" type="Object"/>
+    <aura:attribute name="catalogData" type="GYNCO_Catalog_Master__c" default="{ 'sobjectType': 'GYNCO_Catalog_Master__c'}"/>
+    <aura:attribute name="isOpen" type="boolean" default="false"/>
+    <aura:attribute name="isNew" type="boolean" default="false"/>
+    <aura:attribute name="showGrid" type="boolean" default="false"/>
+    <aura:attribute name="prodUniqList" type="GYNCS_Theme__c[]" default=""/>
+    <aura:attribute name="prodUniqCols" type="List"/>
+    <!-- Added By Spandana -->
+      <aura:if isTrue="{!v.staticresourceName=='Theme2'}">
+    <ltng:require styles="{!$Resource.GYNSR_GyansysTheme}"  afterScriptsLoaded ="{!c.scriptsLoaded}" />
+    </aura:if>
+     <aura:if isTrue="{!v.staticresourceName=='Theme1'}">
+    <ltng:require styles="{!$Resource.GYNSR_SalesforceTheme}"  afterScriptsLoaded ="{!c.scriptsLoaded}" />
+    </aura:if>
+    <aura:if isTrue="{!v.staticresourceName=='Theme3'}">
+    <ltng:require styles="{!$Resource.GYNSR_GreyTheme}"  afterScriptsLoaded ="{!c.scriptsLoaded}" />
+    </aura:if>
+    
+    <aura:attribute name="staticresourceName" type="String" />
+    <aura:attribute name="themeList" type="GYNCS_Theme__c[]" default=""/>
+    <aura:attribute name="themeColumns" type="List"/>
+    <aura:registerEvent name="selectTheme" type="c:GYNE_selectThemeEvent"/>
+  
+    
+    <!-- Ended By Spandana -->
+                    
+    <aura:handler name="init" value="{!this}" action="{!c.fetchData}"/>
+    <div class="themeClass">
+    <aura:if isTrue="{!!v.showGrid}">
+        <lightning:card  title="Available Catalogs" iconName="standard:all">
+            
+            <aura:set attribute="actions">
+                <lightning:button label="New Catalog"  variant="brand" onclick="{!c.onNewClick}"/>
+            </aura:set>
+            <lightning:datatable data="{! v.acctList }"
+                             columns="{! v.mycolumns }"
+                             keyField="id"
+                             hideCheckboxColumn="true"
+                             onrowaction="{! c.handleRowAction }"/>
+            
+        </lightning:card><br/><br/>
+        <lightning:card title="Catalog Upload Settings" iconName="standard:product_transfer">
+           
+            <lightning:datatable data="{! v.prodUniqList}"
+                                 columns="{! v.prodUniqCols }"
+                                 keyField="id"
+                                 hideCheckboxColumn="true"
+                                 onrowaction="{! c.handleProdUniqRowAction }"/>
+            
+        </lightning:card> <br/><br/>
+        <lightning:card title="Themes" iconName="standard:brand">
+            <!--    <h2> Themes Option Section Comes here Soon...</h2>-->
+            <lightning:datatable data="{! v.themeList}"
+                                 columns="{! v.themeColumns }"
+                                 keyField="id"
+                                 hideCheckboxColumn="true"
+                                 onrowaction="{! c.handleThemeRowAction }"
+                                 />
+        </lightning:card>
+    </aura:if>
+    <aura:if isTrue="{!v.showGrid}">
+               <div class="slds-modal__content slds-p-around--medium"> <c:GYNL_SearchProducts cdata="{!v.selectedAccount}"/>
+        </div>	
+        <div class="slds-modal__footer">
+          <lightning:button variant="neutral" iconName="utility:preview" label="Show Catalogs"
+                            onclick="{!c.scatalog}"/>
+        </div>
+        </aura:if>
+
+        <aura:if isTrue="{!v.isOpen}">
+          <div class="slds-modal slds-fade-in-open">
+              <div class="slds-modal__container">
+                  <div class="slds-modal__header">
+                      <h2 class="title slds-text-heading--medium">Edit Record</h2>
+                  </div>
+                  <div class="slds-modal__content slds-p-around--medium">
+                      <lightning:layout multipleRows="true" >
+                          <lightning:layoutitem padding="around-small" flexibility="auto" size="6">
+                              <lightning:input  label="Name"  value="{!v.selectedAccount.Name}"/>
+                          </lightning:layoutitem>
+                          <lightning:layoutitem padding="around-small" flexibility="auto" size="6">
+                              <lightning:input  label="Description" value="{!v.selectedAccount.GYNCF_Description__c}" />
+                          </lightning:layoutitem>
+                          <lightning:layoutitem padding="around-small" flexibility="auto" size="6">
+                              <!--<lightning:input label="Active"   value="{!v.selectedAccount.GYNCF_Active__c}"/>-->
+                              <ui:inputCheckbox aura:id="checkbox" label="Active" change="{!c.onCheck}"/>
+                          </lightning:layoutitem>
+                      </lightning:layout>
+                    <lightning:layout horizontalAlign="center">
+                        <lightning:layoutitem padding="around-small">
+                              <lightning:button  label="Save" variant="brand" onclick="{!c.editCatalogData}"/>
+                              <lightning:button variant="neutral" label="Cancel" onclick="{!c.closeModel}"/>
+                          </lightning:layoutitem>
+                    </lightning:layout>
+                  </div>
+                 <!-- <div class="slds-modal__footer">
+                      <lightning:button variant="neutral" iconName="utility:close" label="Cancel"
+                                        onclick="{!c.closeModel}"/>
+                  </div>-->
+              </div>
+          </div>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </aura:if>
+    	<aura:if isTrue="{!v.isNew}">
+          <div class="slds-modal slds-fade-in-open">
+              <div class="slds-modal__container">
+                  <div class="slds-modal__header">
+                      <h2 class="title slds-text-heading--medium">Create Catalog</h2>
+                  </div>
+                  <div class="slds-modal__content slds-p-around--medium">
+                      <lightning:layout multipleRows="true" >
+                          <lightning:layoutitem padding="around-small" flexibility="auto" size="6">
+                              <lightning:input  label="Name"  value="{!v.catalogData.Name}"/>
+                          </lightning:layoutitem>
+                          <lightning:layoutitem padding="around-small" flexibility="auto" size="6">
+                              <lightning:input  label="Description" value="{!v.catalogData.GYNCF_Description__c}" />
+                          </lightning:layoutitem>
+                          <lightning:layoutitem padding="around-small" flexibility="auto" size="6">
+                              <!--<lightning:input label="Active"   value="{!v.selectedAccount.GYNCF_Active__c}"/>-->
+                              <ui:inputCheckbox aura:id="cbox" label="Active" change="{!c.onSelect}"/>
+                          </lightning:layoutitem>
+                      </lightning:layout>
+                    <lightning:layout horizontalAlign="center">
+                        <lightning:layoutitem padding="around-small">
+                              <lightning:button  label="Save" variant="brand" onclick="{!c.createInfo}"/>
+                              <lightning:button variant="neutral" label="Cancel" onclick="{!c.closeCreateWindow}"/>
+                          </lightning:layoutitem>
+                    </lightning:layout>
+                  </div>
+                 <!-- <div class="slds-modal__footer">
+                      <lightning:button variant="base" iconName="utility:close" label="Cancel"
+                                        onclick="{!c.closeCreateWindow}"/>
+                  </div> -->
+              </div>
+          </div>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </aura:if>
+    </div>
+    
+</aura:component>

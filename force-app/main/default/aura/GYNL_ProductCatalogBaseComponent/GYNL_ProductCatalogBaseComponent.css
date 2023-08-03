@@ -1,0 +1,27 @@
+.THIS.slds-tabs_default{
+    border-radius: 5px;
+}
+.THIS .slds-tabs_default__content{
+    box-shadow: 0px 0px 5px 0px #374b64;
+}
+/*.THIS .slds-tabs_scoped__link:hover{
+    color: white;
+    background-color: #1b3563;
+    border-color: #1b3563;
+}
+.THIS .slds-tabs_scoped__link:hover .slds-icon_container svg{
+    fill: white;
+}
+.THIS .slds-button_icon svg{
+    fill: #1b3563;
+}*/
+.THIS .slds-tabs_scoped__content{
+    min-height: 74vh;
+}
+.THIS .tabHeaderBorder{
+    padding-top: 1rem;
+    /*border-top: 1px solid #cccccc;*/
+}
+/*.THIS .gridLeftBorderColor{
+    border-left: 1px solid #cccccc;
+}*/

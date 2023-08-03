@@ -1,0 +1,121 @@
+<aura:component controller="AdminScreenApex" implements="lightning:isUrlAddressable" >
+    <aura:attribute name="ObjectName" type="String" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="ParentName" type="String" />
+    <aura:attribute name="iconName" type="String" />
+    <aura:attribute name="SelectedSystem" type="String" />
+    <aura:attribute name="SystemId" type="String" />
+    <aura:attribute name="MainSelectedTab" type="String" default="one"/>
+	<!--<aura:attribute name="CheckRender" type="Boolean" default="false"/>
+    
+    aura:handler name="change" value="{!v.ObjectName}" action="{!c.itemsChange}"/
+    <aura:handler event="aura:doneRendering" action="{!c.itemsChange}"/>-->
+    
+    
+    <lightning:card footer="" title="{!v.ObjectName}" iconName="{!'standard:'+v.iconName}">
+        <aura:set attribute="actions">
+             <c:GYNL_SystemInformation  selectedSystemId="{!v.SystemId}"/>
+                   
+            
+            
+        </aura:set>
+        <div class="slds-box" style="border-width:0px;">
+            <aura:if isTrue="{!v.SystemId !=undefined}">
+                <lightning:tabset selectedTabId="{!v.MainSelectedTab}" variant="scoped" onselect="{!c.onchange}">
+                    <lightning:tab label="Object Settings" id="one" iconName="utility:ad_set">
+                        
+                        <c:GYNL_sycParamterScreen hideTab="hideTab" selTabId="{!v.ObjectName}" SystemId="{!v.SystemId}"/>
+                    </lightning:tab>
+                    <lightning:tab label="Mapping" id="two" iconName="utility:strategy">
+                        <c:GYNL_mappingScreenComponent  aura:id="mapping" selectedObject="{!v.ObjectName}" showPicklist="false" systemId ="{!v.SystemId}" /> 
+                    </lightning:tab>
+                    <lightning:tab label="Replication Setup" id="three" iconName="utility:reminder">
+                        <lightning:tabset selectedTabId="one">
+                            <lightning:tab label="Full Load" id="one">
+                                <div style="" class="slds-grid slds-wrap">
+                                <div class="slds-col" style="max-width:18%;margin-top:1%">
+                                    <c:GYNL_massSyncTab ObjectName="{!v.ObjectName}" SystemId="{!v.SystemId}"/>
+                                </div>
+                                <div  class="slds-col slds-m-top_xx-small" style="margin-top:2.7%;" >
+                                    
+                                    <c:GYNL_MassSyncLogs ObjectName="{!v.ObjectName}" SystemId="{!v.SystemId}"/>
+                                </div>
+                            </div>
+                            </lightning:tab>
+                            <lightning:tab label="Batch Setup" id="two">
+                                <div class="slds-box slds-grid">
+                                	<div class="slds-col">
+                                        <c:GYNL_Mass_Sync_Scheduler ObjectName="{!v.ObjectName}" SystemId="{!v.SystemId}" />
+                                  
+                                    </div>
+                                    <div class="slds-col"></div>
+                                    <div class="slds-col">
+                                         <c:GYNL_Schedular_List ObjectName="{!v.ObjectName}" SystemId="{!v.SystemId}" />
+                                
+                                    </div>
+                                </div>
+                                   
+                            </lightning:tab>
+                            <lightning:tab label="Adhoc Replication" id="three">
+                                <c:GYNL_singleRecordSync systemId ="{!v.SystemId}" objNameSAP ="{!v.ObjectName}" />
+                      
+                            </lightning:tab>
+                        </lightning:tabset>
+                        <!--<div class="slds-box">
+                            <strong><h2>Full Load</h2></strong>
+                            <br/>
+                            
+                           
+                            
+                        </div>
+                        <br/>
+                        <div class="slds-box">
+                            <h2><strong>Batch Setup</strong></h2>
+                            
+                            <lightning:tabset selectedTabId="one">
+                                <lightning:tab label="Schedule Batch" id="one">
+                                  </lightning:tab>
+                                
+                                <lightning:tab label="Create Batch Variant" id="two">
+                                    <c:GYNL_New_SchedularRecords/>
+                                </lightning:tab>
+                            </lightning:tabset>
+                        </div>
+                        <br/>
+                        <div class="slds-box">
+                            <h2><strong>Adhoc Replication</strong></h2>
+                            
+                              </div>-->
+                    </lightning:tab>
+                    <lightning:tab label="Enhancement Framework" id="four" iconName="utility:change_record_type">
+                        <div class="slds-grid">
+                <!--<div class="slds-col">
+                    <c:GYNL_SystemInformation  selectedSystemId="{!v.SystemId}"/>
+                    
+                </div>&nbsp;&nbsp;-->
+                <div class="slds-col slds-size_2-of-12" style="width: 12%;">
+                    <br/>
+               
+                    <c:GYNL_syncSAPFieldsButton  selTabId = "{!v.ObjectName}" systemId="{!v.SystemId}"/>
+                    
+                </div>
+                <div class="slds-col ">
+                    <br/>
+                    <div class="slds-clearfix">
+                    <div class="slds-float_left" style="float:left !important">
+                        <c:GYNC_CreateCustomField SelectedTab="{!v.ObjectName}" selectedSystemId="{!v.SystemId}"/>
+                    </div>
+                    </div>
+                    
+                </div>
+                        </div><br/>
+                        <c:GYNC_CustomFieldTable selectedtab="{!v.ObjectName}" selectedSystemId="{!v.SystemId}"/>
+                    </lightning:tab>
+                </lightning:tabset>
+            </aura:if>
+        </div>
+          <div class="slds-grid slds-gutters" style="margin-bottom: 0.5rem;float: right;">
+            <span><b><p class = "markup" >Powered by GyanSys</p></b></span>
+        </div>
+    </lightning:card>
+</aura:component>

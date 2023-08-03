@@ -1,0 +1,11 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global">
+    <c:GYNC_Mode_Of_Mail/>
+	<br></br>
+    <p class="slds-box slds-text-heading_small"> 
+        <lightning:icon iconName="action:new_note" alternativeText="New note" title="New note" />
+        Offer Letter Template
+    </p>
+    <c:GYNL_offerLetterAdminScreen/>
+
+    
+</aura:component>

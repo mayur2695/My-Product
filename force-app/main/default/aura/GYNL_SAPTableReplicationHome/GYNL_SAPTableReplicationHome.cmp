@@ -1,0 +1,93 @@
+<aura:component controller = "GYNC_SAPTableReplicationHomeApex" implements="force:appHostable" >
+    <aura:attribute name = "availableSAPTables" type = "List" />
+    <aura:attribute name = "availableSAPFields" type = "List" />
+    <aura:attribute name = "existingTableMap" type = "List" />
+    <!--aura:attribute name = "configRec" type = "GYNCO_Configuration__c" /-->
+    <aura:attribute name = "sapTableMap" type = "Map" />
+    <aura:attribute name = "tableSelected" type = "String" />
+    <aura:attribute name = "SFDCObjName" type = "String" />
+    <aura:attribute name = "systemId" type = "String" default = "Not Selected" />
+    <aura:attribute name = "loadingFlag" type = "Boolean" default = "false" />
+    <aura:attribute name = "refreshFlag" type = "Boolean" default = "true" />
+    <aura:attribute name = "openObjectModalFlag" type = "Boolean" default = "false" />
+    <aura:attribute name="spinnerFlag" type="Boolean" default = "false" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler name="GYNE_DynamicSearchEvent" event="c:GYNE_DynamicSearchEvent" action="{!c.handleSearchEvent}"/>
+    <aura:handler name="change" value="{!v.systemId}" action="{!c.refreshComponent}"/>
+    <aura:if isTrue = "{!v.loadingFlag}">
+        <lightning:spinner alternativeText="Loading" size="medium" variant = "brand"/>
+    </aura:if>
+    <div class = "container slds-box">
+        <div style = "width: 20%;">
+        <c:GYNL_SystemInformation selectedSystemId="{!v.systemId}" />
+        </div>
+        <br/>
+        
+        <aura:if isTrue = "{!and(notequals(v.systemId, 'Not Selected'),v.refreshFlag)}">
+           
+            <c:GYNL_DynamicSearchBar spinnerFlag = "{!v.spinnerFlag}" title = "Search SAP Table" itemList = "{!v.availableSAPTables}" origin = "tableSearch"  />
+            
+            
+            
+            <aura:if isTrue="{!v.openObjectModalFlag}">
+                
+                <!--###### MODAL BOX Start######--> 
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container">
+                        <!-- ###### MODAL BOX HEADER Start ######-->
+                        <header class="slds-modal__header">
+                            <lightning:buttonIcon iconName="utility:close"
+                                                  onclick="{! c.closeModel }"
+                                                  alternativeText="close"
+                                                  variant="bare-inverse"
+                                                  class="slds-modal__close"/>
+                            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Configure {!v.tableSelected}</h2>
+                        </header>
+                        <!--###### MODAL BOX BODY Part Start######-->
+                        <div  class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                            <aura:if isTrue = "{!v.loadingFlag}">
+                                <lightning:spinner alternativeText="Loading" size="medium" variant = "brand"/>
+                            </aura:if>
+                            <lightning:input type="text" name="input1" label="SFDC Object Name:" value = "{!v.SFDCObjName}" disabled="true"/>                        
+                            <a  onclick = "{!c.selectAllFields}">Select All</a>
+                            &nbsp;
+                            <a  onclick = "{!c.unSelectAllFields}">UnSelect All</a>
+                            <div style = "display:flex; flex-wrap: wrap;">
+                                <aura:iteration items="{!v.availableSAPFields}" var="item" indexVar="index">
+                                    <div style = "flex-grow: 1;width: 33%;">
+                                        <lightning:input type="checkbox" name="" label="{!item.fieldName}" checked = "{!item.isSelected}" />
+                                    </div>
+                                    
+                                </aura:iteration>
+                            </div>
+                        </div>
+                        <!--###### MODAL BOX FOOTER Part Start ######-->
+                        <footer class="slds-modal__footer">
+                            <lightning:button variant="neutral" 
+                                              label="Cancel"
+                                              title="Cancel"
+                                              onclick="{! c.closeModel }"/>
+                            <lightning:button variant="brand" 
+                                              label="Create Object in SFDC"
+                                              title="Like and Close"
+                                              onclick="{! c.createObj }"/>
+                        </footer>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+                <!--###### MODAL BOX Part END Here ######-->
+                
+            </aura:if>
+            
+            <!--Previously mapped Tables!-->
+            <c:GYNL_mappedTable aura:id = "mappedTable" existingTableMap = "{!v.existingTableMap}" sapTableMap = "{!v.sapTableMap}" systemId = "{!v.systemId}" />
+        </aura:if>
+        <div class="slds-grid slds-gutters" style="float: right;">
+            <div >
+                <span><b><p class = "markup">Powered by GyanSys</p></b></span>
+            </div>
+        </div>
+    </div>
+    
+</aura:component>

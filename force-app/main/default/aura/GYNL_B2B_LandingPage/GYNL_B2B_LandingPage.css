@@ -1,0 +1,22 @@
+.THIS .icnStyle svg{
+    background:#ffc10d;
+}
+.THIS .box {
+    background-color:white; 
+    border-style: solid;
+    border-color: #0b4256;
+}
+.THIS .markup {
+    font-size:1rem; 
+    color:#EAAE19;
+    margin-top:-4%;
+}
+.THIS .LiBox {
+    width: 62%;
+    margin: auto;
+   border-style: solid;
+   border-color: #0b4256;
+}
+.THIS .headerIconBG{
+    background-color:#0b4256
+}

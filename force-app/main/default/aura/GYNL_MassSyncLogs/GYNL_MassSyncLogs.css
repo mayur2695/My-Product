@@ -1,0 +1,29 @@
+.THIS {
+}
+.THIS .widthclass{
+	width: 100% !important;
+}
+.THIS .redcolor svg{
+    fill: red !important;
+}
+.THIS .redcolor{
+    color: red !important;
+}
+.THIS .greencolor svg{
+    fill : green !important;
+}
+.THIS .greencolor{
+    color : green !important;
+}
+.THIS .OrangeColor svg{
+    fill : orange !important;
+}
+.THIS .OrangeColor{
+    color : orange !important;
+}
+.THIS .slds-truncate {
+    text-overflow: inherit;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word; 
+}

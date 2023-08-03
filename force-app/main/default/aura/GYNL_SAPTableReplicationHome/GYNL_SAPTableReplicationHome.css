@@ -1,0 +1,14 @@
+.THIS.container{
+    background-color:white;
+}
+.THIS .table-search .slds-form-element__label {
+    display:none !important;
+}
+.THIS .hover-highlight:hover {
+    background-color:#89C4F4 !important;
+}
+.THIS  .markup{
+    font-size:1rem; 
+    color:#EAAE19;
+    margin-top:-2%;
+}

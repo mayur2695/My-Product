@@ -1,0 +1,107 @@
+<aura:component controller="GYNC_ProductTreeControllerUpdate" implements="flexipage:availableForAllPageTypes,force:appHostable,flexipage:availableForRecordHome,force:hasRecordId,force:hasSObjectName" access="global">
+      
+    
+    <aura:attribute name="staticresourceName" type="String" />
+    <aura:attribute name="items" type="Object"/>
+    <aura:attribute name="itemTest" type="Object"/>
+    <aura:attribute name="selectedId" type="String"/>
+    <aura:attribute name="editNodeData" type="boolean" default="false"/>
+    <aura:attribute name="editProdData" type="boolean" default="false"/>
+    <aura:attribute name="addNodeData" type="boolean" default="false"/>
+    <aura:attribute name="showDialog" type="boolean" default="false"/>
+    <aura:attribute name="showRootCreate" type="boolean" default="false"/>
+    <aura:attribute name="cInfo" type="Object"/>
+    <aura:attribute name="catalogname" type="String" />
+    <aura:attribute name="fields" type="String[]" default="['Name','GYNCF_Parent_Category__c']" />
+    <aura:attribute name="Rootfields" type="String[]" default="['Name','GYNCF_Catalog_Master__c','GYNCF_Level__c']" />
+    <aura:attribute name="objString" type="String"/>
+    <aura:attribute name="objRootString" type="String" default="GYNCO_Product_Category__c"/>
+    <aura:attribute name="objId" type="String"/>
+    <aura:attribute name="catalogMasterName" type="Id"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />    
+    <aura:method name="refreshTree" action="{!c.handleTreeEvent}" access="PUBLIC"/> 
+    
+    <!--<lightning:button variant="brand-outline" label="Add Root Category" title="Neutral action" onclick="{! c.handleClick }"/>-->
+    <lightning:button label="Add Root Category" iconName="utility:new" iconPosition="left" title="Add Root Node" onclick="{! c.handleClick }"/>
+    <lightning:tree items="{! v.itemTest }" header="{!v.catalogname}" onselect="{!c.handleSelect}"/>
+    
+    <aura:if isTrue="{!v.showRootCreate}">
+    	<div class="slds-modal slds-fade-in-open">
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+            <div class="slds-modal__container">                
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                	<lightning:card title="Create Root Category">	
+                    <lightning:recordEditForm objectApiName="GYNCO_Product_Category__c" onsuccess="{!c.handleSuccessRoot}">
+                            <lightning:inputField fieldName="Name"/>
+                            <lightning:inputField fieldName="GYNCF_Catalog_Master__c" value="{!v.catalogMasterName}"/>
+                            <lightning:inputField fieldName="GYNCF_Level__c" value="1"/>
+                           <div class="slds-align_absolute-center">
+                                <lightning:button variant="brand-outline" label="Close" title="Close" onclick="{! c.onCancelRoot }" />
+                                <lightning:button variant="brand" type="submit" name="Update" label="Create" /> 
+                           </div>
+                    </lightning:recordEditForm>
+                   </lightning:card>
+                </div>
+            </div>
+        </section>
+        </div>
+    </aura:if>
+    <aura:if isTrue="{!v.showDialog}">
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+            <div class="slds-modal__container">                
+                <lightning:tabset>
+                    <aura:if isTrue="{!v.addNodeData}">
+                        <lightning:tab label="Add Category" id="AddCat">
+                            <aura:if isTrue="{!v.addNodeData}">
+                                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">                                     
+                                    <lightning:recordForm
+                                                          objectApiName="{!v.objString}"
+                                                          fields="{!v.fields}"
+                                                          onsuccess="{!c.handleSuccess}"
+                                                          oncancel="{!c.onCancel}"/>
+                                </div>
+                            </aura:if>
+                        </lightning:tab>
+                    </aura:if>
+                    <aura:if isTrue="{!v.editNodeData}">
+                        <lightning:tab label="Edit Category" id="editCat">
+                            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                                
+                                <lightning:recordEditForm recordId="{!v.objId}" objectApiName="{!v.objString}" onsuccess="{!c.closeEdit}">                       
+                                    <lightning:inputField fieldName="Name"/>
+                                   <!-- <lightning:inputField fieldName="GYNCF_Catalog_Master__c"/>
+                                    <lightning:inputField fieldName="GYNCF_Hierarchy__c"/>-->
+                                    <lightning:inputField fieldName="GYNCF_Parent_Category__c"/>
+                                    <div class="slds-align_absolute-center">
+                                        <lightning:button variant="brand-outline" label="Close" title="Close" onclick="{! c.closeDialog }" />
+                                        <lightning:button variant="brand" iconName="utility:edit" iconPosition="left" type="submit" name="Update" label="Update" />
+                                        <lightning:button label="Delete" iconName="utility:delete" iconPosition="left"  variant="destructive" onclick="{! c.handleDelCatData}"/>
+                                    </div>                        			
+                                </lightning:recordEditForm>
+                            </div>  
+                        </lightning:tab>
+                    </aura:if>
+                    <!--<aura:if isTrue="{!v.editProdData}">
+                        <lightning:tab label="Edit Product" id="editPro">
+                            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">                                     
+                                <lightning:recordEditForm recordId="{!v.objId}" objectApiName="{!v.objString}" onsuccess="{!c.closePro}">                       
+                                    <lightning:inputField fieldName="Name"/>
+                                    <lightning:inputField fieldName="ProductCode"/>
+                                    <lightning:inputField fieldName="Product_Category__c"/>
+                                    <lightning:inputField fieldName="Family"/>
+                                    <lightning:inputField fieldName="IsActive"/>
+                                    <lightning:inputField fieldName="Description"/>
+                                    <div class="slds-align_absolute-center">
+                                        <lightning:button variant="brand-outline" label="Close" title="Close" onclick="{! c.closeDialog }" />
+                                        <lightning:button variant="brand" type="submit" name="Update" label="Update" /> 
+                                    </div>                        			
+                                </lightning:recordEditForm>
+                            </div> 
+                        </lightning:tab>
+                    </aura:if>-->
+                </lightning:tabset>                               
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>  
+</aura:component>

@@ -1,0 +1,61 @@
+<aura:component controller = "GYNC_mappingScreenClass" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="mappingList" type="List" default="[]"/>
+    <aura:attribute name="SelectOptions" type="object" default="[]"/>
+    <aura:attribute name="businessObjectList" type="List" default="[]"/>
+    <aura:attribute name="optionSelected" type="String" default = "Customer"/>
+    <aura:attribute name="optionsSAP" type="List" default="[{'value': 'SAPA','label':'SAPA2','isSelected':false},{'value': 'SAPA','label':'SAPA','isSelected':true}]"/>
+    <aura:attribute name="optionsSFDC" type="List" default="[{'value':'SAPID','label':'SAPID'}]"/>
+    <aura:attribute name="LineItemList" type="List" />
+    <aura:attribute name="loadingSpinner" type="boolean" default = "false" />
+    <aura:attribute name="showPicklist" type="Boolean" default="true" />
+    <aura:attribute name="selectedObject" type="String" default="" />
+    <aura:attribute name="systemId" type="String" default="" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler name="change" value="{!v.systemId}" action="{!c.doInit}"/>
+    <aura:method name="childMessageMethod" action="{!c.doInit}" access="public" />
+       
+    <aura:if isTrue = "{!v.loadingSpinner}">
+        <lightning:spinner alternativeText="Loading" size="large" />
+    </aura:if>
+    
+    <div class="slds-box slds-box slds-box slds-theme_default" style="width:100%;margin:auto;">
+        <aura:if isTrue="{!v.showPicklist}">
+        <center>
+            <div class="slds-m-around_xx-small " style="width:50%">
+                <lightning:select aura:id = "BusinessobjectPickList" name="SelectBusinessObject" label="Select Business object" value="{!v.selectedObject}" onchange ="{!c.handleOptionSelected}" >
+                    <option value="">choose one...</option>
+                    <aura:iteration items ="{!v.businessObjectList}" var="objectVar">
+                        <option value="{!objectVar.value}" selected="{!objectVar.selected}">{!objectVar.value}</option> 
+                    </aura:iteration>
+                </lightning:select>
+            </div>
+        </center>
+        </aura:if>
+        <aura:iteration items ="{!v.mappingList}" var="item" indexVar="index">
+            <center>
+                <div class="slds-grid" style="margin-left:2%;">
+                    <div class="slds-col slds-size_1-of-12">
+                        <div class="closeIcon" onclick="{!c.closeMappingRow}" id="{!index}">
+                            <lightning:icon  size="xx-small" iconName="action:close" />
+                        </div>
+                    </div> 
+                    <div class="slds-col slds-size_10-of-12" >
+                        <c:GYNL_mapScreenChild LineItemList = "{!v.LineItemList}" valueForRow="{!item}" optionsSAP="{!v.optionsSAP}" optionsSFDC ="{!v.optionsSFDC}" currentIndex="{!_index}"/>
+                    </div>
+                    <div class="slds-col slds-size_1-of-12">
+                        <div class="newIcon" onclick="{!c.addMappingRow}" >
+                            <lightning:icon size="xx-small" iconName="action:new"/>
+                        </div>
+                    </div>
+                </div>
+            </center>
+        </aura:iteration>
+        
+        <br/><br/>
+        <div class="slds-clearfix">
+            <div class="slds-float_right">
+                <lightning:button iconName="utility:save" variant="brand" label="Save" title="Success" onclick="{!c.saveMapping}"/>  
+            </div>
+        </div>
+    </div>
+</aura:component>

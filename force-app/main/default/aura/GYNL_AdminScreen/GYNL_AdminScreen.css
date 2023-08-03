@@ -1,0 +1,43 @@
+.THIS .header{
+    background: repeating-linear-gradient(45deg, rgb(84,105,141), rgb(84,105,141) 20px, rgba(84,105,141,.97) 20px, rgba(84,105,141,.97) 40px);
+    background-image: repeating-linear-gradient(45deg, rgb(84, 105, 141), rgb(84, 105, 141) 20px, rgba(84, 105, 141, 0.97) 20px, rgba(84, 105, 141, 0.97) 40px);
+    background-position-x: initial;
+    background-position-y: initial;
+    background-size: initial;
+    background-repeat-x: initial;
+    background-repeat-y: initial;
+    background-attachment: initial;
+    background-origin: initial;
+    background-clip: initial;
+    background-color: initial;
+    font-size:0.9rem;
+    color:white !important;
+    padding: 0.7rem !important;
+    /*background-image: linear-gradient(#324A73 20%,#EBAF10 40%,#CDCACF 90%);
+    background-image:linear-gradient(to bottom right,#324A73 40% ,#EBAF10,#CDCACF 70%);
+    font-size:0.9rem;
+    color:white !important;
+    padding: 0.7rem !important;*/
+}
+.THIS .maxWidth{
+    max-width: 40%;
+}
+.THIS  label{
+    font-weight: bolder;
+}
+.THIS h1{
+    font-weight: bolder;
+    margin-top:22%;
+}
+.THIS .markup {
+    font-size: 1rem;
+    color: #EAAE19;
+    margin-top: -2%;
+    margin-left: -9%;
+}
+.THIS .slds-icon-action-approval {
+    background-color: #00c606;
+}
+.THIS .slds-icon-action-close {
+    background-color: #c71f12;
+}

@@ -1,0 +1,43 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="valueForRow" type="Object"/>
+    <aura:attribute name="optionsSAP" type="List"/>
+    <aura:attribute name="optionsSFDC" type="List"/>
+    <aura:attribute name="currentIndex" type="String" default ="Customer"/>
+    <aura:attribute name="LineItemList" type="List" />
+    
+    <div class="slds-grid" style="margin-top:2rem;">
+        <div class="slds-col "> 
+            <lightning:select name="SAPAPIFields" label="SAP API Fields" value="{!v.valueForRow.sapField}" >
+                <option value="">choose one...</option>
+                <aura:iteration items ="{!v.optionsSAP}" var="sapfield">
+                    <aura:if isTrue = "{!sapfield.value=='\r\n'}">
+                        <option value="{!sapfield.value}" disabled = "true" style = "color:orange;font-weight:700">Line Item Fields</option>
+                        <aura:set attribute="else">
+                            <aura:if isTrue = "{!sapfield.value=='CustomField'}">
+                                <option value="{!sapfield.value}" disabled = "true" style = "color:orange;font-weight:700">Custom Fields</option>
+                                <aura:set attribute="else">
+                                    <option value="{!sapfield.value}" disabled = "{!v.optionDisabled}">{!sapfield.value}</option>
+                                </aura:set>
+                            </aura:if>
+                        </aura:set>
+                    </aura:if>
+                    
+                </aura:iteration>
+            </lightning:select>
+        </div>
+        <div class="slds-col"></div>
+        <div class="slds-col " style=""> 
+            <lightning:select name="SalesforceFields" label="Salesforce Fields" value="{!v.valueForRow.SFDCField}" onchange ="{!c.handleOptionSelected}" >
+                <option value="">choose one...</option>
+                <aura:iteration items ="{!v.optionsSFDC}" var="sfdcfield">
+                 <option value="{!sfdcfield.value}" disabled = "{!v.optionDisabled}">{!sfdcfield.label}</option>
+                </aura:iteration>
+                <option value="" disabled = "true" style = "color:orange;font-weight:700">Line Item Fields</option>
+                <aura:iteration items ="{!v.LineItemList}" var="sfdcfield">
+                 <option value="{!sfdcfield.value}" disabled = "{!v.optionDisabled}">{!sfdcfield.label}</option>
+                </aura:iteration>
+            </lightning:select>
+        </div>
+        
+    </div>
+</aura:component>

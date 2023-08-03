@@ -1,0 +1,19 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+  <!-- Added By Spandana -->
+   
+  <!--  <aura:handler event="c:GYNE_selectThemeEvent" action="{!c.doinit}"/> -->
+    <aura:handler name="init" value="{!this}" action="{!c.doinit}"/>
+    <aura:attribute name="staticresourceName" type="String" />
+  <!-- Ended By Spandana --> 
+    <aura:attribute type = "Integer" name = "ratingSelected" default = "3" />
+    <aura:attribute type = "Integer" name = "currentRatingValue" default = "0" />
+    
+	<div class = "star-container" onmouseout = "{!c.hoverOut}">
+        <span id = "1" onmouseover = "{!c.hoverIn}" onclick = "{!c.handleClick}" style = "{!v.ratingSelected >= 1?'color:#F7D215':'color:grey'}">&#9733;</span>
+        <span id = "2" onmouseover = "{!c.hoverIn}" onclick = "{!c.handleClick}" style = "{!v.ratingSelected >= 2?'color:#F7D215':'color:grey'}">&#9733;</span>
+        <span id = "3" onmouseover = "{!c.hoverIn}" onclick = "{!c.handleClick}" style = "{!v.ratingSelected >= 3?'color:#F7D215':'color:grey'}">&#9733;</span>
+        <span id = "4" onmouseover = "{!c.hoverIn}" onclick = "{!c.handleClick}" style = "{!v.ratingSelected >= 4?'color:#F7D215':'color:grey'}">&#9733;</span>
+        <span id = "5" onmouseover = "{!c.hoverIn}" onclick = "{!c.handleClick}" style = "{!v.ratingSelected >= 5?'color:#F7D215':'color:grey'}">&#9733;</span>
+    </div>
+ 
+</aura:component>

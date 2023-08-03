@@ -1,0 +1,24 @@
+<aura:component >
+    <aura:attribute name="iconName" type="String" default="" />
+    <aura:attribute name="ObjectName" type="String" default="" />
+    <aura:attribute name="ParentName" type="String" default="" />
+    <li class="slds-p-horizontal_small slds-size_1-of-1 slds-medium-size_1-of-4" onclick="{!c.callEvent}">
+        <div  class="slds-app-launcher__tile slds-text-link_reset">
+            <div class="slds-app-launcher__tile-figure">
+                <span class="slds-avatar slds-avatar_large">
+                    <abbr class="slds-avatar__initials slds-icon-custom-27" title="Customers">
+                        <lightning:icon iconName="{!'standard:'+v.iconName}" alternativeText="Customers" title="Customers" />
+                    </abbr>
+                </span>
+                
+            </div>
+            <div class="slds-app-launcher__tile-body">
+                <div style="margin-top: 1rem;">
+                    <a style="font-size:1rem;" href="">{!v.ObjectName}</a>
+                </div>
+                
+            </div>
+                        
+        </div>
+    </li>
+</aura:component>

@@ -1,0 +1,77 @@
+<aura:component controller="GYNC_ProductCatalogBrowse"
+    implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes"
+    access="global">
+    <aura:if isTrue="{!v.staticresourceName=='Theme2'}">
+        <ltng:require styles="{!$Resource.GYNSR_GyansysTheme}" afterScriptsLoaded="{!c.scriptsLoaded}" />
+    </aura:if>
+    <aura:if isTrue="{!v.staticresourceName=='Theme1'}">
+        <ltng:require styles="{!$Resource.GYNSR_SalesforceTheme}" afterScriptsLoaded="{!c.scriptsLoaded}" />
+    </aura:if>
+    <aura:if isTrue="{!v.staticresourceName=='Theme3'}">
+        <ltng:require styles="{!$Resource.GYNSR_GreyTheme}" afterScriptsLoaded="{!c.scriptsLoaded}" />
+    </aura:if>
+
+    <aura:attribute name="staticresourceName" type="String" />
+    <aura:handler name="init" value="{!this}" action="{!c.myAction}" />
+
+    <aura:attribute name="isVisible4" type="Boolean" default="true" />
+   <aura:attribute name="isVisible" type="Boolean" default="true" />
+    <aura:handler name="cmpEvent2" event="c:GYNE_DynamicSearchEvent" action="{!c.handleComponentEvent}" />
+
+    <aura:attribute name="isVisible2" type="Boolean" default="true" />
+    <aura:handler name="cmpEvent3" event="c:GYNE_DynamicSearchEvent" action="{!c.handleComponentEvent2}" />
+
+    <aura:attribute name="isVisible3" type="Boolean" default="false" />
+    <aura:handler name="cmpEvent4" event="c:GYNE_DynamicSearchEvent" action="{!c.handleComponentEvent3}" />
+  
+    <aura:attribute name="array" type="Product2[]"/>
+
+
+    <div class="themeClass">
+        <lightning:tabset selectedTabId="browse" variant="scoped">
+
+            <lightning:tab label="Search" id="search" iconName="utility:search">
+                <div class="slds-grid slds-wrap slds-gutters tabHeaderBorder">
+                    <div class="slds-col slds-size_1-of-4">
+                        <c:GYNL_SearchFunctionalityComponent />
+                    </div>
+                    <div class="slds-col slds-size_3-of-4 gridLeftBorderColor"
+                        style="margin-top: -1rem;min-height: 95vh; background-color:aliceblue">
+                        
+                        
+                       <aura:if isTrue="{!v.isVisible}">
+                        <c:GYAN_Carousel  Message="{!v.array}"/>
+                            <aura:set attribute="else">
+                                <c:GYNL_ProductGrid parent="search" />
+                            </aura:set>
+
+
+                        </aura:if>
+                    </div>
+                </div>
+            </lightning:tab>
+            <lightning:tab label="Browse" id="browse" iconName="utility:hierarchy">
+                <div class="slds-grid slds-wrap slds-gutters tabHeaderBorder">
+                    <div class="slds-col slds-size_1-of-4">
+                        <c:GYNL_browseProduct />
+                    </div>
+                    <div class="slds-col slds-size_3-of-4 gridLeftBorderColor"
+                        style="margin-top:-1rem;min-height: 95vh; background-color:aliceblue">
+                       
+                        
+                        <aura:if isTrue="{!v.isVisible2}">
+                            <c:GYAN_Carousel Message="{!v.array}"/>
+                            <aura:set attribute="else">
+                                <c:GYNL_ProductGrid parent="browse" />
+                            </aura:set>
+
+                        </aura:if>
+
+                    </div>
+                </div>
+            </lightning:tab>
+
+        </lightning:tabset>
+    </div>
+    <!--  <c:GYNL_productDetailComponent/> -->
+</aura:component>

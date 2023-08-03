@@ -1,0 +1,18 @@
+<aura:component>
+    <aura:attribute name="Message" type="Product2[]"/>
+    <aura:attribute name="prefixURL" type="String" default="/sfc/servlet.shepherd/version/download/"/>
+    <aura:attribute name="UrlBase" type="String" default="https://gyansysdevelopers1-dev-ed.lightning.force.com/lightning/cmp/c__GYNL_productDetailComponent?c__recordId="/>
+    <div class="slds-size_3-of-3" style="height: 10%;">
+    <lightning:carousel>
+        <aura:iteration items="{!v.Message}" var="item">
+        <lightning:carouselImage 
+            src = "{!v.prefixURL + item.ContentDocId__c}"
+            header = "{!item.Name}"
+            description = "{!item.Description}"
+            alternativeText = "First card accessible description."
+            href = "{!v.UrlBase + item.Id}">
+        </lightning:carouselImage>
+    </aura:iteration>
+    </lightning:carousel>
+</div>
+</aura:component>

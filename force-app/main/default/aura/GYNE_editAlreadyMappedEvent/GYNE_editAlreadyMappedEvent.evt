@@ -1,0 +1,3 @@
+<aura:event type="COMPONENT" description="When a tableis already mapped" >
+    <aura:attribute name = "tableSelected" type = "String" />
+</aura:event>

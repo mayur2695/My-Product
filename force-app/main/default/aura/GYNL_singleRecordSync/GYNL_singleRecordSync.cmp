@@ -1,0 +1,47 @@
+<aura:component controller = "GYNC_singleRecordSyncApex" >
+    <aura:attribute name="objNameSAP" type="String" default = "Customer" />
+    <aura:attribute name="searchPara" type="String" default = "" />
+    <aura:attribute name="systemId" type="String" default = "a0gg00000063bqxAAA" />
+    <aura:attribute name="loadingFlag" type="boolean" default = "false" />
+    <aura:attribute name="searchResultList" type="List" default = "[]" />
+    
+    <aura:attribute name="configRec" type="GYNCO_Configuration__c" default = "" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <!--aura:handler name="GYNE_DynamicSearchEvent" event="c:GYNE_DynamicSearchEvent" action="{!c.handleSearchEvent}"/-->
+    
+	<!--c:GYNL_DynamicSearchBar title = "{!'Search '+v.objNameSAP}" itemList = "{!v.searchResultList}" origin = "recordSearch"  /-->
+    <aura:if isTrue = "{!v.loadingFlag}">
+        <lightning:spinner variant="brand"/>
+    </aura:if>
+    <lightning:card class = "search-card"  title="{!'Search '+v.objNameSAP}" iconName = "standard:search">
+        <p class="slds-p-horizontal_small" style = "display:flex;">
+            <div style = "width:35%; margin-right:1%;">
+                <lightning:input type="Search" name="searchAccount" value = "{!v.searchPara}"/>
+            </div>
+            
+            <div><lightning:button variant = "Brand" label = "Search" onclick = "{!c.searchSAP}" /></div>
+        </p>
+        
+        <aura:if isTrue = "{!v.searchResultList.length > 0}">
+            <aura:iteration items="{!v.searchResultList}" var="item">
+                <aura:if isTrue = "{!v.configRec.GYNCF_Identifier_SAP__c == item.key}">
+                    
+                    <div style = "display:flex; margin: 1%;" class = "slds-box" >
+                        <div style = "margin:auto;">
+                            <span style= "font-weight: 700;">{!v.configRec.GYNCF_Identifier_SAP__c} : {!item.value} found.</span>
+                        </div>
+                        <div style = "margin:auto;">
+                            <lightning:button name = "{!item.value}" variant = "brand" label = "Sync Now" onclick = "{!c.startSyncRecord}" />
+                        </div>
+                    </div>
+                </aura:if>
+            </aura:iteration>
+        </aura:if>
+    </lightning:card>
+    
+    
+    
+    
+</aura:component>

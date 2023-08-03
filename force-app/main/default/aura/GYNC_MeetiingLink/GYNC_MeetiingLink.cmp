@@ -1,0 +1,37 @@
+<!--This component is created for position record page so that user can upload custom meeting link from it
+  Created by - Arnab Dey -->
+
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" controller = "GYNC_UpdateMeetingLink" access="global">
+ <aura:attribute name="IsOpen" type="Boolean" default="false"/>
+ <aura:attribute name="MeetingLink" type="String" default=""/>
+ <aura:attribute name="MeetingLink2" type="String" default=""/>
+ <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+     <aura:if isTrue="{!v.IsOpen}">
+              <lightning:card >
+                  <p class="slds-p-horizontal_small">
+                    Meeting Link: <h6 style="color:blue" >{!v.MeetingLink2}</h6>
+                  </p> 
+                  <br></br>
+                  <p class="slds-p-horizontal_small">
+                    <lightning:input aura:id="MeetingLink"
+                                 label="Enter Link"
+                                 type="String"
+                                 required="true"
+                                 value="{!v.MeetingLink}"
+                                 />
+                  </p>
+              </lightning:card>
+         
+              <footer class="slds-modal__footer">
+                      <lightning:button aura:id="saveId"
+                                  label="Cancel" 
+                                  variant="Destructive"
+                                  onclick="{!c.doCancel}"/>
+                      <lightning:button aura:id="saveId"
+                                  label="Save" 
+                                  variant="brand"
+                                  onclick="{!c.doSave}"/>
+              </footer>
+    </aura:if>
+</aura:component>

@@ -1,0 +1,54 @@
+({
+	doInit : function(component, event, helper) {
+		var finalArrray=[];
+        var objectData= new Object();
+        objectData.iconName="customers";
+        objectData.ObjectName="Customer";
+        objectData.feature='customerFlag';
+        objectData.field='GYNPS_customerPermission__c';
+        finalArrray.push(objectData);
+        var objectData1= new Object();
+        objectData1.iconName="product";
+        objectData1.ObjectName="Equipment";
+        objectData1.feature='equipmentFlag';
+        objectData1.field='GYNPS_equipmentPermission__c';
+        finalArrray.push(objectData1);
+        var objectData2= new Object();
+        objectData2.iconName="all";
+        objectData2.ObjectName="Materials";
+        objectData2.feature='materialFlag';
+        objectData2.field='GYNPS_materialPermission__c';
+        finalArrray.push(objectData2);
+        var objectData3= new Object();
+        objectData3.iconName="avatar";
+        objectData3.ObjectName="Admin";
+        objectData3.feature='adminMasterDataFlag';
+        objectData3.field='GYNPS_adminMasterDataPermission__c';
+        finalArrray.push(objectData3);
+        var objectData4= new Object();
+        objectData4.iconName="custom";
+        objectData4.ObjectName="Any Data Connect";
+        objectData4.feature='anyConnectFlag';
+        objectData4.field='GYNPS_anyConnectPermission__c';
+        finalArrray.push(objectData4);
+        var objectData5= new Object();
+        objectData5.iconName="custom";
+        objectData5.ObjectName="Pricing";
+        objectData5.feature='anyConnectFlag';
+        objectData5.field='GYNPS_anyConnectPermission__c';
+        finalArrray.push(objectData5);
+        var objectData6= new Object();
+        objectData6.iconName="custom";
+        objectData6.ObjectName="BOM";
+        objectData6.feature='anyConnectFlag';
+        objectData6.field='GYNPS_anyConnectPermission__c';
+        finalArrray.push(objectData6);
+        var objectData7= new Object();
+        objectData7.iconName="custom";
+        objectData7.ObjectName="Inventory";
+        objectData7.feature='anyConnectFlag';
+        objectData7.field='GYNPS_anyConnectPermission__c';
+        finalArrray.push(objectData7);
+        component.set("v.MainList",finalArrray);
+	}
+})

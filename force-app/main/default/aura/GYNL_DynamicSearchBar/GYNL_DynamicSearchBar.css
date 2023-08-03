@@ -1,0 +1,17 @@
+.THIS.search-card .slds-form-element__label {
+    display:none !important;
+}
+.THIS .hover-highlight:hover {
+    background-color:#89C4F4 !important;
+}
+.THIS .loader {
+    margin-left: 1%;
+    margin-top: .25%;
+    border: 12px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 12px solid #3498db;
+    width: 12px;
+    height: 12px;
+    -webkit-animation: spin 2s linear infinite; /* Safari */
+    animation: spin 2s linear infinite;
+}

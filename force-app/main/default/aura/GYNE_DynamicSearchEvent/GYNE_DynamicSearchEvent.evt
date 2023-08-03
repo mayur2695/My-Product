@@ -1,0 +1,9 @@
+<aura:event type="COMPONENT" description="Pass the search parameter to parent" >
+    <aura:attribute name="searchPara" type="String" />
+    <aura:attribute name="origin" type="String" />
+    <aura:attribute name="seletedValue" type="String" />
+    <aura:attribute name="operationType" type="String" />  
+    <aura:attribute name="isChecked" type="Boolean" />
+    <aura:attribute name="isChecked2" type="Boolean"/>
+    <aura:attribute name="isChecked3" type="Boolean"/>
+</aura:event>

@@ -1,0 +1,18 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" controller = "GYNC_getReport" access="global">
+	<aura:attribute name="urlPlannedreport" type="String"/>
+    <aura:attribute name="urlPlannedreport2" type="String"/>
+   <lightning:card variant="narrow">
+       <p class="slds-box slds-text-heading_small" style="font-size:20px;">
+         <lightning:icon iconName="standard:dashboard" alternativeText="New note" title="New note"/>
+           Dashboards
+       </p>
+       <div class="slds-scrollable_y" style="height:10rem">
+       <div slot="actions" style="Margin-top:5px;color:#000099;margin-left: 55px;font-family: sans-serif;font-size:15px">
+         <a target="blank" href="{!v.urlPlannedreport}" id="UCvsqxqBffKhFKegiYNqWMDrTFSohD" onclick="{!c.OnClickStd}">Candidates Joined</a>
+       </div>
+       <div slot="actions" style="color:#000099;margin-left: 55px;font-family: sans-serif;font-size:15px">
+         <a target="blank" href="{!v.urlPlannedreport2}" id="BOmoWwicXFgVijVjApHPGqnqLsAVLV" onclick="{!c.OnClickStd2}">Position Status</a>
+       </div>
+       </div>
+   </lightning:card>
+</aura:component>

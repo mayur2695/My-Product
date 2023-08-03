@@ -1,0 +1,4 @@
+.THIS.search-card .slds-form-element__label {
+    display:none !important;
+    background-color: white;
+}

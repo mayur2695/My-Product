@@ -1,0 +1,18 @@
+<aura:component >
+    <aura:attribute name = "ratingSelected" type = "Decimal" default = "0"/>
+    <aura:attribute name = "maxRating" type = "Integer" default = "5"/>
+    <aura:attribute name = "percentageRating" type = "Decimal" default = "0"/>
+     <aura:attribute name = "starSize" type = "Integer" Default = "14"/>
+    <aura:handler name ="init" value ="{!this}" action ="{!c.doInit}"/>
+    <!--div class = "starContainer" style = "font-size: 12px;">
+        <span id = "1" class="star" style = "{!v.ratingSelected>=1?'color:#F7D215':'color:grey'}">&#9733;</span>
+        <span id = "2" class="star" style = "{!v.ratingSelected>=2?'color:#F7D215':'color:grey'}">&#9733;</span>
+        <span id = "3" class="star" style = "{!v.ratingSelected>=3?'color:#F7D215':'color:grey'}">&#9733;</span>
+        <span id = "4" class="star" style = "{!v.ratingSelected>=4?'color:#F7D215':'color:grey'}">&#9733;</span>
+        <span id = "5" class="star" style = "{!v.ratingSelected>=5?'color:#F7D215':'color:grey'}">&#9733;</span>
+    </div-->
+    <div class="star-ratings" style = "{!'font-size:' + v.starSize + 'px;width:' + v.starSize*4.14 + 'px;'}">
+        <div class="star-ratings-top" style="{!'width:'+v.percentageRating+'%'}"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div>
+        <div class="star-ratings-bottom"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div>
+    </div>
+</aura:component>

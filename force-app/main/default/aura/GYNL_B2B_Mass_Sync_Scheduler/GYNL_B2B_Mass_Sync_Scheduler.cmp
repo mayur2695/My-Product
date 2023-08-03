@@ -1,0 +1,116 @@
+<aura:component controller="GYNC_B2B_syncParamterClass" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:handler name="init" value="{!this}" action="{!c.selectedBatch}"/>
+    <aura:handler name="init" value="{!this}" action="{!c.loadOptions}" />
+    <aura:handler name="init" value="{!this}" action="{!c.dataloadOptions}" />
+    <aura:registerEvent name="CronEvent" type="c:SendCronToParent"/>
+    <aura:registerEvent name="GYNL_UpdateVariantList" type="c:GYNL_UpdateVariantList" />
+    <aura:method name="callChild" action="{!c.handleClick}" />
+    <aura:handler event="c:ReloadNewBatchSetting" action="{!c.selectedBatch}"/>
+    <aura:attribute name="options" type="List" default="[
+                                                        {'label': 'Sunday', 'value': '1'},
+                                                        {'label': 'Monday', 'value': '2'},
+                                                        {'label': 'Tuesday', 'value': '3'},
+                                                        {'label': 'Wednesday', 'value': '4'},
+                                                        {'label': 'Thursday', 'value': '5'},
+                                                        {'label': 'Friday', 'value': '6'},
+                                                        {'label': 'Saturday', 'value': '7'}                                                
+                                                        ]"/>
+    <aura:attribute name="rdoption" type="List" default="[
+                                                         {'label': 'Weekly', 'value': 'W'},
+                                                         {'label': 'Monthly', 'value': 'M'}
+                                                         ]"/>
+    <aura:attribute name="rdvalue" type="String" default=""/>
+    <aura:attribute name="value" type="List" default=""/>
+    <aura:attribute name="myBool" type="Boolean" />
+    <aura:attribute name="variantCheck" type="Boolean"/>
+    <aura:attribute name="option" type="List" />
+    <aura:attribute name="checkboxChecked" type="boolean" default="false"/>
+    <aura:attribute name="selectedValue" type="String" default="Red"/>
+    <aura:attribute name="allDay" type="integer" default=""/>
+    <aura:attribute name="timeVal" type="integer" default=""/>
+    <aura:attribute name="dayselected" type="integer[]" />
+    <aura:attribute name="selectedDateValue" type="String" default=""/>
+    <aura:attribute name="Dateoption" type="List" />
+    <aura:attribute name="disableFirst" type="boolean" default=""/>
+    <aura:attribute name="selecteddatavalAttr" type="integer" default=""/>
+    <aura:attribute name="weekly" type="boolean" default=""/>
+    <aura:attribute name="mothlyid" type="boolean" default=""/>
+    <aura:attribute name="globalDiv" type="boolean" default=""/>
+    <aura:attribute name="myDIV" type="boolean" default="true"/>
+    <aura:attribute name="Everydaycheckbox" type="boolean" default="true"/>
+    <aura:attribute name="BatchName" type="string" default=""/>
+    <aura:attribute name="ObjectName" type="string" default=""/>
+    <aura:attribute name="SystemId" type="string" default=""/>
+    
+    
+    <!--Radio Button Section-->
+    
+    <strong><h2 class="header">Create New Setting</h2></strong>
+    
+    <label class="slds-form-element__label" style="margin-right: 0.5rem;">Enter Batch Name</label>
+    <lightning:helptext content="Enter value in this field to create a new Batch" class="FieldsWithHelpText"/> 
+    <lightning:input type="text" class="maxWidth" name="Batch Name" label="Batch Name" variant="label-hidden" aura:id="mySelect2" value="{!v.BatchName}"/>
+    
+    <div  class="" id="frequencyDiv">
+        <lightning:radioGroup name="radioGroup"
+                              label="Frequency"
+                              options="{! v.rdoption }"
+                              value="{! v.rdvalue }"
+                              type="button" 
+                              onchange="{!c.onChangeRadioButton}" disabled="{!v.disableFirst}"/><br/>
+    </div>
+    <aura:if isTrue="{!v.globalDiv}">
+        <div class="" id="">
+            <form class="slds-form--stacked" id=""> 
+                <aura:if isTrue="{!v.mothlyid}">
+                    <div id="">
+                        <p>
+                            <lightning:select class="maxWidth" name="datel" label="On day of every month" aura:id="mySelect" value="{!v.selectedDateValue}" onchange="{!c.dayMonth}" disabled="{!v.disableFirst}">
+                                <aura:iteration items="{!v.Dateoption}" var="item">
+                                    <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+                                </aura:iteration>
+                            </lightning:select>
+                            
+                        </p><br/>
+                    </div> 
+                </aura:if>
+                <!--End -->
+                <aura:if isTrue="{!v.weekly}">
+                    <div id="" >
+                        <p class="slds-p-horizontal_small">
+                            <lightning:input type="checkbox" aura:id="checkbox1" label="Every Day" onchange="{!c.onCheck}"  checked="{!v.Everydaycheckbox}"/>
+                            <aura:if isTrue="{!v.myDIV}">
+                                <div id="" class="">
+                                    <lightning:checkboxGroup aura:id= "weekdays" name="Checkbox Group Required"
+                                                             label="Week Days"
+                                                             options="{! v.options }"
+                                                             value="{! v.value }" onchange="{!c.getCheckBoxValue}"
+                                                             disabled="{!v.disableFirst}"
+                                                             />
+                                    
+                                </div>
+                            </aura:if>
+                        </p>
+                        
+                    </div>
+                </aura:if>
+                <p>  
+                    <lightning:select class="maxWidth" name="mySelect" label="Preferred Start Time" aura:id="mySelect" value="{!v.selectedValue}" onchange="{!c.getselectedValue}" disabled="{!v.disableFirst}">
+                        <aura:iteration items="{!v.option}" var="item">
+                            <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+                        </aura:iteration>
+                    </lightning:select>
+                </p><br/>
+                <lightning:input type="checkbox" name="Variant Save" label="Save as a Batch Variant" checked="{!v.variantCheck}" />
+                <br/>
+                <div class="slds-clearfix">
+                    <div class="slds-float_left">
+                        <lightning:button iconName="utility:save" variant="brand" label="Save" title="Save" onclick="{! c.handleClick }"/>
+                    </div>
+                </div>
+            </form>
+        </div> 
+    </aura:if>
+    
+    <br/>
+</aura:component>

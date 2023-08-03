@@ -1,0 +1,55 @@
+<aura:component controller="AdminScreenApex" >
+    <aura:attribute name="iconName" type="String" default="" />
+    <aura:attribute name="ObjectName" type="String" default="" />
+    <aura:attribute name="ParentName" type="String" default="" />
+    <aura:attribute name="FeatureManagement" type="String" default="" />
+    <aura:attribute name="Allowed" type="Boolean" default="false"/>
+    <aura:attribute name="FieldApiName" type="String" default="" />
+    
+    
+    <!--Handler Section-->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <aura:if isTrue="{!v.Allowed}">
+        <li class="slds-p-horizontal_small slds-size_1-of-1 slds-medium-size_1-of-3" onclick="{!c.callEvent}">
+            <div  class="slds-app-launcher__tile slds-text-link_reset">
+                <div class="slds-app-launcher__tile-figure">
+                    <span class="slds-avatar slds-avatar_large">
+                        <abbr class="slds-avatar__initials slds-icon-custom-27" title="{!v.ObjectName}">
+                            <lightning:icon iconName="{!'standard:'+v.iconName}" alternativeText="{!v.ObjectName}" title="{!v.ObjectName}" />
+                        </abbr>
+                    </span>
+                </div>
+                <div class="slds-app-launcher__tile-body">
+                    <div style="margin-top: 1rem;">
+                        <a style="font-size:1rem;" href="">{!v.ObjectName}</a>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        </li>
+        <aura:set attribute="else">
+            <li class="slds-p-horizontal_small slds-size_1-of-1 slds-medium-size_1-of-3" onclick="{!c.showMyToast}">
+                <div  class="slds-app-launcher__tile slds-text-link_reset">
+                    <div class="slds-app-launcher__tile-figure">
+                        <span class="slds-avatar slds-avatar_large">
+                            <abbr class="slds-avatar__initials slds-icon-custom-27" title="{!v.ObjectName}">
+                                <lightning:icon class="dicnStyle" iconName="{!'standard:'+v.iconName}" alternativeText="{!v.ObjectName}" title="{!v.ObjectName}" />
+                            </abbr>
+                        </span>
+                        
+                    </div>
+                    <div class="slds-app-launcher__tile-body">
+                        <div style="margin-top: 1rem;">
+                            <p style="font-size:1rem;" >{!v.ObjectName}</p>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+            </li>
+        </aura:set>
+    </aura:if>
+    
+</aura:component>

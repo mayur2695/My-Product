@@ -1,0 +1,155 @@
+<aura:component controller="GYNC_MassUploadController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <!-- <ltng:require styles="{!$Resource.GYNSR_GyansysTheme}"  afterScriptsLoaded ="{!c.scriptsLoaded}" />-->
+    <aura:attribute name="progress1" type="Integer" default="0"/>
+    <aura:attribute name="progress2" type="Integer" default="0"/>
+    <aura:attribute name="ShowHideBar1" type="Boolean" default="false"/>
+    <aura:attribute name="ShowHideBar2" type="Boolean" default="false"/>
+    <aura:attribute name="ShowsccessIcon1" type="Boolean" default="false"/>
+    <aura:attribute name="ShowsccessIcon2" type="Boolean" default="false"/>
+    <aura:attribute name="isProgressing" type="Boolean" default="false"/>
+    <aura:attribute name="parentId" type="Id" default="0016F000024nYzwQAE" />
+    <aura:attribute name="showLoadingSpinner" type="boolean" default="false" />
+    <aura:attribute name="ProductFileName" type="String" default="No File Selected.." />
+    <aura:attribute name="CategoryFileName" type="String" default="No File Selected.." />
+    <aura:attribute name="FormattedCSVFileId" Type ="Id" />
+    <aura:attribute name="csvString" type="String"/>
+    <div class="slds-m-bottom_small slds-page-header">
+        <div class="slds-media">
+            <div class="slds-media__figure">
+                <lightning:icon iconName="standard:dataset" size="medium" variant="slds-icon-inverse"></lightning:icon>
+            </div>
+            <div class="slds-media__body">
+                <div class="slds-m-top_xx-small slds-m-right_xx-large" style="font-size: 1.25rem;">
+                    <p>Mass Data Upload</p>
+                </div>
+            </div>
+            <div class="slds-media__figure slds-media__figure_reverse"></div>
+        </div>
+    </div>
+    <lightning:layout>
+        <lightning:layoutItem size="6">
+            <div class="slds-p-around_large slds-p-top_large slds-p-right_large slds-p-bottom_large slds-p-left_large slds-card slds-card_boundary">
+                <div class="slds-align_absolute-center">
+                    <lightning:icon class="slds-m-bottom_small slds-align_absolute-center" iconName="utility:upload" size="medium" variant="success"></lightning:icon>
+                </div>
+                <div class="slds-text-align_center" style="font-size: 1.25rem;">
+                    <p>Upload Product</p>
+                </div>
+                <div class="slds-grid slds-gutters" style="margin-top:-4.2%;">
+                    <div class="slds-col slds-size_2-of-3 slds-float_right" style="margin-left:30%;">
+                        <lightning:input class="slds-m-top_x-small" aura:id="CSVFileID" onchange="{!c.handleCsvFileUpload}" type="file" name="ProductFile" multiple="false"/>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3" id="ProdDiv" style="margin-left:-30%;margin-top:6%;color:red;">
+                        <aura:if isTrue="{!v.ShowHideBar1}">
+                            <span><lightning:progressBar value="{! v.progress1 }" /></span>
+                            <aura:set attribute="else">
+                                <aura:if isTrue="{!v.ShowsccessIcon1}">
+                                    <lightning:icon iconName="utility:success" alternativeText="Success!" variant="Success"
+                                                    title="success variant" />
+                                </aura:if>
+                                <span style="font-size: 11px;">{!v.ProductFileName}</span>
+                            </aura:set>
+                        </aura:if>
+                    </div>
+                </div>
+                
+                <lightning:layout class="slds-m-top_xx-small" horizontalAlign="center" verticalAlign="start">
+                    <lightning:layoutItem>
+                        <lightning:button name="processProduct" class="slds-theme_brand slds-border_top slds-border_bottom slds-border_left slds-border_right" onclick="{!c.handleCsvFile}" iconPosition="right" variant="brand" label="Process" iconName="utility:sync"></lightning:button>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem>
+                        <lightning:button class="slds-theme_destructive" name="productCancel" onclick="{!c.removeUploadedCSV}" iconPosition="right" variant="destructive" label="Cancel" iconName="standard:first_non_empty"></lightning:button>
+                    </lightning:layoutItem>
+                    <aura:if isTrue="{!v.showLoadingSpinner}">
+                        <div class="slds-text-body_small slds-text-color_error">Uploading... 
+                            <img src="/auraFW/resources/aura/images/spinner.gif" class="spinner-img" alt="Loading"/>'
+                        </div>
+                    </aura:if>
+                </lightning:layout>
+            </div>
+        </lightning:layoutItem>
+        <lightning:layoutItem size="6">
+            <div class="slds-p-around_large slds-p-top_large slds-p-right_large slds-p-bottom_large slds-p-left_large slds-card slds-card_boundary">
+                <div>
+                    <div class="slds-align_absolute-center">
+                        <lightning:icon class="slds-m-bottom_small slds-align_absolute-center" iconName="utility:download" size="medium" variant="success"></lightning:icon>
+                    </div>
+                    <div class="slds-text-align_center" style="font-size: 1.25rem;">
+                        <p>Download Product Format (CSV)</p>
+                    </div>
+                    <div class="slds-m-top_small slds-m-bottom_small slds-text-align_center" style="color: rgb(124, 124, 124); font-size: 0.8125rem;">
+                        <p>Please download the product format here</p>
+                    </div>
+                    <div class="slds-m-top_x-small slds-align_absolute-center">
+                        <lightning:button class="slds-theme_brand" iconPosition="left" variant="brand" label="Download" iconName="utility:download">
+                            <a href="" data-recId="ProductFormat"  onclick = "{!c.downloadFormatedCSV}" >Download</a></lightning:button>
+                    </div>
+                </div>
+            </div>
+        </lightning:layoutItem>
+    </lightning:layout>
+    
+    <!--Mass Catalog upload-->
+    <lightning:layout>
+        <lightning:layoutItem size="6">
+            <div class="slds-p-around_large slds-p-top_large slds-p-right_large slds-p-bottom_large slds-p-left_large slds-card slds-card_boundary">
+                <div class="slds-align_absolute-center">
+                    <lightning:icon class="slds-m-bottom_small slds-align_absolute-center" iconName="utility:upload" size="medium" variant="success"></lightning:icon>
+                </div>
+                <div class="slds-text-align_center" style="font-size: 1.25rem;">
+                    <p>Upload Product Category</p>
+                </div>
+                <div class="slds-grid slds-gutters" style="margin-top:-4.2%;">
+                    <div class="slds-col slds-size_2-of-3 slds-float_right" style="margin-left:30%;">
+                        <lightning:input class="slds-m-top_x-small" aura:id="fileId" onchange="{!c.handleCsvFileUpload}" type="file" name="CatgoryFile" multiple="false"/>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3" id="categoryDiv" style="margin-left:-30%;margin-top:6%;color:red;">
+                        <aura:if isTrue="{!v.ShowHideBar2}">
+                            <span><lightning:progressBar value="{! v.progress2 }" /></span>
+                            <aura:set attribute="else">
+                                <aura:if isTrue="{!v.ShowsccessIcon2}">
+                                    <lightning:icon iconName="utility:success" alternativeText="Success!" variant="Success"
+                                                    title="success variant" />
+                                </aura:if>
+                                <span style="font-size:11px;">{!v.CategoryFileName}</span>
+                            </aura:set>
+                        </aura:if>
+                    </div>
+                </div>
+                
+                <lightning:layout class="slds-m-top_xx-small" horizontalAlign="center" verticalAlign="start">
+                    <lightning:layoutItem>
+                        <lightning:button name="processCategory" class="slds-theme_brand slds-border_top slds-border_bottom slds-border_left slds-border_right" onclick="{!c.handleCsvFile}" iconPosition="right" variant="brand" label="Process" iconName="utility:sync"></lightning:button>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem>
+                        <lightning:button class="slds-theme_destructive" onclick="{!c.removeUploadedCSV}" iconPosition="right" variant="destructive" label="Cancel" iconName="standard:first_non_empty"></lightning:button>
+                    </lightning:layoutItem>
+                    <aura:if isTrue="{!v.showLoadingSpinner}">
+                        <div class="slds-text-body_small slds-text-color_error">Uploading... 
+                            <img src="/auraFW/resources/aura/images/spinner.gif" class="spinner-img" alt="Loading"/>'
+                        </div>
+                    </aura:if>
+                </lightning:layout>
+            </div>
+        </lightning:layoutItem>
+        <lightning:layoutItem size="6">
+            <div class="slds-p-around_large slds-p-top_large slds-p-right_large slds-p-bottom_large slds-p-left_large slds-card slds-card_boundary">
+                <div>
+                    <div class="slds-align_absolute-center">
+                        <lightning:icon class="slds-m-bottom_small slds-align_absolute-center" iconName="utility:download" size="medium" variant="success"></lightning:icon>
+                    </div>
+                    <div class="slds-text-align_center" style="font-size: 1.25rem;">
+                        <p>Download Product Category Format (CSV)</p>
+                    </div>
+                    <div class="slds-m-top_small slds-m-bottom_small slds-text-align_center" style="color: rgb(124, 124, 124); font-size: 0.8125rem;">
+                        <p>Please download the product Category format here</p>
+                    </div>
+                    <div class="slds-m-top_x-small slds-align_absolute-center">
+                        <lightning:button aura:id="categoryID" class="slds-theme_brand" iconPosition="left" variant="brand" label="Download" iconName="utility:download">
+                            <a href="" id="category" data-recId="categoryFormat"  onclick = "{!c.downloadFormatedCSV}" >Download</a></lightning:button>
+                    </div>
+                </div>
+            </div>
+        </lightning:layoutItem>
+    </lightning:layout>
+</aura:component>

@@ -1,0 +1,136 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" controller="GYNC_offerLetterController" access="global" >
+	<aura:attribute name="newOfferLetterTemplate" type="GYNCO_Offer_Letter_Template__c"
+        default="{ 'sobjectType': 'GYNCO_Offer_Letter_Template__c',
+                   'Name': '',
+                   'GYNCF_Template__c': '',
+                    }" />
+    <aura:attribute name="parentId" type="Id" default="" />
+    <aura:attribute name="isOpen" type="boolean" default="false"/>
+    <aura:attribute name="selectedLookUpRecord" type="sObject" default="{}"/>
+    <aura:attribute name="selectedLookUpRecord2" type="sObject" default="{}"/>
+    <!--<aura:attribute name="filetype" type="List" default="['.png', '.jpg', '.jpeg']" />
+    <aura:attribute name="multiple" type="Boolean" default="false" />
+    <aura:attribute name="disabled" type="Boolean" default="true" />
+    <aura:attribute name="recordId" type="String" />-->
+    
+ 
+   <article class="slds-card">
+    <div class="slds-p-around_small">
+     <!--lightning:layoutItem padding="around-small" size="12"-->
+      <!--lightning:layout-->
+         <!--lightning:layoutItem padding="around-small" size="6"-->
+             <lightning:card  title="Search Offer Letter Template">
+           <c:GYNL_searchBar objectAPIName="GYNCO_Offer_Letter_Template__c" IconName="standard:search" selectedRecord="{!v.selectedLookUpRecord}" srarchByFieldAPIName="Name" label="Offer Letter Template Name" />
+             </lightning:card><Br></Br>
+         <!--/lightning:layoutItem>
+         <lightning:layoutItem padding="around-small" size="6"-->
+             <lightning:card  title="Select Default Offer Letter Template">
+           <c:GYNL_searchByCompName objectAPIName="GYNCO_Offer_Letter_Template__c" srarchByFieldAPIName="GYNCF_Company_Name__c" />
+             </lightning:card>
+         <!--/lightning:layoutItem-->
+     <!--/lightning:layout-->
+    <!--/lightning:layoutItem-->
+       </div>
+    </article>
+  <lightning:layoutItem padding="around-small" size="12">
+  <lightning:layout>
+  <lightning:layoutItem padding="around-small" size="8">
+    <lightning:card title="Enter New Offer Letter Template">
+        <div class="slds-p-around_medium">
+            <!--lightning:layout> 
+                <lightning:layoutItem size="8" padding="around-small"-->
+                <lightning:input aura:id="TempName"
+                                 label="Template Name"
+                                 type="String"
+                                 required="true"
+                                 value="{!v.newOfferLetterTemplate.Name}"
+                                 />
+            
+                    <lightning:textarea aura:id="template" class="TR" label="Template" value="{!v.newOfferLetterTemplate.GYNCF_Template__c}"/>
+                    <lightning:button label="Save and Next" onclick="{!c.handleCreateOLT}" variant="brand" class="slds-m-top_medium"/>
+                    <c:GYNL_LogoUploader parentId="{!v.parentId}" isOpen = "{!v.isOpen}" />
+                <!--/lightning:layoutItem>
+            </lightning:layout-->
+            <p>{!v.message}</p>
+        </div>
+    </lightning:card>
+   </lightning:layoutItem>
+   <lightning:layoutItem padding="around-small" size="4">
+      <div >
+           
+       <p class="slds-box slds-text-heading_small" style="height:80px;"> 
+       <lightning:icon iconName="standard:branch_merge" alternativeText="Email" title="Email" />
+       Merge Fields
+       </p>
+          <br></br>
+         
+       <p >
+           <table class="slds-table slds-table--bordered slds-table--cell-buffer">
+    <thead>
+        <tr class="slds-text-title--caps">
+            <th scope="col">
+                <div class="slds-truncate" title="Merge Field">Merge Field</div>
+            </th>
+            <th scope="col">
+                <div class="slds-truncate" title="Description">Description</div>
+            </th>
+        </tr>
+    </thead>
+               <br></br>
+    <tbody>
+            <tr>
+                <td>
+                    <div class="slds-truncate"><p>&amp;Candidate Name&amp;</p></div>
+                </td>
+                <td>
+                    <div class="slds-truncate">Name of the candidate</div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="slds-truncate"><p>&amp;Location&amp;</p></div>
+                </td>
+                <td>
+                    <div class="slds-truncate">Joining location</div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="slds-truncate"><p>&amp;Designation&amp;</p></div>
+                </td>
+                <td>
+                    <div class="slds-truncate">Position/Designation</div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="slds-truncate"><p>&amp;Joining Date&amp;</p></div>
+                </td>
+                <td>
+                    <div class="slds-truncate">Date of joining</div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="slds-truncate"><p>&amp;Final Compensation&amp;</p></div>
+                </td>
+                <td>
+                    <div class="slds-truncate">Final Offer Amount</div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="slds-truncate"><p>&amp;Company&amp;</p></div>
+                </td>
+                <td>
+                    <div class="slds-truncate">Company Name</div>
+                </td>
+            </tr>
+    </tbody>
+</table>   
+       </p>   
+      </div>
+   </lightning:layoutItem>
+   </lightning:layout>
+   </lightning:layoutItem>
+</aura:component>

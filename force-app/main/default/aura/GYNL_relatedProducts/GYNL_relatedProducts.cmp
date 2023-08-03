@@ -1,0 +1,104 @@
+<aura:component controller ="GYNC_displayRelatedProductsController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+   <!-- <aura:if isTrue="{!v.staticresourceName=='Theme2'}">
+        <ltng:require styles="{!$Resource.Theme1}" afterScriptsLoaded ="{!c.scriptsLoaded}"/>
+    </aura:if>
+    
+    <aura:if isTrue="{!v.staticresourceName=='Theme1'}">
+        <ltng:require styles="{!$Resource.Theme1}" afterScriptsLoaded ="{!c.scriptsLoaded}"/>
+    </aura:if> -->
+    
+    
+    
+    <aura:attribute name="relatedProdList"  type="Product2[]"/> 
+    <aura:attribute name="staticresourceName" type="String" />
+    <!--  <aura:attribute name="relatedProdList"  type="list"/> 
+    <aura:attribute name="relatedProdList"  type="GYNC_displayRelatedProductsController.productWrapper[]"/>-->
+    <aura:attribute name="recordId" type="String" />
+    
+    <aura:attribute name="PaginationList" type="product2[]"/>
+    <aura:attribute name="startPage" type="Integer" />
+    <aura:attribute name="endPage" type="Integer"/>
+    <aura:attribute name="totalRecords" type="Integer"/>
+    <aura:attribute name="pageSize" type="Integer" default="4"/>
+    <aura:attribute name="prefixURL" type="String" default="/sfc/servlet.shepherd/version/download/"/>
+   <aura:if isTrue="{!v.PaginationList != null}"> 
+    <div class=" c-container" >
+        <lightning:layout horizontalAlign="space">
+            <lightning:layoutItem padding="around-small ">
+                <div  ><br></br><br></br>
+                <lightning:buttonIcon  iconName="utility:chevronleft" alternativeText="leftarrow" title="leftarrow" onclick="{! c.previous }"  disabled="{!v.startPage == 0}"  />
+                </div>
+                </lightning:layoutItem>
+            <aura:iteration items="{!v.PaginationList}" var="prodlist">
+                &nbsp;
+             <div class="custom-box "> 
+                <lightning:layoutItem  padding="around-small">
+                    <div  class=" auto-resize-square"  >  
+                        
+                        <img  style="height: 175px;" src="{!v.prefixURL + prodlist.ContentDocId__c}" onclick="{!c.myAction}" id="{!prodlist.Id}"   />  
+                    </div>
+                        <div class="center">
+                        <h1><b >{!prodlist.Name}</b></h1>
+                        <h2>
+                            <c:GYNL_showStars ratingSelected="{!prodlist.GYNCF_Average_Rating__c}"/></h2>
+                        <!--  <h2>${!prodlist.GYNCF_Price__c}</h2> -->
+                        <div  style=" padding: initial;color:green;" >
+                            <lightning:formattedNumber value="{!prodlist.GYNCF_Price__c}" style="currency" maximumFractionDigits="2"/>
+                        </div>
+                        </div>
+                    
+                </lightning:layoutItem>&nbsp;
+
+                </div>
+            </aura:iteration>
+            <lightning:layoutItem padding="around-small">
+               <div ><br></br><br></br>
+                <lightning:buttonIcon  iconName="utility:chevronright" size="large"  alternativeText="rightarrow" title="rightarrow" onclick="{!c.next}"    disabled="{!v.endPage + 1 >= v.totalRecords}" />
+                </div>
+            </lightning:layoutItem>    
+            
+        </lightning:layout>
+       </div></aura:if>
+</aura:component>
+<!--<div >
+        <lightning:layout >
+            <lightning:layoutItem padding="around-small">
+                
+                 <lightning:buttonIcon iconName="utility:chevronleft" alternativeText="leftarrow" title="leftarrow" onclick="{! c.previous }"  disabled="{!v.startPage == 0}"  />
+            </lightning:layoutItem>
+            <aura:iteration items="{!v.PaginationList}" var="prodlist">
+                <lightning:layoutItem  >
+                <br></br>
+                        <img  style="height: 100px;" src="{!prodlist.DisplayUrl}" onclick="{!c.myAction}" id="{!prodlist.Id}"   />   
+                         <h1><b>{!prodlist.Name}</b></h1>
+                   <h2>${!prodlist.GYNCF_Price__c}</h2>
+                   <h2><c:GYNL_showStars ratingSelected="{!prodlist.GYNCF_Average_Rating__c}"/></h2>
+              
+                </lightning:layoutItem>
+                
+            </aura:iteration>
+            <lightning:layoutItem padding="around-small">
+                 <lightning:buttonIcon iconName="utility:chevronright" size="large"  alternativeText="rightarrow" title="rightarrow" onclick="{!c.next}"    disabled="{!v.endPage + 1 >= v.totalRecords}" />
+                
+            </lightning:layoutItem>    
+            
+        </lightning:layout>
+    </div> -->
+
+<!--
+<div style="overflow-x: auto">
+  <lightning:layout  > horizontalAlign="spread" verticalAlign="spread" multipleRows="false"
+     <aura:iteration items="{!v.PaginationList}" var="prodlist">
+            <lightning:layoutItem flexibility="grow"> padding="around-small"
+                <div class="auto-resize-square ">  
+                    <img  style="height: 100px;" src="{!prodlist.DisplayUrl}" onclick="{!c.myAction}" id="{!prodlist.Id}"   />   
+                  <h1><b>{!prodlist.Name}</b></h1>
+                   <h2>${!prodlist.GYNCF_Price__c}</h2>
+                   <h2><c:GYNL_showStars ratingSelected="{!prodlist.GYNCF_Average_Rating__c}"/></h2>
+                </div>
+            </lightning:layoutItem>
+     </aura:iteration>
+    </lightning:layout></div><img  style="height: 125px;" src="{!v.prefixURL + prodlist.ContentDocId__c}"
+-->

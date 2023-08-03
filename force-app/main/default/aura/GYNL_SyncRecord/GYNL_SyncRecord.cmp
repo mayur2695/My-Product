@@ -1,0 +1,9 @@
+<!--Name: GYNL_SyncRecord
+    This component is syncing the SFDC record with SAP on click of Sync Record Quick Action on Account
+    Created by: Nitish-->
+<aura:component controller = "GYNC_SyncRecord" implements="force:lightningQuickAction,force:hasRecordId">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <lightning:spinner alternativeText="Loading" size="large" variant = "brand" />
+
+
+</aura:component>
